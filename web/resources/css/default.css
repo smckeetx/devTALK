@@ -1,0 +1,715 @@
+@CHARSET "UTF-8";
+/**
+* Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/)
+* http://cssreset.com
+*/
+html, body, div, span, applet, object, iframe,
+/* h1, h2, h3, h4, h5, h6, p, blockquote, pre, I don't usually comment things out but I'm not happy with this change */
+h1, h2, h3, h4, h5, h6, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {margin: 0; padding: 0; border: 0; font-size: 100%; font: inherit;}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {display: block;}
+body {line-height: 1;}
+ol, ul {list-style: none;}
+blockquote, q {quotes: none;}
+blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none;}
+table {border-collapse: collapse; border-spacing: 0;}
+
+body {
+    font: 100% "Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-serif;
+}
+
+#wrapper {
+    background-color:#FFFFF0;
+    margin-left:auto;
+    margin-right:auto;
+    min-width:900px;
+    min-height:600px;
+    overflow:visible;
+    text-align:left;
+    width:98%;
+}
+
+#banner{
+    background-color: #9CCCFC;
+    background-position:center top;
+    background-repeat:repeat-x;
+    height:86px;
+    margin-top:-1px;
+    width:100%;
+}
+#banner_title {
+    float:left;
+    height:33px;
+    width:100%;
+}
+
+#banner_bottom{
+    background-color:#9AC269;
+    color:white;
+    float:left;
+    font-family:Verdana,Arial,Helvetica,sans-serif;
+    font-size:1em;
+    font-weight:bold;
+    height:15px;
+    list-style-image:none;
+    list-style-position:outside;
+    list-style-type:none;
+    margin:0;
+    padding-left:0;
+    text-align:left;
+    text-decoration:none;
+    vertical-align:bottom;
+    width:100%;
+}
+
+#search_section {
+    color: #355E50;
+    float: right;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    height: 40px;
+    text-align: right;
+    text-decoration: none;
+    width: 220px;
+}
+#footer_links, #footer_linked_images{
+    width:100%;
+}
+
+/* modify base-cachekey0941.css */
+#portal-columns {
+    margin-top:10px;
+    height:1.1em;
+    text-align:center
+}
+#nav {
+    background: #1D323B;
+    min-height: 400px;
+    width: 153px;
+    color: #fffff0;
+    padding: 0 6px 6px 6px;
+    float: left;
+    margin-top:3em;
+}
+
+#nav h2 {
+    font-size: 100%;
+    font-family: "Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-serif;
+    font-weight:bold;
+    color: #000033;
+    background-color: #1D323B;
+    color: #FFFFFF;
+    border-bottom: 1px dotted #316534;
+    padding: 0;
+}
+#nav ul {
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+    
+}
+#nav li {
+    font-size: 100%;
+    font-weight: bold;
+    border-bottom: 1px solid #316534;
+}
+#nav li a:link, #nav li a:visited {
+    display: block;
+    text-decoration: none;
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    border-left: none;
+    border-right: none;
+    background-color: #1D323B;
+    color: #FFFFFF;
+}
+#nav li a:hover {
+    color: #a7c9a9;
+    text-decoration: underline;
+}
+
+#nav ul ul {
+    list-style-type: none;
+    margin-left: 12px;
+}
+#nav ul ul li {
+    font-weight: bold;
+    font-size: 90%;
+    margin:0;
+    background-color: #1D323B;
+    color: #FFFFFF;
+}
+#nav ul li ul li {
+    font-weight: bold;
+    font-size: 90%;
+    margin:0;
+    background-color: #1D323B;
+    color: #FFFFFF;
+    border-bottom:none;
+}
+
+#nav ul ul a:link, #nav ul ul a:visited {
+    background-color: #1D323B;
+    color: #FFFFFF;
+}
+#nav ul ul a:hover {
+    color: #a7c9a9;
+    text-decoration: underline;
+}
+
+#nav ul ul ul {
+    list-style-type: none;
+    margin-left: 12px;
+    background-color: #1D323B;
+    color: #FFFFFF;
+    
+}
+#nav ul ul ul li {
+    font-weight: bold;
+    font-size: 100%;
+    border-top: 1px solid #316534;
+    border-bottom: 1px solid #316534;
+    margin:0;
+    background-color: #1D323B;
+    color: #FFFFFF; 
+}
+
+#nav ul ul ul a:link, #nav ul ul ul a:visited {
+    background-color: #203D49;
+    color: #FFFFFF;
+}
+#nav ul ul ul a:hover {
+    background-color: #1D323B;
+    color: #FFFFFF;
+}
+
+#logoutLink{
+    margin-top:2em;
+    margin-bottom:1em;
+}
+
+#content {
+    margin-bottom:2em;
+    min-height: 20em;
+    overflow:hidden;
+}
+
+/* from here down is application specific CSS */
+
+h2 {
+    font-weight: bold;
+    color: green;   
+}
+
+.normalSelect {
+    min-width: 140px;
+    max-width:150px;
+}
+.narrowSelect {
+    min-width:40px;
+    max-width:90px; 
+}
+.extraNarrowSelect {
+    min-width:35px;
+    max-width:50px; 
+}
+
+h3 {
+    font-size: 100%;
+    font-weight:bold;
+    color: #000033;
+    background-color: transparent;
+    padding: 0;
+    color:#060;
+}
+
+.timer {
+    visibility: visible;
+    text-align: right;
+    color: #ffffff;
+    font-weight: bold;
+    border: 0;
+    font-size: 95%;
+    padding-top: 1px;
+    background: none; /* override default backgroun image */
+}
+
+#footer {    
+    margin-left: 0em;
+    margin-top: 10px;
+    
+    padding-left: 153px;
+    
+    text-align:center;
+    font-size: .95em;
+    background-color: #9CCCFC;
+    color: #333333;
+    clear: both;
+}
+
+#footer a {
+    color: #333;
+}
+
+#footer img {
+    border: none;
+}
+
+#footer p {
+    margin: 0;
+    padding: 0;
+}
+
+#footer p.footerimages {
+    margin: 0 0 0 -8px;
+    padding-bottom: 10px;
+}
+
+#footer img.dotted {
+    margin: 0 0 0 -80px;
+    padding-bottom: 10px;
+    width: 1014px; 
+    background-color: transparent;
+}
+
+form {
+    font-size: 95%;
+    padding-left:5px;
+    width:100%;
+}
+form p {
+    clear: left;
+    padding: 7px 0 0 0;
+    vertical-align:top;
+}
+form label {
+    font-weight: bold;
+    line-height:22.889px;
+}
+span{
+    line-height:22.889px;
+} 
+   
+.col1{
+    width:20%;
+    text-align:right;
+    float:left;
+}
+
+.col2{
+    width:25%;
+    text-align:left;
+    float:left;
+}
+
+form p label.left {
+    text-align: right;
+}
+.hint {
+    margin:0;
+    float: left;
+}
+.justify100{
+    width:100%;
+    text-align:justify;
+}
+
+.justify100 > div{
+    display: inline-block;
+    vertical-align: top;
+
+    /* IE fix. */
+    *display: inline;
+    zoom: 1;
+}
+.justify100:after {
+    content: "";
+    width: 100%;
+    display: inline-block;
+}
+
+form p span.lbl, 
+form p label.left {
+    float: left;
+    width: 32%;
+    padding-right:5px;
+}
+
+form p label.left3columns {
+    text-align: right;
+    float: left;
+    width: 15%;
+    padding-right:5px;
+}
+.inputSpan {
+    display:inline-block;
+    height:24px;
+    position: relative;
+}
+.inputSpanInner {
+    position: absolute;
+    bottom: 6px;
+    width: 300px;
+    text-align: left;
+}
+form.narrowsearch {
+    font-size: 80%;
+    width:75%;
+}
+
+fieldset {
+    border: 1px solid #316534;
+    margin: 11px;
+    padding: 2px;
+}
+
+legend {
+    font-weight: bold;
+    background-color: transparent;
+    padding: 4px;
+    text-align:left;
+}
+
+table { width:100%;}
+
+.redbold {
+    font-weight: bold;
+    font-size:110%;
+    color:#FF0000;
+}
+
+.greenbold {
+    font-weight: bold;
+    font-size:110%;
+    color:#006600;
+}
+
+.textarea {
+    font-size: 100%;
+    width: 100%;
+    font-weight:normal;
+  text-align:left;
+  vertical-align:top;
+}
+
+.centerbuttons {
+    width: auto;
+    text-align:center;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.button {
+    vertical-align: text-top;
+    border: 0;
+}
+
+.colL50
+{
+    float:left;
+    width:50%;
+}   
+.colR50
+{
+    float:right;
+    width:50%;
+}   
+.colR30
+{
+    float:right;
+    width: 30%;
+}   
+.colL12
+{
+    float:left;
+    width:12%;
+}
+
+.clear {
+    clear: both;
+    }
+    
+.bold, th {
+    font-weight: bold;
+}
+
+
+
+#pageSubHeader {
+    margin: 0em;
+    padding-left: 153px;
+    background-color: transparent;
+    padding-top: .75em;
+    text-align:center;
+    font-size: 1em;
+    color: #000033;
+    font-weight:bold;
+}
+
+.required {
+    font-family: arial, verdana,  sans-serif;
+    font-size: small;
+    color:#F00;
+    vertical-align:top; 
+}
+
+.error {
+    color: #cd0a0a;
+}
+label.error, div.error {
+    display:inline;
+    margin-left:2px;
+    padding: 2px;
+    font-weight: bold;
+}
+/* different form layouts need different placement of errors */
+/* sample of moving the margin to line up with the inputs */
+form#frmMySampleForm label.error {
+    margin-left: 220px;
+}
+/* display of inline places it below the field */
+form#loginForm label.error {
+    margin-left: 4px;
+    display: block; 
+}
+
+
+.nowrap { 
+    white-space:nowrap;
+}
+
+.nowrapPosAbs { 
+    white-space:nowrap;
+    position:absolute;
+}
+
+.space2 {
+    margin-bottom:1em;
+    margin-top:1em;
+    }
+    
+.inline {
+    display:inline;
+    }
+    
+.noborder {
+    border:none;
+    }   
+            
+.whiteborder {
+    border:#FFFFFF none;
+    }   
+    
+.col100
+{
+    width:100%;
+}   
+
+.colL50
+{
+    float:left;
+    width:49.5%;
+}   
+.colL60
+{
+    float:left;
+    width:60%;
+}   
+
+.colL70
+{
+    float:left;
+    width:70%;
+}   
+
+.colL90
+{
+    float:left;
+    width:90%;
+}   
+
+.colR50
+{
+    float:right;
+    width:49.5%;
+    padding-left:1%;
+}   
+.colL
+{
+    float:left;
+    width:18%;
+}
+.colL10
+{
+    float:left;
+    width:9.5%;
+}
+.colL15
+{
+    float:left;
+    width:14.5%;
+}
+.colL18
+{
+    float:left;
+    width:17.5%;
+}
+.colL20
+{
+    float:left;
+    width:19.5%;
+}
+.colL22
+{
+    float:left;
+    width:21.5%;
+}
+.colL25
+{
+    float:left;
+    width:24%;
+}
+
+.colL75
+{
+    float:left;
+    width:74%;
+}
+.colL25
+{
+    float:left;
+    width:25%;
+}
+.colL33
+{
+    float:left;
+    width:32%;
+}
+
+.colM33
+{
+    float:none;
+    width:32%;
+}
+
+.colR33
+{
+    float:right;
+    width:32%;
+    padding-left:1%;
+}   
+
+.col33
+{
+    width:45%;
+    display:inline;
+}
+.colR60
+{
+    float:left;
+    width:50%;
+}   
+
+.colR45
+{
+    float:right;
+    width:40%;
+}   
+.colL45
+{
+    float:left;
+    width:40%;
+}   
+    
+.colR75
+{
+    float:right;
+    width:74%;
+    padding-left:1%;
+}   
+.highlight {
+background-color:#BBCCEE;
+color:#000000;
+}
+
+#noAccess { 
+    margin-top:5px;
+    text-align:center; 
+}
+
+.requiredField { 
+    color:red; 
+    font-weight:bold; 
+}
+
+.preserveSpaces{
+    white-space:pre-wrap;
+}
+
+.rightAlignText{
+   text-align:right; 
+}
+
+.centerAlignText {
+    text-align:center;
+}
+
+.centerAlignDiv{
+    text-align:center; 
+    width:100%;
+    margin:0 auto;
+}
+
+.hiddenStructure{
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: medium none;
+    display: block;
+    height: 0.1em;
+    margin: -0.1em 0 0 -0.1em;
+    overflow: hidden;
+    padding: 0;
+    width: 1px; 
+}
+
+.ie6 .hiddenStructure, .ie7 .hiddenStructure {
+    position: absolute;
+}
+
+.skip{
+padding: 6px;
+position: absolute;
+top: -40px;
+left: 0px;
+color: white;
+font-weight:bold;
+border-right: 1px solid white;
+border-bottom: 1px solid white;
+border-bottom-right-radius: 8px;
+background-color: red;
+-webkit-transition: top 1s ease-out, background 1s linear;
+transition: top 1s ease-out, background 1s linear;
+z-index: 100;
+}
+
+a.skip:active, 
+a.skip:focus, 
+a.skip:hover {
+  left: 0; 
+  top: 0;
+  width: auto; 
+  height: auto; 
+  overflow: visible; 
+}
