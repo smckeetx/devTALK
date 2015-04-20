@@ -27,6 +27,35 @@ USE `devtalk` ;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
+
+
+# Dump of table users
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `users`;
+
+CREATE TABLE `users` (
+  `userID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `userName` varchar(25) NOT NULL,
+  `userFirstName` varchar(25) DEFAULT NULL,
+  `userLastName` varchar(25) DEFAULT NULL,
+  `userEmail` varchar(50) DEFAULT NULL,
+  `userExtension` bigint(20) DEFAULT NULL,
+  `userPassword` varchar(32) NOT NULL DEFAULT 'password',
+  `userActive` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`userID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+
+INSERT INTO `users` (`userID`, `userName`, `userFirstName`, `userLastName`, `userEmail`, `userExtension`, `userPassword`, `userActive`)
+VALUES
+	(1,'superUser','Super','User',NULL,NULL,'password',1);
+
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
 # Dump of table permissions
 # ------------------------------------------------------------
 
@@ -78,13 +107,6 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `pinnedposts`;
 
-CREATE TABLE `pinnedposts` (
-  `userID` int(10) unsigned NOT NULL,
-  `projectID` int(10) unsigned NOT NULL,
-  `postContent` varchar(20000) NOT NULL COMMENT 'Posts are physically deleted so we need the actual content',
-  PRIMARY KEY (`userID`,`projectID`),
-  CONSTRAINT `fk_pinnedposts_users1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
@@ -124,8 +146,41 @@ CREATE TABLE `projects` (
   CONSTRAINT `fk_projects_users1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+# Dump of table roles
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `roles`;
+
+CREATE TABLE `roles` (
+  `roleID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `roleDesc` varchar(50) NOT NULL,
+  `roleCode` varchar(10) NOT NULL,
+  PRIMARY KEY (`roleID`),
+  UNIQUE KEY `roleDesc_UNIQUE` (`roleDesc`),
+  UNIQUE KEY `roleCode_UNIQUE` (`roleCode`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `roles` WRITE;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+
+INSERT INTO `roles` (`roleID`, `roleDesc`, `roleCode`)
+VALUES
+	(1,'Super Admin','superAdmin'),
+	(2,'Administrator','admin'),
+	(3,'User','user'),
+	(4,'Project Lead','prjctLead');
+
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
+CREATE TABLE `pinnedposts` (
+  `userID` int(10) unsigned NOT NULL,
+  `projectID` int(10) unsigned NOT NULL,
+  `postContent` varchar(20000) NOT NULL COMMENT 'Posts are physically deleted so we need the actual content',
+  PRIMARY KEY (`userID`,`projectID`),
+  CONSTRAINT `fk_pinnedposts_users1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 # Dump of table projectUsers
 # ------------------------------------------------------------
 
@@ -189,34 +244,6 @@ VALUES
 UNLOCK TABLES;
 
 
-# Dump of table roles
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `roles`;
-
-CREATE TABLE `roles` (
-  `roleID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `roleDesc` varchar(50) NOT NULL,
-  `roleCode` varchar(10) NOT NULL,
-  PRIMARY KEY (`roleID`),
-  UNIQUE KEY `roleDesc_UNIQUE` (`roleDesc`),
-  UNIQUE KEY `roleCode_UNIQUE` (`roleCode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-LOCK TABLES `roles` WRITE;
-/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
-
-INSERT INTO `roles` (`roleID`, `roleDesc`, `roleCode`)
-VALUES
-	(1,'Super Admin','superAdmin'),
-	(2,'Administrator','admin'),
-	(3,'User','user'),
-	(4,'Project Lead','prjctLead');
-
-/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
 # Dump of table thread
 # ------------------------------------------------------------
 
@@ -268,34 +295,6 @@ VALUES
     (1,3);
 
 /*!40000 ALTER TABLE `userroles` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
-# Dump of table users
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `users`;
-
-CREATE TABLE `users` (
-  `userID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `userName` varchar(25) NOT NULL,
-  `userFirstName` varchar(25) DEFAULT NULL,
-  `userLastName` varchar(25) DEFAULT NULL,
-  `userEmail` varchar(50) DEFAULT NULL,
-  `userExtension` bigint(20) DEFAULT NULL,
-  `userPassword` varchar(32) NOT NULL DEFAULT 'password',
-  `userActive` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-
-INSERT INTO `users` (`userID`, `userName`, `userFirstName`, `userLastName`, `userEmail`, `userExtension`, `userPassword`, `userActive`)
-VALUES
-	(1,'superUser','Super','User',NULL,NULL,'password',1);
-
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
