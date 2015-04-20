@@ -8,6 +8,7 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@include file="header.jsp" %>
 <%@include file="menu.jsp" %>
+
             <div id="content">
                 <div class="centerAlignDiv">
                     <h1>${sessionScope.User.getPrimaryRole()}</h1>
