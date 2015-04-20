@@ -237,23 +237,8 @@ h3 {
     color:#060;
 }
 
-.timer {
-    visibility: visible;
-    text-align: right;
-    color: #ffffff;
-    font-weight: bold;
-    border: 0;
-    font-size: 95%;
-    padding-top: 1px;
-    background: none; /* override default backgroun image */
-}
-
 #footer {    
-    margin-left: 0em;
     margin-top: 10px;
-    
-    padding-left: 153px;
-    
     text-align:center;
     font-size: .95em;
     background-color: #9CCCFC;
@@ -300,9 +285,6 @@ form label {
     font-weight: bold;
     line-height:22.889px;
 }
-span{
-    line-height:22.889px;
-} 
    
 .col1{
     width:20%;

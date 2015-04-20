@@ -18,7 +18,7 @@
         <div id="wrapper">
             <div id="banner">
                 <div id="banner_title">
-                    <div class="left"><img src="resources/images/logo.png"/></div>
+                    <div class="left"><img src="resources/images/logo.png" alt="devTALK Logo"/></div>
                     <c:if test="${sessionScope.User!= null}">
                         <div class="right" id="logoutLink"><a href="security?action=logout">Log Out</a></div>
                     </c:if>
