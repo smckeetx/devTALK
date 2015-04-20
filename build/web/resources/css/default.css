@@ -196,9 +196,10 @@ body {
     color: #FFFFFF;
 }
 
-#logoutLink{
-    margin-top:2em;
-    margin-bottom:1em;
+#logoutLink a:link, a:visited{
+    margin-right: 5px;
+    text-decoration: none;
+    color:#000000;
 }
 
 #content {
@@ -712,4 +713,12 @@ a.skip:hover {
   width: auto; 
   height: auto; 
   overflow: visible; 
+}
+
+.left{
+    float:left;
+}
+
+.right{
+    float:right;
 }

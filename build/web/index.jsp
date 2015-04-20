@@ -5,22 +5,7 @@
 --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>devTALK</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
-        <link type="text/css" rel="stylesheet" href="resources/css/default.css">
-    </head>
-    <body>
-        <div id="wrapper">
-            <div id="banner">
-                <div id="banner_title">
-                    devTALK
-                </div>
-            </div>
+<%@include file="header.jsp" %>
             <div id="content">
                 <div class="centerAlignDiv">
                     <c:if test="${error != null}">
@@ -37,9 +22,4 @@
                     </div>
                 </div>
             </div>
-            <div id="footer">
-                devTALK Copyright &copy; 2015 Shawn McKee All Rights Reserved
-            </div>
-        </div>
-    </body>
-</html>
+<%@include file="footer.jsp" %>
