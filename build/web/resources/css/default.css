@@ -28,7 +28,11 @@ table {border-collapse: collapse; border-spacing: 0;}
 
 body {
     font: 100% "Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-serif;
-    /* padding:3px; */
+    height:100%
+}
+
+html{
+    height:100%
 }
 
 #wrapper {
@@ -40,6 +44,7 @@ body {
     overflow:visible;
     text-align:left;
     width:98%;
+    position: relative;
 }
 
 #banner{
@@ -75,6 +80,56 @@ body {
     vertical-align:bottom;
     width:100%;
 }
+
+#content {
+    margin-top:1em;
+    margin-bottom:2em;
+    min-height: 20em;
+    overflow:hidden;
+    padding-bottom: 4em;
+}
+
+
+#footer {    
+    margin-top: 10px;
+    text-align:center;
+    font-size: .95em;
+    background-color: #9CCCFC;
+    color: #333333;
+    clear: both;
+    height:4em;
+    position: absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    z-index: 1001; /* so the menu or its navicon stays above all content */
+}
+
+#footer a {
+    color: #333;
+}
+
+#footer img {
+    border: none;
+}
+
+#footer p {
+    margin: 0;
+    padding: 0;
+}
+
+#footer p.footerimages {
+    margin: 0 0 0 -8px;
+    padding-bottom: 10px;
+}
+
+#footer img.dotted {
+    margin: 0 0 0 -80px;
+    padding-bottom: 10px;
+    width: 1014px; 
+    background-color: transparent;
+}
+
 
 #search_section {
     color: #355E50;
@@ -205,13 +260,6 @@ body {
     color:#000000;
 }
 
-#content {
-    margin-top:1em;
-    margin-bottom:2em;
-    min-height: 20em;
-    overflow:hidden;
-}
-
 /* from here down is application specific CSS */
 
 h2 {
@@ -239,40 +287,6 @@ h3 {
     background-color: transparent;
     padding: 0;
     color:#060;
-}
-
-#footer {    
-    margin-top: 10px;
-    text-align:center;
-    font-size: .95em;
-    background-color: #9CCCFC;
-    color: #333333;
-    clear: both;
-}
-
-#footer a {
-    color: #333;
-}
-
-#footer img {
-    border: none;
-}
-
-#footer p {
-    margin: 0;
-    padding: 0;
-}
-
-#footer p.footerimages {
-    margin: 0 0 0 -8px;
-    padding-bottom: 10px;
-}
-
-#footer img.dotted {
-    margin: 0 0 0 -80px;
-    padding-bottom: 10px;
-    width: 1014px; 
-    background-color: transparent;
 }
 
 form {
@@ -1739,9 +1753,8 @@ appears on the left side of the page.
 */
 
 #menu {
-    /* margin-left: -200px; */ /* "#menu" width */
-    /* margin-top:1em; */
     padding-left: 5px;
+    margin-bottom: 4em;
     width: 280px;
     position: fixed;
     top: 86px;
