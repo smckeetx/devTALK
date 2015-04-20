@@ -16,11 +16,11 @@
                                 </li>
                                 <c:forEach items="${role.getPermissionsList()}" var="permission">
                                     <c:set var="strng" value=",${permission.getPermissionID()},"/>
-                                    <li>
+                                    <li class="s4">
                                         <c:if test="${fn:contains(unsupportedList, strng)}">
                                             <span style="text-decoration: line-through">
                                         </c:if>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;${permission.getPermissionID()}&nbsp;${permission.getPermissionDesc()}
+                                            ${permission.getPermissionDesc()}
                                         <c:if test="${fn:contains(unsupportedList, strng)}">
                                             </span>
                                         </c:if>
