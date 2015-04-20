@@ -171,6 +171,10 @@ public class User implements Serializable {
         }
         return false;
     }
+    
+    public String getPrimaryRole(){
+        return rolesList.get(0).getRoleDesc();
+    }
 
 /*
     public List<Projects> getProjectsList() {

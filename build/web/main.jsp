@@ -26,6 +26,9 @@
             </div>
             <div id="content">
                 <div class="centerAlignDiv">
+                    <h1>${sessionScope.User.getPrimaryRole()}</h1>
+                </div>
+                <div class="centerAlignDiv">
                     <c:if test="${error != null}">
                         <div class="error">${error}</div>
                     </c:if>
