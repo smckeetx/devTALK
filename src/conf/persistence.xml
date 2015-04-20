@@ -9,6 +9,8 @@
     <class>net.shawnmckee.devtalk.entities.Projects</class>
     <class>net.shawnmckee.devtalk.entities.Permissions</class>
     <class>net.shawnmckee.devtalk.entities.User</class>
+    <class>net.shawnmckee.devtalk.entities.Roles_1</class>
+    <class>net.shawnmckee.devtalk.entities.Permissions_1</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/devTALK?zeroDateTimeBehavior=convertToNull"/>

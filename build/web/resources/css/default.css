@@ -96,11 +96,12 @@ body {
 #nav {
     background: #1D323B;
     min-height: 400px;
-    width: 153px;
+    width: 200px;
     color: #fffff0;
     padding: 0 6px 6px 6px;
     float: left;
     margin-top:3em;
+    font-size: .75em;
 }
 
 #nav h2 {
@@ -203,6 +204,7 @@ body {
 }
 
 #content {
+    margin-top:1em;
     margin-bottom:2em;
     min-height: 20em;
     overflow:hidden;
@@ -429,8 +431,6 @@ table { width:100%;}
     font-weight: bold;
 }
 
-
-
 #pageSubHeader {
     margin: 0em;
     padding-left: 153px;
@@ -468,7 +468,6 @@ form#loginForm label.error {
     margin-left: 4px;
     display: block; 
 }
-
 
 .nowrap { 
     white-space:nowrap;
@@ -623,6 +622,7 @@ form#loginForm label.error {
     width:74%;
     padding-left:1%;
 }   
+
 .highlight {
 background-color:#BBCCEE;
 color:#000000;

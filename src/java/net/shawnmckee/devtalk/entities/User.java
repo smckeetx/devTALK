@@ -6,8 +6,8 @@ package net.shawnmckee.devtalk.entities;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +18,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -38,6 +37,11 @@ import javax.persistence.Table;
     @NamedQuery(name = "User.findByUserPassword", query = "SELECT u FROM User u WHERE u.userPassword = :userPassword"),
     @NamedQuery(name = "Users.findByUserActive", query = "SELECT u FROM User u WHERE u.userActive = :userActive")})
 public class User implements Serializable {
+    @JoinTable(name = "userroles", joinColumns = {
+        @JoinColumn(name = "userID", referencedColumnName = "userID")}, inverseJoinColumns = {
+        @JoinColumn(name = "roleID", referencedColumnName = "roleID")})
+    @ManyToMany(fetch=javax.persistence.FetchType.EAGER)
+    private List<Roles> rolesList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,13 +65,9 @@ public class User implements Serializable {
     @Basic(optional = false)
     @Column(name = "userActive")
     private boolean userActive = true;
-/*    @ManyToMany(mappedBy = "usersList")
+/*
+    @ManyToMany(mappedBy = "usersList")
     private List<Projects> projectsList;
-    @JoinTable(name = "userroles", joinColumns = {
-        @JoinColumn(name = "userID", referencedColumnName = "userID")}, inverseJoinColumns = {
-        @JoinColumn(name = "roleID", referencedColumnName = "roleID")})
-    @ManyToMany
-    private List<Roles> rolesList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
     private List<Projects> projectsList1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
@@ -154,14 +154,6 @@ public class User implements Serializable {
     public void setUserActive(boolean userActive) {
         this.userActive = userActive;
     }
-/*
-    public List<Projects> getProjectsList() {
-        return projectsList;
-    }
-
-    public void setProjectsList(List<Projects> projectsList) {
-        this.projectsList = projectsList;
-    }
 
     public List<Roles> getRolesList() {
         return rolesList;
@@ -169,6 +161,24 @@ public class User implements Serializable {
 
     public void setRolesList(List<Roles> rolesList) {
         this.rolesList = rolesList;
+    }
+    
+    public boolean hasRole(Integer roleID){
+        
+        for(Roles role:rolesList){
+            if(Objects.equals(role.getRoleID(), roleID))
+                return true;
+        }
+        return false;
+    }
+
+/*
+    public List<Projects> getProjectsList() {
+        return projectsList;
+    }
+
+    public void setProjectsList(List<Projects> projectsList) {
+        this.projectsList = projectsList;
     }
 
     public List<Projects> getProjectsList1() {
@@ -227,5 +237,5 @@ public class User implements Serializable {
     public String toString() {
         return "net.shawnmckee.devtalk.entities.Users[ userID=" + userID + " ]";
     }
-    
+
 }
