@@ -80,13 +80,12 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(Integer userID) {
-        this.userID = userID;
-    }
-
-    public User(Integer userID, String userName, String userPassword, boolean userActive) {
-        this.userID = userID;
+  public User(String firstName, String lastName, String userName, String email, BigInteger extension, String userPassword, boolean userActive) {
+        this.userLastName = firstName;
+        this.userFirstName = lastName;
         this.userName = userName;
+        this.userEmail = email;
+        this.userExtension = extension;
         this.userPassword = userPassword;
         this.userActive = userActive;
     }

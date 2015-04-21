@@ -75,7 +75,7 @@ LOCK TABLES `permissions` WRITE;
 
 INSERT INTO `permissions` (`permissionID`, `permissionDesc`, `permissionCode`)
 VALUES
-	(1,'Add Administrators','cre8Admin'),
+	(1,'Add Administrators','adminCre8'),
 	(2,'Follow Conversations','thrdRead'),
 	(3,'Edit Conversations','thrdUpdt'),
 	(4,'Add Permissions','permsCre8'),

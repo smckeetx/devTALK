@@ -465,6 +465,9 @@ table { width:100%;}
     vertical-align:top; 
 }
 
+.em7{
+    width:7em;
+}
 .error {
     color: #cd0a0a;
 }
@@ -1396,8 +1399,7 @@ table {
     vertical-align: middle
 }
 .pure-menu li a {
-    padding: 5px 20px
-}
+    padding: 2px 0px;}
 .pure-menu-can-have-children > .pure-menu-label:after {
     content: '\25B8';
     float: right;
@@ -1755,7 +1757,7 @@ appears on the left side of the page.
 #menu {
     padding-left: 5px;
     margin-bottom: 4em;
-    width: 280px;
+    width: 275px;
     position: fixed;
     top: 86px;
     z-index: 1000; /* so the menu or its navicon stays above all content */
@@ -1769,7 +1771,6 @@ appears on the left side of the page.
     #menu a {
         color: #455560;
         border: none;
-        padding: 0.6em 0 0.6em .5em;
         background: #CBDB92;
         font-weight:bold;
         font-size:14px;
@@ -1875,11 +1876,7 @@ Hides the menu at `48em`, but modify this based on your app's needs.
     }
 
     #wrapper {
-        /* padding-left: 200px; */ /* left col width "#menu" */
         left: 0;
-    }
-    #menu {
-        /* left: 200px; */
     }
 
     .menu-link {
