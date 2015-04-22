@@ -14,8 +14,7 @@ public class DBUtil {
     public DBUtil(){
         
     }
-    private static final EntityManagerFactory emf =
-            Persistence.createEntityManagerFactory("devTALKPU");
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("devTALKPU");
 
     public static EntityManagerFactory getEmFactory(){
         return emf;
