@@ -5,6 +5,7 @@ package net.shawnmckee.devtalk.tasks;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.servlet.ServletException;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import net.shawnmckee.devtalk.entities.DBUtil;
 import net.shawnmckee.devtalk.entities.Permissions;
+import net.shawnmckee.devtalk.entities.Roles;
 import net.shawnmckee.devtalk.entities.User;
 
 /**
@@ -52,11 +54,20 @@ public class adminCre8 extends HttpServlet {
                 em.persist(user);
                 em.merge(user);
                 em.getTransaction().commit();
+                em.getTransaction().begin();
+                Query q = em.createNamedQuery("Roles.findByRoleID");
+                q.setParameter("roleID", 2);
+                List<Roles> role = q.getResultList();
+                q.setParameter("roleID", 3);
+                role.addAll(q.getResultList());
+                user.setRolesList(role);
+                em.merge(user);
+                em.getTransaction().commit();
+                
+                System.out.println(role.get(0));
                 request.getSession().setAttribute("user", user);
-                return;
             } catch (Exception e) {
-                request.setAttribute("flash", e.getMessage());
-                return;
+                request.setAttribute("error", e.getMessage());
             }
         }catch(Exception e){
             

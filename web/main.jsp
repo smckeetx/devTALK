@@ -11,7 +11,7 @@
 
             <div id="content">
                 <div class="centerAlignDiv">
-                    <h1>${sessionScope.User.getPrimaryRole()}</h1>
+                    <h1>${sessionScope.User.getPrimaryRole()} ${sessionScope.User.getRolesList()}</h1>
                 </div>
                 <div class="centerAlignDiv">
                     <c:if test="${error != null}">

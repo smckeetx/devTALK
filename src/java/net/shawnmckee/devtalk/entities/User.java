@@ -8,6 +8,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -40,7 +41,7 @@ public class User implements Serializable {
     @JoinTable(name = "userroles", joinColumns = {
         @JoinColumn(name = "userID", referencedColumnName = "userID")}, inverseJoinColumns = {
         @JoinColumn(name = "roleID", referencedColumnName = "roleID")})
-    @ManyToMany(fetch=javax.persistence.FetchType.EAGER)
+    @ManyToMany(cascade=CascadeType.PERSIST)//(fetch=javax.persistence.FetchType.EAGER)
     private List<Roles> rolesList;
     private static final long serialVersionUID = 1L;
     @Id
