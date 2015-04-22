@@ -46,6 +46,9 @@ CREATE TABLE `users` (
   PRIMARY KEY (`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE UNIQUE INDEX `userName_UNIQUE` ON `users` (`userName` ASC);
+CREATE UNIQUE INDEX `userEmail_UNIQUE` on `users` (`userEmail` ASC);
+
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 
@@ -102,34 +105,6 @@ VALUES
 UNLOCK TABLES;
 
 
-# Dump of table pinnedposts
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pinnedposts`;
-
-
-
-
-# Dump of table posts
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `posts`;
-
-CREATE TABLE `posts` (
-  `postID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `threadID` int(10) unsigned NOT NULL COMMENT 'Associates all posts in a thread',
-  `userID` int(10) unsigned NOT NULL COMMENT 'Creator of post',
-  `postContent` varchar(20000) NOT NULL,
-  `postTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`postID`,`threadID`,`userID`),
-  KEY `fk_posts_thread1_idx` (`threadID`),
-  KEY `fk_posts_users1` (`userID`),
-  CONSTRAINT `fk_posts_thread1` FOREIGN KEY (`threadID`) REFERENCES `thread` (`threadID`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT `fk_posts_users1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
 # Dump of table projects
 # ------------------------------------------------------------
 
@@ -160,6 +135,53 @@ CREATE TABLE `roles` (
   UNIQUE KEY `roleCode_UNIQUE` (`roleCode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+# Dump of table thread
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `thread`;
+
+CREATE TABLE `thread` (
+  `threadID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `projectID` int(10) unsigned NOT NULL,
+  `userID` int(10) unsigned NOT NULL,
+  `threadTitle` varchar(45) NOT NULL,
+  `threadActive` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`threadID`,`projectID`, `userID`),
+  KEY `fk_thread_projects1_idx` (`projectID`),
+  KEY `fk_thread_user1` (`userID`),
+  CONSTRAINT `fk_thread_projects1` 
+	FOREIGN KEY (`projectID`) 
+    REFERENCES `projects` (`projectID`) 
+    ON DELETE NO ACTION 
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_thread_user1` 
+	FOREIGN KEY (`userID`) 
+    REFERENCES `users` (`userID`) 
+    ON DELETE NO ACTION 
+    ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# Dump of table posts
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `posts`;
+
+CREATE TABLE `posts` (
+  `postID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `threadID` int(10) unsigned NOT NULL COMMENT 'Associates all posts in a thread',
+  `userID` int(10) unsigned NOT NULL COMMENT 'Creator of post',
+  `postContent` varchar(20000) NOT NULL,
+  `postTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`postID`,`threadID`,`userID`),
+  KEY `fk_posts_thread1_idx` (`threadID`),
+  KEY `fk_posts_users1` (`userID`),
+  CONSTRAINT `fk_posts_thread1` FOREIGN KEY (`threadID`) REFERENCES `thread` (`threadID`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_posts_users1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 LOCK TABLES `roles` WRITE;
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
 
@@ -172,6 +194,12 @@ VALUES
 
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 UNLOCK TABLES;
+
+
+# Dump of table pinnedposts
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pinnedposts`;
 
 
 CREATE TABLE `pinnedposts` (
@@ -242,34 +270,6 @@ VALUES
 
 /*!40000 ALTER TABLE `roleperms` ENABLE KEYS */;
 UNLOCK TABLES;
-
-
-# Dump of table thread
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `thread`;
-
-CREATE TABLE `thread` (
-  `threadID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `projectID` int(10) unsigned NOT NULL,
-  `userID` int(10) unsigned NOT NULL,
-  `threadTitle` varchar(45) NOT NULL,
-  `threadActive` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`threadID`,`projectID`, `userID`),
-  KEY `fk_thread_projects1_idx` (`projectID`),
-  KEY `fk_thread_user1` (`userID`),
-  CONSTRAINT `fk_thread_projects1` 
-	FOREIGN KEY (`projectID`) 
-    REFERENCES `projects` (`projectID`) 
-    ON DELETE NO ACTION 
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_thread_user1` 
-	FOREIGN KEY (`userID`) 
-    REFERENCES `users` (`userID`) 
-    ON DELETE NO ACTION 
-    ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 
 # Dump of table userroles
