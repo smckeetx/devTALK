@@ -82,12 +82,12 @@ public class User implements Serializable {
     }
 
   public User(String firstName, String lastName, String userName, String email, BigInteger extension, String userPassword, boolean userActive) {
-        this.userLastName = firstName;
-        this.userFirstName = lastName;
+        this.userFirstName = firstName;
+        this.userLastName = lastName;
         this.userName = userName;
         this.userEmail = email;
         this.userExtension = extension;
-        this.userPassword = userPassword;
+        setUserPassword(userPassword);
         this.userActive = userActive;
     }
 
@@ -144,6 +144,7 @@ public class User implements Serializable {
     }
 
     public void setUserPassword(String userPassword) {
+        // TODO: encrypt
         this.userPassword = userPassword;
     }
 

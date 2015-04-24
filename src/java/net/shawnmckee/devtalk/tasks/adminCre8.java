@@ -42,14 +42,13 @@ public class adminCre8 extends HttpServlet {
         String error = "";
 
         try{
-            String fn = request.getParameter("firstName");
-            
-            String ln = request.getParameter("lastName");
-            String un = request.getParameter("userName");
-            String eml = request.getParameter("email");
-            
+            String fn     = request.getParameter("firstName");
+            String ln     = request.getParameter("lastName");
+            String un     = request.getParameter("userName");
+            String eml    = request.getParameter("email");
+            // TODO: turn this in to a String
             BigInteger ex = new BigInteger(request.getParameter("extension"));
-            Boolean ac = request.getParameter("active").equals("Y");
+            Boolean ac    = request.getParameter("active").equals("Y");
 
             Query q = em.createNamedQuery("User.findByUserName");
             q.setParameter("userName", un);
@@ -114,7 +113,7 @@ public class adminCre8 extends HttpServlet {
         HttpSession session = request.getSession(true);
 
         try{
-            
+            // TODO: Veridy that user has permission
             Query q = em.createNamedQuery("Permissions.findByPermissionCode");
             q.setParameter("permissionCode", "adminCre8");
             Permissions perm = (Permissions)q.getSingleResult();
