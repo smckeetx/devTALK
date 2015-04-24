@@ -89,7 +89,10 @@ public class adminCre8 extends HttpServlet {
         }catch(Exception e){
                 error = error +  "2: " + e.getMessage() + "<br/>";
         }
-        request.setAttribute("error", error);
+
+        if(!error.equals("")){
+            request.setAttribute("error", error);
+        }
         
         request.getRequestDispatcher("/adminAddEdit.jsp").forward(request, response);
     }

@@ -15,8 +15,30 @@
                 </div>
                 <div class="centerAlignDiv">
                     <c:if test="${error != null}">
-                        <div class="error">${error}</div>
+                        <div class="error">|${error}|</div>
                     </c:if>
+                    <c:if test="${error == null && param.firstName != null}">
+                        <div>${param.userName} added!</div>
+                    </c:if>
+
+                    <c:choose>
+                        <c:when test="${error == null}">
+                            <c:set var="firstName" scope="page" value=""/>
+                            <c:set var="lastName"  scope="page" value=""/>
+                            <c:set var="userName"  scope="page" value=""/>
+                            <c:set var="email"     scope="page" value=""/>
+                            <c:set var="extension" scope="page" value=""/>
+                            <c:set var="active"    scope="page" value=""/>
+                        </c:when>
+                        <c:otherwise>
+                            <c:set var="firstName" scope="page" value="${param.firstName}"/>
+                            <c:set var="lastName"  scope="page" value="${param.lastName}"/>
+                            <c:set var="userName"  scope="page" value="${param.userName}"/>
+                            <c:set var="email"     scope="page" value="${param.email}"/>
+                            <c:set var="extension" scope="page" value="${param.extension}"/>
+                            <c:set var="active"    scope="page" value="${param.active}"/>
+                        </c:otherwise>
+                    </c:choose>
 
                     <form action="adminCre8" method="post" name="admin">
                         <div style="width: 500px;" id="fieldset" class="centerAlignDiv">
@@ -32,7 +54,7 @@
                                     <label for="firstName" class="bold em7">
                                         First Name:
                                     </label>
-                                    <input type="text" name="firstName" id="firstName" size="32" maxlength="25" value="${param.firstName}" aria-required="true" required />
+                                    <input type="text" name="firstName" id="firstName" size="32" maxlength="25" value="${pageScope.firstName}" aria-required="true" required />
                                 </div>
                                 <div style="padding:2%;">
                                     <div id="error1" class="redbold" aria-live="assertive"></div>
@@ -40,7 +62,7 @@
                                     <label for="lastName" class="bold em7">
                                         Last Name:
                                     </label>
-                                    <input type="text" name="lastName" id="lastName" size="32" maxlength="25" value="${param.lastName}" aria-required="true" required />
+                                    <input type="text" name="lastName" id="lastName" size="32" maxlength="25" value="${pageScope.lastName}" aria-required="true" required />
                                 </div>
                                 <div style="padding:2%;">
                                     <div id="error1" class="redbold" aria-live="assertive"></div>
@@ -48,7 +70,7 @@
                                     <label for="email" class="bold em7">
                                         eMail:
                                     </label>
-                                    <input type="email" name="email" id="email" size="32" maxlength="50" value="${param.email}" aria-required="true" required />
+                                    <input type="email" name="email" id="email" size="32" maxlength="50" value="${pageScope.email}" aria-required="true" required />
                                 </div>
                                 <div style="padding:2%;">
                                     <div id="error1" class="redbold" aria-live="assertive"></div>
@@ -56,7 +78,7 @@
                                     <label for="userName" class="bold em7">
                                         User Name:
                                     </label>
-                                    <input type="userName" name="userName" id="userName" size="32" maxlength="25" value="${param.userName}" aria-required="true" required />
+                                    <input type="userName" name="userName" id="userName" size="32" maxlength="25" value="${pageScope.userName}" aria-required="true" required />
                                 </div>
                                 <div style="padding:2%;">
                                     <div id="error1" class="redbold" aria-live="assertive"></div>
@@ -64,7 +86,7 @@
                                     <label for="extension" class="bold em7">
                                         Extension:
                                     </label>
-                                    <input type="text" name="extension" id="extension" size="32" maxlength="6" value="${param.extension}" aria-required="true" required />
+                                    <input type="text" name="extension" id="extension" size="32" maxlength="6" value="${pageScope.extension}" aria-required="true" required />
                                 </div>
                                 <div style="padding:2%;">
                                     <div id="error1" class="redbold" aria-live="assertive"></div>
@@ -73,7 +95,7 @@
                                         User Active:
                                     </label>
                                     <c:set var="checked" value="" scope="request"/>
-                                    <c:if test="${empty param.active || param.active == 'Y'}">
+                                    <c:if test="${empty pageScope.active || pageScope.active == 'Y'}">
                                         <c:set var="checked" value="checked" scope="request"/>
                                     </c:if>
                                     <input type="radio" name="active" id="activeY" value="Y" aria-required="true" <c:out value="${checked}"/>> Yes
