@@ -84,6 +84,7 @@ html{
 #content {
     margin-top:1em;
     margin-bottom:2em;
+    margin-left:275px; // same width as #menu
     min-height: 20em;
     overflow:hidden;
     padding-bottom: 4em;
