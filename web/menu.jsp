@@ -20,7 +20,7 @@
                                         <c:if test="${fn:contains(unsupportedList, strng)}">
                                             <span style="text-decoration: line-through">
                                         </c:if>
-                                        <a href="task/${permission.getPermissionCode()}">${permission.getPermissionDesc()}</a>
+                                        <a href="${permission.getPermissionCode()}">${permission.getPermissionDesc()}</a>
                                         <c:if test="${fn:contains(unsupportedList, strng)}">
                                             </span>
                                         </c:if>

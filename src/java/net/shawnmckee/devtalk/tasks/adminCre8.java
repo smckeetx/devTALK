@@ -23,7 +23,7 @@ import net.shawnmckee.devtalk.entities.User;
  *
  * @author smckee
  */
-@WebServlet(name = "adminCre8", urlPatterns = {"/task/adminCre8"})
+@WebServlet(name = "adminCre8", urlPatterns = {"/adminCre8"})
 public class adminCre8 extends HttpServlet {
 
     /**
@@ -39,39 +39,59 @@ public class adminCre8 extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String error = "";
 
         try{
             String fn = request.getParameter("firstName");
+            
             String ln = request.getParameter("lastName");
             String un = request.getParameter("userName");
             String eml = request.getParameter("email");
-            BigInteger ex = new BigInteger(request.getParameter("extension"));
-            Boolean ac = request.getParameter("active").equals("Y") ? true : false;
             
-            User user = new User(fn, ln, un, eml, ex, "password", ac);
-            try{
-                em.getTransaction().begin();
-                em.persist(user);
-                em.merge(user);
-                em.getTransaction().commit();
-                em.getTransaction().begin();
-                Query q = em.createNamedQuery("Roles.findByRoleID");
-                q.setParameter("roleID", 2);
-                List<Roles> role = q.getResultList();
-                q.setParameter("roleID", 3);
-                role.addAll(q.getResultList());
-                user.setRolesList(role);
-                em.merge(user);
-                em.getTransaction().commit();
-                
-                System.out.println(role.get(0));
-                request.getSession().setAttribute("user", user);
-            } catch (Exception e) {
-                request.setAttribute("error", e.getMessage());
+            BigInteger ex = new BigInteger(request.getParameter("extension"));
+            Boolean ac = request.getParameter("active").equals("Y");
+
+            Query q = em.createNamedQuery("User.findByUserName");
+            q.setParameter("userName", un);
+            if(!q.getResultList().isEmpty()){
+                error = error + "User name, " + un + " in use.<br/>";
+            }
+
+            q = em.createNamedQuery("User.findByUserEmail");
+            q.setParameter("userEmail", eml);
+            if(!q.getResultList().isEmpty()){
+                error = error + "User eMail " + eml + " in use.<br/>";
+            }
+
+            if(error.equals("")){
+                try{
+                    User user = new User(fn, ln, un, eml, ex, "password", ac);
+                    em.getTransaction().begin();
+                    em.persist(user);
+                    em.merge(user);
+                    em.getTransaction().commit();
+                    em.getTransaction().begin();
+                    q = em.createNamedQuery("Roles.findByRoleID");
+                    q.setParameter("roleID", 2);
+                    List<Roles> role = q.getResultList();
+                    q.setParameter("roleID", 3);
+                    role.addAll(q.getResultList());
+                    user.setRolesList(role);
+                    em.merge(user);
+                    em.getTransaction().commit();
+
+                    System.out.println(role.get(0));
+                    request.getSession().setAttribute("user", user);
+                } catch (Exception e) {
+                    error = error +  "1: " + e.getMessage() + "<br/>";
+                }
             }
         }catch(Exception e){
-            
+                error = error +  "2: " + e.getMessage() + "<br/>";
         }
+        request.setAttribute("error", error);
+        
+        request.getRequestDispatcher("/adminAddEdit.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

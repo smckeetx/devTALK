@@ -18,7 +18,7 @@
                         <div class="error">${error}</div>
                     </c:if>
 
-                    <form action="/devTALK10/task/adminCre8" method="post" name="admin">
+                    <form action="adminCre8" method="post" name="admin">
                         <div style="width: 500px;" id="fieldset" class="centerAlignDiv">
                             <div style="text-align: left; padding-top: 20px; padding-left: 10px;">
                                 <span class="required">*</span> denotes a required field
@@ -32,7 +32,7 @@
                                     <label for="firstName" class="bold em7">
                                         First Name:
                                     </label>
-                                    <input type="text" name="firstName" id="firstName" size="32" maxlength="25" value="" aria-required="true" required />
+                                    <input type="text" name="firstName" id="firstName" size="32" maxlength="25" value="${param.firstName}" aria-required="true" required />
                                 </div>
                                 <div style="padding:2%;">
                                     <div id="error1" class="redbold" aria-live="assertive"></div>
@@ -40,7 +40,7 @@
                                     <label for="lastName" class="bold em7">
                                         Last Name:
                                     </label>
-                                    <input type="text" name="lastName" id="lastName" size="32" maxlength="25" value="" aria-required="true" required />
+                                    <input type="text" name="lastName" id="lastName" size="32" maxlength="25" value="${param.lastName}" aria-required="true" required />
                                 </div>
                                 <div style="padding:2%;">
                                     <div id="error1" class="redbold" aria-live="assertive"></div>
@@ -48,7 +48,7 @@
                                     <label for="email" class="bold em7">
                                         eMail:
                                     </label>
-                                    <input type="email" name="email" id="email" size="32" maxlength="50" value="" aria-required="true" required />
+                                    <input type="email" name="email" id="email" size="32" maxlength="50" value="${param.email}" aria-required="true" required />
                                 </div>
                                 <div style="padding:2%;">
                                     <div id="error1" class="redbold" aria-live="assertive"></div>
@@ -56,7 +56,7 @@
                                     <label for="userName" class="bold em7">
                                         User Name:
                                     </label>
-                                    <input type="userName" name="userName" id="userName" size="32" maxlength="25" value="" aria-required="true" required />
+                                    <input type="userName" name="userName" id="userName" size="32" maxlength="25" value="${param.userName}" aria-required="true" required />
                                 </div>
                                 <div style="padding:2%;">
                                     <div id="error1" class="redbold" aria-live="assertive"></div>
@@ -64,7 +64,7 @@
                                     <label for="extension" class="bold em7">
                                         Extension:
                                     </label>
-                                    <input type="text" name="extension" id="extension" size="32" maxlength="6" value="" aria-required="true" required />
+                                    <input type="text" name="extension" id="extension" size="32" maxlength="6" value="${param.extension}" aria-required="true" required />
                                 </div>
                                 <div style="padding:2%;">
                                     <div id="error1" class="redbold" aria-live="assertive"></div>
@@ -72,8 +72,12 @@
                                     <label for="active" class="bold em7">
                                         User Active:
                                     </label>
-                                    <input type="radio" name="active" id="activeY" value="Y" aria-required="true" checked /> Yes
-                                    <input type="radio" name="active" id="activen" value="Y" aria-required="true" /> No
+                                    <c:set var="checked" value="" scope="request"/>
+                                    <c:if test="${empty param.active || param.active == 'Y'}">
+                                        <c:set var="checked" value="checked" scope="request"/>
+                                    </c:if>
+                                    <input type="radio" name="active" id="activeY" value="Y" aria-required="true" <c:out value="${checked}"/>> Yes
+                                    <input type="radio" name="active" id="activeN" value="Y" aria-required="true" /> No
                                 </div>
                                 <div style="padding:2%" id="formButtons">
                                     <input type="submit" value="Add" />
