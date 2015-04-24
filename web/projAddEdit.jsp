@@ -15,9 +15,9 @@
                 </div>
                 <div class="centerAlignDiv">
                     <c:if test="${error != null}">
-                        <div class="error">|${error}|</div>
+                        <div class="error">${error}</div>
                     </c:if>
-                    <c:if test="${error == null && param.firstName != null}">
+                    <c:if test="${error == null && param.projectDesc != null}">
                         <div>${param.projectDesc} added!</div>
                     </c:if>
 
@@ -27,12 +27,12 @@
                             <c:set var="active"    scope="page" value=""/>
                         </c:when>
                         <c:otherwise>
-                            <c:set var="projectDesc" scope="page" value="${param.firstName}"/>
+                            <c:set var="projectDesc" scope="page" value="${param.projectDesc}"/>
                             <c:set var="active"      scope="page" value="${param.active}"/>
                         </c:otherwise>
                     </c:choose>
 
-                    <form action="adminCre8" method="post" name="admin">
+                    <form action="projCre8" method="post" name="admin">
                         <div style="width: 500px;" id="fieldset" class="centerAlignDiv">
                             <div style="text-align: left; padding-top: 20px; padding-left: 10px;">
                                 <span class="required">*</span> denotes a required field
@@ -46,7 +46,7 @@
                                     <label for="projectDesc" class="bold em7">
                                         Project Name:
                                     </label>
-                                    <input type="text" name="firstName" id="firstName" size="32" maxlength="45" value="${pageScope.projectDesc}" aria-required="true" required />
+                                    <input type="text" name="projectDesc" id="projectDesc" size="32" maxlength="45" value="${pageScope.projectDesc}" aria-required="true" required />
                                 </div>
                                 <%-- TODO: add in drop down for Project Lead selection --%>
                                 <div style="padding:2%;">

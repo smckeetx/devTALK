@@ -4,7 +4,6 @@
 package net.shawnmckee.devtalk.tasks;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.servlet.ServletException;
@@ -15,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import net.shawnmckee.devtalk.entities.DBUtil;
 import net.shawnmckee.devtalk.entities.Permissions;
+import net.shawnmckee.devtalk.entities.Projects;
+import net.shawnmckee.devtalk.entities.User;
 
 /**
  *
@@ -35,18 +36,43 @@ public class projCre8 extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet projCre8</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet projCre8 at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String error = "";
+
+        try{
+            String pn  = request.getParameter("projectDesc");
+            Boolean ac = request.getParameter("active").equals("Y");
+
+            Query q = em.createNamedQuery("Projects.findByProjectDesc");
+            q.setParameter("projectDesc", pn);
+            if(!q.getResultList().isEmpty()){
+                error = error + "Project description, " + pn + " in use.<br/>";
+            }
+
+            if(error.equals("")){
+                try{
+                    HttpSession session = request.getSession();
+                    User user = (User)session.getAttribute("User");
+                    Projects proj = new Projects(pn, user.getUserID(), ac);
+                    em.getTransaction().begin();
+                    em.persist(proj);
+                    em.merge(proj);
+                    em.getTransaction().commit();
+
+                    request.getSession().setAttribute("proj", proj);
+                } catch (Exception e) {
+                    error = error +  "1: " + e.getMessage() + "<br/>";
+                }
+            }
+        }catch(Exception e){
+                error = error +  "2: " + e.getMessage() + "<br/>";
         }
+
+        if(!error.equals("")){
+            request.setAttribute("error", error);
+        }
+        
+        request.getRequestDispatcher("/projAddEdit.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -66,7 +92,7 @@ public class projCre8 extends HttpServlet {
         HttpSession session = request.getSession(true);
 
         try{
-            // TODO: Veridy that user has permission
+            // TODO: Verify that user has permission
             Query q = em.createNamedQuery("Permissions.findByPermissionCode");
             q.setParameter("permissionCode", "projCre8");
             Permissions perm = (Permissions)q.getSingleResult();

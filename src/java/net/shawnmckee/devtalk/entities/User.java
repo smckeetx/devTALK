@@ -19,7 +19,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -38,6 +40,10 @@ import javax.persistence.Table;
     @NamedQuery(name = "User.findByUserPassword", query = "SELECT u FROM User u WHERE u.userPassword = :userPassword"),
     @NamedQuery(name = "Users.findByUserActive", query = "SELECT u FROM User u WHERE u.userActive = :userActive")})
 public class User implements Serializable {
+    @ManyToMany(mappedBy = "userList")
+    private List<Projects> projectsList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Projects> projectsList1;
     @JoinTable(name = "userroles", joinColumns = {
         @JoinColumn(name = "userID", referencedColumnName = "userID")}, inverseJoinColumns = {
         @JoinColumn(name = "roleID", referencedColumnName = "roleID")})
@@ -241,6 +247,24 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "net.shawnmckee.devtalk.entities.Users[ userID=" + userID + " ]";
+    }
+
+    @XmlTransient
+    public List<Projects> getProjectsList() {
+        return projectsList;
+    }
+
+    public void setProjectsList(List<Projects> projectsList) {
+        this.projectsList = projectsList;
+    }
+
+    @XmlTransient
+    public List<Projects> getProjectsList1() {
+        return projectsList1;
+    }
+
+    public void setProjectsList1(List<Projects> projectsList1) {
+        this.projectsList1 = projectsList1;
     }
 
 }
