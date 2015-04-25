@@ -4,6 +4,7 @@
 package net.shawnmckee.devtalk.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -39,6 +40,9 @@ public class Roles implements Serializable {
     @Basic(optional = false)
     @Column(name = "roleDesc")
     private String roleDesc;
+    @Basic(optional = false)
+    @Column(name = "subRoles")
+    private String subRoles;
     @Basic(optional = false)
     @Column(name = "roleCode")
     private String roleCode;
@@ -93,6 +97,17 @@ public class Roles implements Serializable {
         this.permissionsList = permissionsList;
     }
 
+    public List getSubRoles() {
+        List<Integer> rolesList = new ArrayList<Integer>();
+        for (String s : subRoles.split(","))
+            rolesList.add(new Integer(s));
+        return rolesList;
+    }
+
+    public void setSubRoles(String subRoles) {
+        this.subRoles = subRoles;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -117,5 +132,5 @@ public class Roles implements Serializable {
     public String toString() {
         return "net.shawnmckee.devtalk.entities.Roles[ roleID=" + roleID + " ]";
     }
-    
+
 }

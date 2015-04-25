@@ -1,5 +1,5 @@
 <%-- 
-    Document   : adminAddEdit
+    Document   : userAddEdit
     Created on : Apr 20, 2015, 5:45:11 PM
     Author     : smckee
 --%>
@@ -11,11 +11,11 @@
 
             <div id="content">
                 <div class="centerAlignDiv">
-                    <h1>${sessionScope.User.getPrimaryRole()} : ${sessionScope.task}</h1>
+                    <h1>${sessionScope.User.getPrimaryRole()} : ${requestScope.task}</h1>
                 </div>
                 <div class="centerAlignDiv">
                     <c:if test="${error != null}">
-                        <div class="error">|${error}|</div>
+                        <div class="error">${error}</div>
                     </c:if>
                     <c:if test="${error == null && param.firstName != null}">
                         <div>${param.userName} added!</div>
@@ -29,6 +29,7 @@
                             <c:set var="email"     scope="page" value=""/>
                             <c:set var="extension" scope="page" value=""/>
                             <c:set var="active"    scope="page" value=""/>
+                            <c:set var="permCode"  scope="page" value="${requestScope.permCode}"/>
                         </c:when>
                         <c:otherwise>
                             <c:set var="firstName" scope="page" value="${param.firstName}"/>
@@ -37,17 +38,18 @@
                             <c:set var="email"     scope="page" value="${param.email}"/>
                             <c:set var="extension" scope="page" value="${param.extension}"/>
                             <c:set var="active"    scope="page" value="${param.active}"/>
+                            <c:set var="permCode"  scope="page" value="${param.permCode}"/>
                         </c:otherwise>
                     </c:choose>
 
-                    <form action="adminCre8" method="post" name="admin">
+                    <form action="userCre8" method="post" name="admin">
                         <div style="width: 500px;" id="fieldset" class="centerAlignDiv">
                             <div style="text-align: left; padding-top: 20px; padding-left: 10px;">
                                 <span class="required">*</span> denotes a required field
                             </div>
 
                             <fieldset style="width: 100%; margin-top: -5px">
-                                <legend>Create/Edit Admin</legend>
+                                <legend>Create/Edit</legend>
                                 <div style="padding:2%;">
                                     <div id="error1" class="redbold" aria-live="assertive"></div>
                                     <span class="required">*</span>&nbsp;
@@ -104,9 +106,10 @@
                                 <div style="padding:2%" id="formButtons">
                                     <input type="submit" value="Add" />
                                     <span style="padding-left:5%; margin-left:5%">
-                                        <input type="reset" value="Clear" title="Clear" />
+                                        <input type="reset" value="Reset" title="Reset" />
                                     </span>
                                 </div>
+                                <input type="hidden" name="permCode" value="${pageScope.permCode}"/>
                             </fieldset>
                         </div>
                     </form>
