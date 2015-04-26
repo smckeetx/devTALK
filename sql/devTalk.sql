@@ -130,6 +130,7 @@ CREATE TABLE `roles` (
   `roleID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `roleDesc` varchar(50) NOT NULL,
   `roleCode` varchar(10) NOT NULL,
+  `subRoles` varchar(25) NOT NULL DEFAULT '0',
   PRIMARY KEY (`roleID`),
   UNIQUE KEY `roleDesc_UNIQUE` (`roleDesc`),
   UNIQUE KEY `roleCode_UNIQUE` (`roleCode`)

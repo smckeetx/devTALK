@@ -30,6 +30,9 @@
                             <c:set var="extension" scope="page" value=""/>
                             <c:set var="active"    scope="page" value=""/>
                             <c:set var="permCode"  scope="page" value="${requestScope.permCode}"/>
+                            <c:if test="${empty permCode}">
+                                <c:set var="permCode"  scope="page" value="${param.permCode}"/>
+                            </c:if>
                         </c:when>
                         <c:otherwise>
                             <c:set var="firstName" scope="page" value="${param.firstName}"/>
