@@ -54,7 +54,7 @@ LOCK TABLES `users` WRITE;
 
 INSERT INTO `users` (`userID`, `userName`, `userFirstName`, `userLastName`, `userEmail`, `userExtension`, `userPassword`, `userActive`)
 VALUES
-	(1,'superUser','Super','User',NULL,NULL,'password',1);
+	(1,'superuser','Super','User',NULL,NULL,'password',1);
 
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
