@@ -49,19 +49,21 @@
                     <h1>
                         ${sessionScope.thread.threadTitle}
                     </h1>
-                    
-                    <form action="postCre8" method="post">
-                        <div>
-                            <span class="required">*</span>&nbsp;
-                            <label for="post" class="bold em7">
-                                Post:
-                            </label>
-                            <textarea name="postTxt" id="postTxt" required style="width:98%;height:15em;"></textarea>
-                        </div>
-                        <div style="padding:2%" id="formButtons">
-                            <input type="submit" value="Save" />
-                        </div>
-                    </form>
+
+                    <c:if test="${!empty sessionScope.thread}">
+                        <form action="postCre8" method="post">
+                            <div>
+                                <span class="required">*</span>&nbsp;
+                                <label for="post" class="bold em7">
+                                    Post:
+                                </label>
+                                <textarea name="postTxt" id="postTxt" required style="width:98%;height:15em;"></textarea>
+                            </div>
+                            <div style="padding:2%" id="formButtons">
+                                <input type="submit" value="Save" />
+                            </div>
+                        </form>
+                    </c:if>
 
                     <c:forEach items="${requestScope.posts}" var="post">
                         <div class="postTime">

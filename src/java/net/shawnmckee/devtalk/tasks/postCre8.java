@@ -5,7 +5,9 @@ package net.shawnmckee.devtalk.tasks;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -49,6 +51,10 @@ public class postCre8 extends HttpServlet {
         em.merge(post);
         em.getTransaction().commit();
 
+        Query q = em.createNamedQuery("Posts.findByThreadID");
+        q.setParameter("threadID", thread.getThreadID());
+        List<Posts> posts = q.getResultList();
+        request.setAttribute("posts", posts);
         request.getRequestDispatcher("/threadList.jsp").forward(request, response);
 
     }
