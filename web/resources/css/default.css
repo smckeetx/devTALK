@@ -1738,6 +1738,18 @@ The content `<div>` is where all your content goes.
     color: #888;
 }
 
+.postTime{
+    font-size: .85em;
+    font-weight: bold;
+    padding-top:.75em;
+}
+
+.post{
+    border:1px solid #cbcbcb;
+    padding:2px 5px;
+    margin:2px 10px;
+    font-size: 1.25em;
+}
 
 
 /*

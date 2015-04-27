@@ -4,10 +4,11 @@
 package net.shawnmckee.devtalk.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +19,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -67,6 +69,10 @@ public class Projects implements Serializable {
         this.projectDesc = projectDesc;
         this.userID = userID;
         this.projectActive = projectActive;
+    }
+
+    public Integer getProjectID() {
+        return projectID;
     }
 
     public String getProjectDesc() {
@@ -126,5 +132,5 @@ public class Projects implements Serializable {
     public String toString() {
         return "net.shawnmckee.devtalk.entities.Projects[ projectID=" + projectID + " ]";
     }
-    
+   
 }

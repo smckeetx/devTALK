@@ -93,6 +93,18 @@
                                     </label>
                                     <input type="text" name="extension" id="extension" size="32" maxlength="6" value="${pageScope.extension}" aria-required="true" required />
                                 </div>
+                                <div>
+                                    <span class="required">*</span>&nbsp;
+                                    <label for="projects" class="bold em7">
+                                        Project List:
+                                    </label>
+                                    <select name="projects" id="projects" multiple="true" required="" size="3" style="width:17.5em;">
+                                        <option value="">-- Select Project(s) --</option>
+                                        <c:forEach items="${requestScope.projects}" var="project">
+                                            <option value="${project.projectID}">${project.projectDesc}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
                                 <div style="padding:2%;">
                                     <div id="error1" class="redbold" aria-live="assertive"></div>
                                     <span class="required">*</span>&nbsp;

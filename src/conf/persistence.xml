@@ -3,6 +3,8 @@
   <persistence-unit name="devTALKPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>net.shawnmckee.devtalk.entities.Projects</class>
+    <class>net.shawnmckee.devtalk.entities.Posts</class>
+    <class>net.shawnmckee.devtalk.entities.Thread</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/devTALK?zeroDateTimeBehavior=convertToNull"/>

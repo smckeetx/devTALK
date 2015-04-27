@@ -4,15 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/Users/smckee/NetBeansProjects/devTALK/src/java/net/shawnmckee/devtalk/tasks/userCre8.java</file>
-            <file>file:/Users/smckee/NetBeansProjects/devTALK/src/java/net/shawnmckee/devtalk/entities/User.java</file>
             <file>file:/Users/smckee/NetBeansProjects/devTALK/src/java/net/shawnmckee/devtalk/entities/Projects.java</file>
-            <file>file:/Users/smckee/NetBeansProjects/devTALK/src/java/net/shawnmckee/devtalk/security/Security.java</file>
-            <file>file:/Users/smckee/NetBeansProjects/devTALK/web/header.jsp</file>
-            <file>file:/Users/smckee/NetBeansProjects/devTALK/web/projAddEdit.jsp</file>
-            <file>file:/Users/smckee/NetBeansProjects/devTALK/web/adminAddEdit.jsp</file>
-            <file>file:/Users/smckee/NetBeansProjects/devTALK/src/java/net/shawnmckee/devtalk/entities/Roles.java</file>
-            <file>file:/Users/smckee/NetBeansProjects/devTALK/web/menu.jsp</file>
-            <file>file:/Users/smckee/NetBeansProjects/devTALK/src/java/net/shawnmckee/devtalk/tasks/projCre8.java</file>
+            <file>file:/Users/smckee/NetBeansProjects/devTALK/src/java/net/shawnmckee/devtalk/entities/User.java</file>
+            <file>file:/Users/smckee/NetBeansProjects/devTALK/web/footer.jsp</file>
+            <file>file:/Users/smckee/NetBeansProjects/devTALK/web/userAddEdit.jsp</file>
         </group>
     </open-files>
 </project-private>
