@@ -1,4 +1,4 @@
-# ************************************************************
+s# ************************************************************
 # Sequel Pro SQL dump
 # Version 4096
 #
@@ -186,12 +186,12 @@ CREATE TABLE `posts` (
 LOCK TABLES `roles` WRITE;
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
 
-INSERT INTO `roles` (`roleID`, `roleDesc`, `roleCode`)
+INSERT INTO `roles` (`roleID`, `roleDesc`, `roleCode`, `subRoles`)
 VALUES
-	(1,'Super Admin','superAdmin'),
-	(2,'Administrator','admin'),
-	(3,'User','user'),
-	(4,'Project Lead','prjctLead');
+	(1,'Super Admin','superAdmin', '1,2,3'),
+	(2,'Administrator','admin', '2,3'),
+	(3,'User','user','3'),
+	(4,'Project Lead','prjctLead','4,3');
 
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 UNLOCK TABLES;
