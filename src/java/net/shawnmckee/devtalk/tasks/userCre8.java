@@ -115,7 +115,12 @@ public class userCre8 extends HttpServlet {
         if(!error.equals("")){
             request.setAttribute("error", error);
         }
-        
+
+        Query q = em.createNamedQuery("Projects.findByProjectActive");
+        q.setParameter("projectActive", true);
+        List<Projects> projects = q.getResultList();
+        request.setAttribute("projects", projects);
+
         request.getRequestDispatcher("/userAddEdit.jsp").forward(request, response);
     }
 
