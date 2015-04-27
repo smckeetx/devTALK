@@ -14,21 +14,33 @@
                     <h1>${sessionScope.User.getPrimaryRole()} : ${requestScope.task}</h1>
                 </div>
                 <div class="centerAlignDiv">
-                    <c:if test="${error != null}">
-                        <div class="error">${error}</div>
+                    <c:if test="${requestScope.error != null}">
+                        <div class="error">${requestScope.error}</div>
                     </c:if>
-                    <c:if test="${error == null && param.firstName != null}">
-                        <div>${param.userName} added!</div>
+                    <c:if test="${requestScope.error == null && param.firstName != null}">
+                        <div>${param.userName}&nbsp;${requestScope.permCode == 'userCre8' ? 'added!':'updated!'}</div>
                     </c:if>
 
                     <c:choose>
-                        <c:when test="${error == null}">
+                        <c:when test="${requestScope.error == null  && requestScope.user == null}">
                             <c:set var="firstName" scope="page" value=""/>
                             <c:set var="lastName"  scope="page" value=""/>
                             <c:set var="userName"  scope="page" value=""/>
                             <c:set var="email"     scope="page" value=""/>
                             <c:set var="extension" scope="page" value=""/>
                             <c:set var="active"    scope="page" value=""/>
+                            <c:set var="permCode"  scope="page" value="${requestScope.permCode}"/>
+                            <c:if test="${empty permCode}">
+                                <c:set var="permCode"  scope="page" value="${param.permCode}"/>
+                            </c:if>
+                        </c:when>
+                        <c:when test="${requestScope.error == null  && requestScope.user != null}">
+                            <c:set var="firstName" scope="page" value="${requestScope.user.userFirstName}"/>
+                            <c:set var="lastName"  scope="page" value="${requestScope.user.userLastName}"/>
+                            <c:set var="userName"  scope="page" value="${requestScope.user.userName}"/>
+                            <c:set var="email"     scope="page" value="${requestScope.user.userEmail}"/>
+                            <c:set var="extension" scope="page" value="${requestScope.user.userExtension}"/>
+                            <c:set var="active"    scope="page" value="${requestScope.user.userActive}"/>
                             <c:set var="permCode"  scope="page" value="${requestScope.permCode}"/>
                             <c:if test="${empty permCode}">
                                 <c:set var="permCode"  scope="page" value="${param.permCode}"/>
@@ -44,15 +56,35 @@
                             <c:set var="permCode"  scope="page" value="${param.permCode}"/>
                         </c:otherwise>
                     </c:choose>
+                        
 
-                    <form action="userCre8" method="post" name="admin">
-                        <div style="width: 500px;" id="fieldset" class="centerAlignDiv">
-                            <div style="text-align: left; padding-top: 20px; padding-left: 10px;">
-                                <span class="required">*</span> denotes a required field
+                    <div style="text-align: left; padding-top: 20px; padding-left: 10px;">
+                        <span class="required">*</span> denotes a required field
+                    </div>
+                    <fieldset style="width: 95%;">
+                        <legend>Create/Edit</legend>
+                        <c:if test="${!empty requestScope.users}">
+                            <div>
+                                <form action="userUpdt" method="post">
+                                    <span class="required">*</span>&nbsp;
+                                    <label for="users" class="bold em7">
+                                        User List:
+                                    </label>
+                                    <select name="user" id="user" required>
+                                        <option value="">-- Select User --</option>
+                                        <c:forEach items="${requestScope.users}" var="user">
+                                            <option value="${user.userID}">${user.userFirstName}&nbsp;${user.userLastName}&nbsp;-&nbsp;${user.userName}</option>
+                                        </c:forEach>
+                                    </select>
+                                    <input type="submit" value="Go">
+                                </form>
                             </div>
+                        </c:if>
 
-                            <fieldset style="width: 100%; margin-top: -5px">
-                                <legend>Create/Edit</legend>
+                        <form action="${requestScope.permCode}" method="post" name="admin">
+                            <div style="width: 500px;" id="fieldset" class="centerAlignDiv">
+                                <input type="hidden" name="userID" value="${requestScope.user.userID}">
+
                                 <div style="padding:2%;">
                                     <div id="error1" class="redbold" aria-live="assertive"></div>
                                     <span class="required">*</span>&nbsp;
@@ -91,17 +123,17 @@
                                     <label for="extension" class="bold em7">
                                         Extension:
                                     </label>
-                                    <input type="text" name="extension" id="extension" size="32" maxlength="6" value="${pageScope.extension}" aria-required="true" required />
+                                    <input type="text" name="extension" id="extension" size="32" maxlength="6" value="${pageScope.extension}" aria-required="true" />
                                 </div>
                                 <div>
                                     <span class="required">*</span>&nbsp;
                                     <label for="projects" class="bold em7">
                                         Project List:
                                     </label>
-                                    <select name="projects" id="projects" multiple="true" required="" size="3" style="width:17.5em;">
-                                        <option value="">-- Select Project(s) --</option>
+                                    <select name="projects" id="projects" multiple="true" size="3" style="width:17.5em;">
+                                        <option value="0">-- Select Project(s) --</option>
                                         <c:forEach items="${requestScope.projects}" var="project">
-                                            <option value="${project.projectID}">${project.projectDesc}</option>
+                                            <option value="${project.projectID}" <c:if test="${requestScope.user.projectsList.contains(project)}">selected</c:if>>${project.projectDesc}</option>
                                         </c:forEach>
                                     </select>
                                 </div>
@@ -112,22 +144,22 @@
                                         User Active:
                                     </label>
                                     <c:set var="checked" value="" scope="request"/>
-                                    <c:if test="${empty pageScope.active || pageScope.active == 'Y'}">
+                                    <c:if test="${empty pageScope.active || pageScope.active == 'Y' || pageScope.active == true}">
                                         <c:set var="checked" value="checked" scope="request"/>
                                     </c:if>
                                     <input type="radio" name="active" id="activeY" value="Y" aria-required="true" <c:out value="${checked}"/>> Yes
                                     <input type="radio" name="active" id="activeN" value="Y" aria-required="true" /> No
                                 </div>
                                 <div style="padding:2%" id="formButtons">
-                                    <input type="submit" value="Add" />
+                                    <input type="submit" value="${requestScope.permCode == 'userCre8' ? 'Add' : 'Update'}" />
                                     <span style="padding-left:5%; margin-left:5%">
                                         <input type="reset" value="Reset" title="Reset" />
                                     </span>
                                 </div>
                                 <input type="hidden" name="permCode" value="${pageScope.permCode}"/>
-                            </fieldset>
-                        </div>
-                    </form>
+                            </div>
+                        </form>
+                    </fieldset>
                 </div>
             </div>
 

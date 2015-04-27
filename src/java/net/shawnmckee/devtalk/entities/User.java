@@ -5,7 +5,6 @@ package net.shawnmckee.devtalk.entities;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
