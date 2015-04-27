@@ -82,6 +82,7 @@ public class userCre8 extends HttpServlet {
                     q.setParameter("roleCode", roleCode);
                     List<Roles> role = q.getResultList();
                     List<Integer> subRoles = role.get(0).getSubRoles();
+                    q = em.createNamedQuery("Roles.findByRoleID");
                     for(Integer i : subRoles){
                         if(!role.get(0).getRoleID().equals(i)){
                             q.setParameter("roleID", i);
