@@ -43,14 +43,20 @@ public class postCre8 extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("User");
         Thread thread = (Thread)session.getAttribute("thread");
+        String postText = request.getParameter("postTxt");
         
-        Posts post = new Posts(thread.getThreadID(), user.getUserID(), request.getParameter("postTxt"));
-        
-        em.getTransaction().begin();
-        em.persist(post);
-        em.merge(post);
-        em.getTransaction().commit();
+        if(postText.length() < 20000){
+            Posts post = new Posts(thread.getThreadID(), user.getUserID(), postText);
 
+            em.getTransaction().begin();
+            em.persist(post);
+            em.merge(post);
+            em.getTransaction().commit();
+        }else{
+            error = "Post exceeds 20,000 characters.";
+            request.setAttribute("error", error);
+        }
+        
         Query q = em.createNamedQuery("Posts.findByThreadID");
         q.setParameter("threadID", thread.getThreadID());
         List<Posts> posts = q.getResultList();

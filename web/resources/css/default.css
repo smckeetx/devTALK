@@ -290,19 +290,10 @@ h3 {
     color:#060;
 }
 
-form {
-    font-size: 95%;
-    padding-left:5px;
-    width:100%;
-}
 form p {
     clear: left;
     padding: 7px 0 0 0;
     vertical-align:top;
-}
-form label {
-    font-weight: bold;
-    line-height:22.889px;
 }
    
 .col1{
@@ -317,9 +308,6 @@ form label {
     float:left;
 }
 
-form p label.left {
-    text-align: right;
-}
 .hint {
     margin:0;
     float: left;
@@ -343,19 +331,6 @@ form p label.left {
     display: inline-block;
 }
 
-form p span.lbl, 
-form p label.left {
-    float: left;
-    width: 32%;
-    padding-right:5px;
-}
-
-form p label.left3columns {
-    text-align: right;
-    float: left;
-    width: 15%;
-    padding-right:5px;
-}
 .inputSpan {
     display:inline-block;
     height:24px;
@@ -860,12 +835,6 @@ img {
 }
 svg:not(:root) {
     overflow: hidden
-}
-figure {
-    margin: 0
-}
-form {
-    margin: 0
 }
 button, input, select, textarea {
     font-size: 100%;
@@ -1610,39 +1579,7 @@ table {
     float:left;
     margin-right:1.25em;
 }
-form {
-    font-size: 95%;
-    width:95%;
-}
-form p {
-    clear: left;
-    margin: 0;
-    padding: 0;
-    padding-top: 5px;
-    vertical-align:top;
-}
-form p label {
-    float: left;
-    width: 25%;
-    font-weight: bold;
-    text-align:right;
-    padding-right:5px;
-    vertical-align:top;
-}
 
-form p span.lbl {
-    float: left;
-    width: 25%;
-    font-weight: bold;
-    text-align:right;
-    padding-right:5px;
-    vertical-align:top;
-}
-
-form.narrowsearch {
-    font-size: 80%;
-    width:75%;
-}
 .required {
     font-family: arial, verdana,  sans-serif;
     font-size: small;

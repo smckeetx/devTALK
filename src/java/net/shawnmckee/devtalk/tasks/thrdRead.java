@@ -87,17 +87,18 @@ public class thrdRead extends HttpServlet {
         String error = "";
         HttpSession session = request.getSession();
         
-        if(request.getParameter("project") != null){
-            Query q = em.createNamedQuery("Thread.findByProjectID");
-            q.setParameter("projectID", Integer.parseInt(request.getParameter("project")));
-            List<Thread> threads = q.getResultList();
-            request.setAttribute("threads", threads);
-        }else if(request.getParameter("thread") != null){
+        if(request.getParameter("thread") != null){
             Query q = em.createNamedQuery("Thread.findByThreadID");
             q.setParameter("threadID", Integer.parseInt(request.getParameter("thread")));
             List<Thread> threads = q.getResultList();
             Thread thread = threads.get(0);
             request.getSession().setAttribute("thread", thread);
+        }else if(request.getParameter("project") != null){
+            Query q = em.createNamedQuery("Thread.findByProjectID");
+            q.setParameter("projectID", Integer.parseInt(request.getParameter("project")));
+            List<Thread> threads = q.getResultList();
+            request.setAttribute("threads", threads);
+            request.getSession().setAttribute("thread", null);
         }
         processRequest(request, response);
     }

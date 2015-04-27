@@ -15,36 +15,40 @@
                 <div class="centerAlignDiv">
                     <c:if test="${error != null}">
                         <div class="error">${error}</div>
+                        <c:set var="postTxt" value="${param.postTxt}"/>
                     </c:if>
                     <div>
                         <form action="thrdRead" method="post">
-                            <label for="project" class="bold em7">
-                                Project List:
-                            </label>
-                            <select name="project" id="project" required style="width:17.5em;">
-                                <option value="0">-- Select Project --</option>
-                                <c:forEach items="${sessionScope.User.getProjectsList()}" var="project">
-                                    <option value="${project.projectID}">${project.projectDesc}</option>
-                                </c:forEach>
-                            </select>
-                            <input type="Submit" value="Go"/>
+                            <p>
+                                <label for="project" class="bold em7">
+                                    Project List:
+                                </label>
+                                <select name="project" id="project" required style="width:17.5em;">
+                                    <option value="0">-- Select Project --</option>
+                                    <c:forEach items="${sessionScope.User.getProjectsList()}" var="project">
+                                        <option value="${project.projectID}" ${project.projectID == param.project ? 'selected' : ''}>${project.projectDesc}</option>
+                                    </c:forEach>
+                                </select>
+                                <input type="Submit" value="Go"/>
+                            </p>
                         </form>
                     </div>
                     <c:if test="${!empty requestScope.threads}">
-                        <div>
-                            <form action="thrdRead" method="post">
-                                <label for="project" class="bold em7">
+                        <form action="thrdRead" method="post">
+                            <p>
+                                <label for="thread" class="bold em7">
                                     Thread List:
                                 </label>
                                 <select name="thread" id="thread" required style="width:17.5em;">
                                     <option value="0">-- Select Thread --</option>
                                     <c:forEach items="${requestScope.threads}" var="thread">
-                                        <option value="${thread.threadID}">${thread.threadTitle}</option>
+                                        <option value="${thread.threadID}" ${thread.threadID == param.thread ? 'selected' : ''}>${thread.threadTitle}</option>
                                     </c:forEach>
                                 </select>
+                                <input type="hidden" name="project" value="${param.project}"/>
                                 <input type="Submit" value="Go"/>
-                            </form>
-                        </div>
+                            </p>
+                        </form>
                     </c:if>
                     <h1>
                         ${sessionScope.thread.threadTitle}
@@ -57,7 +61,7 @@
                                 <label for="post" class="bold em7">
                                     Post:
                                 </label>
-                                <textarea name="postTxt" id="postTxt" required style="width:98%;height:15em;"></textarea>
+                                <textarea name="postTxt" id="postTxt" required style="width:98%;height:15em;">${postTxt}</textarea>
                             </div>
                             <div style="padding:2%" id="formButtons">
                                 <input type="submit" value="Save" />
