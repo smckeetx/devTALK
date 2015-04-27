@@ -44,33 +44,57 @@ public class userCre8 extends HttpServlet {
         String error = "";
 
         try{
-            String fn     = request.getParameter("firstName");
-            String ln     = request.getParameter("lastName");
-            String un     = request.getParameter("userName");
-            String eml    = request.getParameter("email");
-            // TODO: turn this in to a String
-            BigInteger ex = new BigInteger(request.getParameter("extension"));
-            Boolean ac    = request.getParameter("active").equals("Y");
-            String[] projectIDs = request.getParameterValues("projects");
+            String fn = request.getParameter("firstName");
+            if(fn.equals(""))
+                error +=  "First name required<br/>";
+            
+            String ln = request.getParameter("lastName");
+            if(ln.equals(""))
+                error +=  "Last name required<br/>";
+            
+            String un = request.getParameter("userName");
+            if(un.equals(""))
+                error +=  "User name required<br/>";
 
             Query q = em.createNamedQuery("User.findByUserName");
             q.setParameter("userName", un);
             if(!q.getResultList().isEmpty()){
-                error = error + "User name, " + un + " in use.<br/>";
+                error += "User name, " + un + " in use.<br/>";
             }
 
+            String eml = request.getParameter("email");
+            if(eml.equals(""))
+                error +=  "eMail required<br/>";
+            
             q = em.createNamedQuery("User.findByUserEmail");
             q.setParameter("userEmail", eml);
             if(!q.getResultList().isEmpty()){
-                error = error + "User eMail " + eml + " in use.<br/>";
+                error += "User eMail " + eml + " in use.<br/>";
             }
             
+            BigInteger pn = null;
+            try{
+                pn = new BigInteger(request.getParameter("userPhone"));
+            }catch(java.lang.NumberFormatException e){
+                error +=  "Phone Number required<br/>";
+            }
+
+            Boolean ac = request.getParameter("active").equals("Y");
+            if(ac == null)
+                error +=  "Active status required<br/>";
+            
+            String[] projectIDs = request.getParameterValues("projects");
+            if(projectIDs == null ||
+               projectIDs.length == 0){
+                error +=  "At least one project is required<br/>";
+            }
+
             String roleCode = request.getParameter("permCode");
             roleCode = roleCode.substring(0, roleCode.length() - 4);
 
             if(error.equals("")){
                 try{
-                    User user = new User(fn, ln, un, eml, ex, "password", ac);
+                    User user = new User(fn, ln, un, eml, pn, "password", ac);
 
                     em.getTransaction().begin();
                     em.persist(user);
@@ -105,11 +129,11 @@ public class userCre8 extends HttpServlet {
 
                     request.getSession().setAttribute("user", user);
                 } catch (Exception e) {
-                    error = error +  "1: " + e.getMessage() + "<br/>";
+                    error += "1: " + e.getMessage() + "<br/>";
                 }
             }
         }catch(Exception e){
-                error = error +  "2: " + e.getMessage() + "<br/>";
+                error += "2: " + e.getMessage() + "<br/>";
         }
 
         if(!error.equals("")){

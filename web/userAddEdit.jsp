@@ -27,7 +27,7 @@
                             <c:set var="lastName"  scope="page" value=""/>
                             <c:set var="userName"  scope="page" value=""/>
                             <c:set var="email"     scope="page" value=""/>
-                            <c:set var="extension" scope="page" value=""/>
+                            <c:set var="userPhone" scope="page" value=""/>
                             <c:set var="active"    scope="page" value=""/>
                             <c:set var="permCode"  scope="page" value="${requestScope.permCode}"/>
                             <c:if test="${empty permCode}">
@@ -39,7 +39,7 @@
                             <c:set var="lastName"  scope="page" value="${requestScope.user.userLastName}"/>
                             <c:set var="userName"  scope="page" value="${requestScope.user.userName}"/>
                             <c:set var="email"     scope="page" value="${requestScope.user.userEmail}"/>
-                            <c:set var="extension" scope="page" value="${requestScope.user.userExtension}"/>
+                            <c:set var="userPhone" scope="page" value="${requestScope.user.userExtension}"/>
                             <c:set var="active"    scope="page" value="${requestScope.user.userActive}"/>
                             <c:set var="permCode"  scope="page" value="${requestScope.permCode}"/>
                             <c:if test="${empty permCode}">
@@ -51,7 +51,7 @@
                             <c:set var="lastName"  scope="page" value="${param.lastName}"/>
                             <c:set var="userName"  scope="page" value="${param.userName}"/>
                             <c:set var="email"     scope="page" value="${param.email}"/>
-                            <c:set var="extension" scope="page" value="${param.extension}"/>
+                            <c:set var="userPhone" scope="page" value="${param.userPhone}"/>
                             <c:set var="active"    scope="page" value="${param.active}"/>
                             <c:set var="permCode"  scope="page" value="${param.permCode}"/>
                         </c:otherwise>
@@ -120,10 +120,10 @@
                                 <div style="padding:2%;">
                                     <div id="error1" class="redbold" aria-live="assertive"></div>
                                     <span class="required">*</span>&nbsp;
-                                    <label for="extension" class="bold em7">
-                                        Extension:
+                                    <label for="userPhone" class="bold em7">
+                                        Phone Number:
                                     </label>
-                                    <input type="text" name="extension" id="extension" size="32" maxlength="6" value="${pageScope.extension}" aria-required="true" />
+                                    <input type="number" name="userPhone" id="userPhone" style="width:17.5em;" maxlength="10" value="${pageScope.userPhone}" aria-required="true" min="10000000000" max="9999999999" />
                                 </div>
                                 <div>
                                     <span class="required">*</span>&nbsp;

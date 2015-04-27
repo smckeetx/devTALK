@@ -86,15 +86,13 @@ public class userUpdt extends HttpServlet {
             String ln     = request.getParameter("lastName");
             String un     = request.getParameter("userName");
             String eml    = request.getParameter("email");
-            // TODO: turn this in to a String
-            
-            BigInteger ex = null;
+            BigInteger pn = null;
             try{
-                ex = new BigInteger(request.getParameter("extension"));
+                pn = new BigInteger(request.getParameter("userPhone"));
             }catch(java.lang.NumberFormatException e){
                 // error message is set below to keep them in a logical order
             }
-            Boolean ac    = request.getParameter("active").equals("Y");
+            Boolean ac = request.getParameter("active").equals("Y");
             String[] projectIDs = request.getParameterValues("projects");
             
             em.getTransaction().begin();
@@ -134,10 +132,10 @@ public class userUpdt extends HttpServlet {
             }else
                 error +=  "eMail required<br/>";
             
-            if(ex != null)
-                user.setUserExtension(ex);
+            if(pn != null)
+                user.setUserExtension(pn);
             else
-                error +=  "Extension required<br/>";
+                error +=  "Phone Number required<br/>";
             
             if(ac != null)
                 user.setUserActive(ac);
