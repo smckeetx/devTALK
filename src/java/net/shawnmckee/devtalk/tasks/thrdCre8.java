@@ -49,6 +49,7 @@ public class thrdCre8 extends HttpServlet {
                 error = error +  "You must select a project.<br/>";
             
             String title = request.getParameter("title");
+            title = title.replaceAll("<", "&lt;");
             if(title.trim().equals(""))
                 error = error +  "You must enter a title.<br/>";
             

@@ -44,6 +44,8 @@ public class postCre8 extends HttpServlet {
         User user = (User)session.getAttribute("User");
         Thread thread = (Thread)session.getAttribute("thread");
         String postText = request.getParameter("postTxt");
+        postText = postText.replaceAll("<", "&lt;");
+        postText = postText.replaceAll("(\r\n|\n)", "<br />");
         
         if(postText.length() < 20000){
             Posts post = new Posts(thread.getThreadID(), user.getUserID(), postText);

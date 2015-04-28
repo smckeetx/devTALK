@@ -123,7 +123,7 @@
                                     <label for="userPhone" class="bold em7">
                                         Phone Number:
                                     </label>
-                                    <input type="number" name="userPhone" id="userPhone" style="width:17.5em;" maxlength="10" value="${pageScope.userPhone}" aria-required="true" min="10000000000" max="9999999999" />
+                                    <input type="number" name="userPhone" id="userPhone" style="width:17.5em;" maxlength="10" value="${pageScope.userPhone}" aria-required="true" min="1000000000" max="9999999999" />
                                 </div>
                                 <div>
                                     <span class="required">*</span>&nbsp;

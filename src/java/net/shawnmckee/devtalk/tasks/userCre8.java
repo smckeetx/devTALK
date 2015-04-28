@@ -47,14 +47,17 @@ public class userCre8 extends HttpServlet {
             String fn = request.getParameter("firstName");
             if(fn.equals(""))
                 error +=  "First name required<br/>";
+            fn = fn.replaceAll("<", "&lt;");
             
             String ln = request.getParameter("lastName");
             if(ln.equals(""))
                 error +=  "Last name required<br/>";
+            ln = ln.replaceAll("<", "&lt;");
             
             String un = request.getParameter("userName");
             if(un.equals(""))
                 error +=  "User name required<br/>";
+            un = un.replaceAll("<", "&lt;");
 
             Query q = em.createNamedQuery("User.findByUserName");
             q.setParameter("userName", un);
@@ -65,6 +68,7 @@ public class userCre8 extends HttpServlet {
             String eml = request.getParameter("email");
             if(eml.equals(""))
                 error +=  "eMail required<br/>";
+            eml = eml.replaceAll("<", "&lt;");
             
             q = em.createNamedQuery("User.findByUserEmail");
             q.setParameter("userEmail", eml);
