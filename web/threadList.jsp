@@ -25,7 +25,7 @@
                                 </label>
                                 <select name="project" id="project" required style="width:17.5em;">
                                     <option value="0">-- Select Project --</option>
-                                    <c:forEach items="${sessionScope.User.getProjectsList()}" var="project">
+                                    <c:forEach items="${requestScope.projects}" var="project">
                                         <option value="${project.projectID}" ${project.projectID == param.project ? 'selected' : ''}>${project.projectDesc}</option>
                                     </c:forEach>
                                 </select>

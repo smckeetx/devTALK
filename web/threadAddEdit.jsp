@@ -17,34 +17,6 @@
                     <c:if test="${error != null}">
                         <div class="error">${error}</div>
                     </c:if>
-                    <c:if test="${error == null && param.firstName != null}">
-                        <div>${param.userName} added!</div>
-                    </c:if>
-
-                    <c:choose>
-                        <c:when test="${error == null}">
-                            <c:set var="firstName" scope="page" value=""/>
-                            <c:set var="lastName"  scope="page" value=""/>
-                            <c:set var="userName"  scope="page" value=""/>
-                            <c:set var="email"     scope="page" value=""/>
-                            <c:set var="extension" scope="page" value=""/>
-                            <c:set var="active"    scope="page" value=""/>
-                            <c:set var="permCode"  scope="page" value="${requestScope.permCode}"/>
-                            <c:if test="${empty permCode}">
-                                <c:set var="permCode"  scope="page" value="${param.permCode}"/>
-                            </c:if>
-                        </c:when>
-                        <c:otherwise>
-                            <c:set var="firstName" scope="page" value="${param.firstName}"/>
-                            <c:set var="lastName"  scope="page" value="${param.lastName}"/>
-                            <c:set var="userName"  scope="page" value="${param.userName}"/>
-                            <c:set var="email"     scope="page" value="${param.email}"/>
-                            <c:set var="extension" scope="page" value="${param.extension}"/>
-                            <c:set var="active"    scope="page" value="${param.active}"/>
-                            <c:set var="permCode"  scope="page" value="${param.permCode}"/>
-                        </c:otherwise>
-                    </c:choose>
-
                     <form action="thrdCre8" method="post" name="admin">
                         <div style="width: 75%;" id="fieldset" class="centerAlignDiv">
                             <div style="text-align: left; padding-top: 20px; padding-left: 10px;">
@@ -60,7 +32,7 @@
                                     </label>
                                     <select name="project" id="project" required style="width:17.5em;">
                                         <option value="0">-- Select Project --</option>
-                                        <c:forEach items="${sessionScope.User.getProjectsList()}" var="project">
+                                        <c:forEach items="${requestScope.projects}" var="project">
                                             <option value="${project.projectID}">${project.projectDesc}</option>
                                         </c:forEach>
                                     </select>

@@ -42,11 +42,23 @@ public class thrdRead extends HttpServlet {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         String error = "";
         HttpSession session = request.getSession();
+        Query q = null;
+        List<Projects> projects = null;
         User user = (User)session.getAttribute("User");
+
+        // get the projects the user can see
+        if(user.getPrimaryRoleCode().equals("user")){
+            projects = user.getProjectsList();
+        }else{
+            q = em.createNamedQuery("Projects.findByProjectActive");
+            q.setParameter("projectActive", true);
+            projects = q.getResultList();
+        }
+        request.setAttribute("projects", projects);
 
         Thread thread = (Thread)session.getAttribute("thread");
         if(thread != null){
-            Query q = em.createNamedQuery("Posts.findByThreadID");
+            q = em.createNamedQuery("Posts.findByThreadID");
             q.setParameter("threadID", thread.getThreadID());
             List<Posts> posts = q.getResultList();
             request.setAttribute("posts", posts);

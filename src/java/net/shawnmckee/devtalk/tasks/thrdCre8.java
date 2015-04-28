@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import net.shawnmckee.devtalk.entities.DBUtil;
 import net.shawnmckee.devtalk.entities.Permissions;
 import net.shawnmckee.devtalk.entities.Posts;
+import net.shawnmckee.devtalk.entities.Projects;
 import net.shawnmckee.devtalk.entities.User;
 import net.shawnmckee.devtalk.entities.Thread;
 
@@ -42,6 +43,18 @@ public class thrdCre8 extends HttpServlet {
         String error = "";
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("User");
+        Query q = null;
+        List<Projects> projects = null;
+
+        // get the projects the user can see
+        if(user.getPrimaryRoleCode().equals("user")){
+            projects = user.getProjectsList();
+        }else{
+            q = em.createNamedQuery("Projects.findByProjectActive");
+            q.setParameter("projectActive", true);
+            projects = q.getResultList();
+        }
+        request.setAttribute("projects", projects);
 
         try{
             Integer proj = Integer.parseInt(request.getParameter("project"));
@@ -55,7 +68,7 @@ public class thrdCre8 extends HttpServlet {
             
             String postTxt = request.getParameter("post");
             if(postTxt.trim().equals(""))
-                error = error +  "You must some content.<br/>";
+                error = error +  "You must enter some content.<br/>";
             
 
             if(error.equals("")){
@@ -74,7 +87,7 @@ public class thrdCre8 extends HttpServlet {
                     em.getTransaction().commit();
 
                     request.getSession().setAttribute("thread", thread);
-                    Query q = em.createNamedQuery("Posts.findByThreadID");
+                    q = em.createNamedQuery("Posts.findByThreadID");
                     q.setParameter("threadID", thread.getThreadID());
                     List<Posts> posts = q.getResultList();
                     request.setAttribute("posts", posts);
@@ -93,7 +106,6 @@ public class thrdCre8 extends HttpServlet {
         request.getRequestDispatcher("/threadList.jsp").forward(request, response);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -108,6 +120,19 @@ public class thrdCre8 extends HttpServlet {
 
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         HttpSession session = request.getSession(true);
+        Query q = null;
+        List<Projects> projects = null;
+        User user = (User)session.getAttribute("User");
+
+        // get the projects the user can see
+        if(user.getPrimaryRoleCode().equals("user")){
+            projects = user.getProjectsList();
+        }else{
+            q = em.createNamedQuery("Projects.findByProjectActive");
+            q.setParameter("projectActive", true);
+            projects = q.getResultList();
+        }
+        request.setAttribute("projects", projects);
 
         try{
             String url = request.getRequestURL().toString();
@@ -116,7 +141,7 @@ public class thrdCre8 extends HttpServlet {
             if(permCode == null)
                 permCode = "thrdCre8";
             // TODO: Verify that logged in user has permission to do this
-            Query q = em.createNamedQuery("Permissions.findByPermissionCode");
+            q = em.createNamedQuery("Permissions.findByPermissionCode");
             q.setParameter("permissionCode", permCode);
             Permissions perm = (Permissions)q.getSingleResult();
 

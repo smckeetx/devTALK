@@ -191,7 +191,7 @@ VALUES
 	(1,'Super Admin','superAdmin', '1,2,3'),
 	(2,'Administrator','admin', '2,3'),
 	(3,'User','user','3'),
-	(4,'Project Lead','prjctLead','4,3');
+	(4,'Project Lead','prjctLead','3,4');
 
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 UNLOCK TABLES;
