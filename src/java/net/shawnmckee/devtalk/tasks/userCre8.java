@@ -149,6 +149,19 @@ public class userCre8 extends HttpServlet {
         List<Projects> projects = q.getResultList();
         request.setAttribute("projects", projects);
 
+        String url = request.getRequestURL().toString();
+        String permCode = url.substring(url.lastIndexOf("/") + 1);
+        // String permCode = (String)request.getAttribute("permCode");
+        if(permCode == null)
+            permCode = "userCre8";
+        // TODO: Verify that logged in user has permission to do this
+        q = em.createNamedQuery("Permissions.findByPermissionCode");
+        q.setParameter("permissionCode", permCode);
+        Permissions perm = (Permissions)q.getSingleResult();
+
+        request.setAttribute("task"  , perm.getPermissionDesc());
+        request.setAttribute("taskID", perm.getPermissionID());
+        request.setAttribute("permCode", permCode);
         request.getRequestDispatcher("/userAddEdit.jsp").forward(request, response);
     }
 

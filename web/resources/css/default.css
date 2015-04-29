@@ -693,6 +693,10 @@ a.skip:hover {
 .s4{
     margin-left:2em;
 }
+
+.datCol{
+    padding:3px 0;
+}
 /**
 * If there are any application specific styles or overrides they should go in here.
 */

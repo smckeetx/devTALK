@@ -69,11 +69,12 @@ public class thrdCre8 extends HttpServlet {
             String postTxt = request.getParameter("post");
             if(postTxt.trim().equals(""))
                 error = error +  "You must enter some content.<br/>";
-            
 
+            Boolean isPublic = request.getParameter("pubPriv").equals("public");
+            
             if(error.equals("")){
                 try{
-                    Thread thread = new Thread(title, proj, user.getUserID(), true);
+                    Thread thread = new Thread(title, proj, user.getUserID(), true, isPublic);
 
                     em.getTransaction().begin();
                     em.persist(thread);
@@ -91,6 +92,7 @@ public class thrdCre8 extends HttpServlet {
                     q.setParameter("threadID", thread.getThreadID());
                     List<Posts> posts = q.getResultList();
                     request.setAttribute("posts", posts);
+
                 } catch (Exception e) {
                     error = error +  "1: " + e.getMessage() + "<br/>";
                 }
@@ -145,9 +147,15 @@ public class thrdCre8 extends HttpServlet {
             q.setParameter("permissionCode", permCode);
             Permissions perm = (Permissions)q.getSingleResult();
 
+            // get the list of ALL users and store that
+            q = em.createNamedQuery("User.findAll");
+            List<User> users = q.getResultList();
+            request.setAttribute("users", users);
+
             request.setAttribute("task"  , perm.getPermissionDesc());
             request.setAttribute("taskID", perm.getPermissionID());
             request.setAttribute("permCode", permCode);
+            
             request.getRequestDispatcher("/threadAddEdit.jsp").forward(request, response);
         }catch(Exception e){
             System.out.println(e.getMessage());

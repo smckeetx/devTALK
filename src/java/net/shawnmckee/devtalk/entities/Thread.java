@@ -52,15 +52,19 @@ public class Thread implements Serializable {
     @Basic(optional = false)
     @Column(name = "threadActive")
     private boolean threadActive;
+    @Basic(optional = false)
+    @Column(name = "threadPublic")
+    private boolean threadPublic;
 
     public Thread() {
     }
 
-    public Thread(String threadTitle, Integer projectID, Integer userID, boolean threadActive) {
+    public Thread(String threadTitle, Integer projectID, Integer userID, boolean threadActive, boolean threadPublic) {
         this.threadTitle = threadTitle;
         this.userID = userID;
         this.projectID = projectID;
         this.threadActive = threadActive;
+        this.threadActive = threadPublic;
     }
 
     public Integer getThreadID(){
@@ -81,6 +85,14 @@ public class Thread implements Serializable {
 
     public void setThreadActive(boolean threadActive) {
         this.threadActive = threadActive;
+    }
+
+    public boolean getThreadPublic() {
+        return threadActive;
+    }
+
+    public void setThreadPublic(boolean threadPublic) {
+        this.threadPublic = threadPublic;
     }
 
     @Override

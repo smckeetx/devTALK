@@ -8,7 +8,6 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@include file="header.jsp" %>
 <%@include file="menu.jsp" %>
-
             <div id="content">
                 <div class="centerAlignDiv">
                     <h1>${sessionScope.User.getPrimaryRole()} : ${requestScope.task}</h1>
@@ -18,14 +17,14 @@
                         <div class="error">${error}</div>
                     </c:if>
                     <form action="thrdCre8" method="post" name="admin">
-                        <div style="width: 75%;" id="fieldset" class="centerAlignDiv">
+                        <div style="width: 95%;" id="fieldset" class="centerAlignDiv">
                             <div style="text-align: left; padding-top: 20px; padding-left: 10px;">
                                 <span class="required">*</span> denotes a required field
                             </div>
 
                             <fieldset style="width: 100%; margin-top: -5px">
                                 <legend>Create/Edit</legend>
-                               <div>
+                               <div class="datCol">
                                     <span class="required">*</span>&nbsp;
                                     <label for="project" class="bold em7">
                                         Project List:
@@ -38,22 +37,34 @@
                                     </select>
                                 </div>
 
-                                <div>
+                                <div class="datCol">
                                     <span class="required">*</span>&nbsp;
                                     <label for="title" class="bold em7">
-                                        Title
+                                        Title:
                                     </label>
                                     <input type="text" name="title" id="title" required size="45" maxlength="45"/>
                                 </div>
 
-                                <div>
-                                    <label for="threadType">
-                                        <input type="radio" name="pubPriv" id="threadType" value="public" checked>Public
-                                        <input type="radio" name="pubPriv" id="threadType" value="provate">Private
+                                <div class="datCol">
+                                    <label for="threadType" class="bold em7">
+                                        <input type="radio" name="pubPriv" id="threadType" value="public" checked onclick="toggleMenu()">Public
+                                        <input type="radio" name="pubPriv" id="threadType" value="private" onclick="toggleMenu()">Private
                                     </label>
                                 </div>
 
-                                <div>
+                                <div class="datCol" style="display: none" id="participantsDiv">
+                                    <label for="participants" class="bold em7">Add Users:</label>
+                                    <select name="participants" id="participants" multiple size="3">
+                                        <option value="0">-- Select Users --</option>
+                                        <c:forEach items="${requestScope.users}" var="user">
+                                            <c:if test="${user.userID != sessionScope.User.getUserID()}"> <%-- exclude logged in user from list --%>
+                                                <option value="${user.userID}">${user.userFirstName}&nbsp;${user.userLastName}&nbsp;-&nbsp;${user.userName}</option>
+                                            </c:if>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+
+                                <div class="datCol">
                                     <span class="required">*</span>&nbsp;
                                     <label for="post" class="bold em7">
                                         Post:
@@ -73,5 +84,15 @@
                     </form>
                 </div>
             </div>
-
+            <script>
+                function toggleMenu() {
+                    var thisMenu = document.getElementById('participantsDiv');
+                    if( thisMenu.style.display == 'block' ) {
+                        thisMenu.style.display = 'none';
+                    } else { 
+                        thisMenu.style.display = 'block';
+                    }
+                    return thisMenu;
+                }
+            </script>
 <%@include file="footer.jsp" %>

@@ -17,7 +17,7 @@
                         <div class="error">${error}</div>
                         <c:set var="postTxt" value="${param.postTxt}"/>
                     </c:if>
-                    <div>
+                    <div class="datCol">
                         <form action="thrdRead" method="post">
                             <p>
                                 <label for="project" class="bold em7">
@@ -56,7 +56,7 @@
 
                     <c:if test="${!empty sessionScope.thread}">
                         <form action="postCre8" method="post">
-                            <div>
+                            <div class="datCol">
                                 <span class="required">*</span>&nbsp;
                                 <label for="post" class="bold em7">
                                     Post:
