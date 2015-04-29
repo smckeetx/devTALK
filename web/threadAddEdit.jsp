@@ -47,6 +47,13 @@
                                 </div>
 
                                 <div>
+                                    <label for="threadType">
+                                        <input type="radio" name="pubPriv" id="threadType" value="public" checked>Public
+                                        <input type="radio" name="pubPriv" id="threadType" value="provate">Private
+                                    </label>
+                                </div>
+
+                                <div>
                                     <span class="required">*</span>&nbsp;
                                     <label for="post" class="bold em7">
                                         Post:
