@@ -18,6 +18,10 @@
                         <div class="error">${error}</div>
                     </c:if>
 
+                    <c:if test="${param.error != null}">
+                        <div class="error">${param.error}</div>
+                    </c:if>
+
                     <div>
                         
                     </div>

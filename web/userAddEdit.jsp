@@ -143,12 +143,18 @@
                                     <label for="active" class="bold em7">
                                         User Active:
                                     </label>
-                                    <c:set var="checked" value="" scope="request"/>
+
+                                    <c:set var="active" value="" scope="request"/>
+                                    <c:set var="inactive" value="" scope="request"/>
                                     <c:if test="${empty pageScope.active || pageScope.active == 'Y' || pageScope.active == true}">
-                                        <c:set var="checked" value="checked" scope="request"/>
+                                        <c:set var="activeY" value="checked" scope="page"/>
                                     </c:if>
-                                    <input type="radio" name="active" id="activeY" value="Y" aria-required="true" <c:out value="${checked}"/>> Yes
-                                    <input type="radio" name="active" id="activeN" value="Y" aria-required="true" /> No
+                                    <c:if test="${!empty pageScope.active && (pageScope.active == 'N' || pageScope.active == false)}">
+                                        <c:set var="activeN" value="checked" scope="page"/>
+                                    </c:if>
+
+                                    <input type="radio" name="active" id="activeY" value="Y" aria-required="true" <c:out value="${activeY}"/>> Yes
+                                    <input type="radio" name="active" id="activeN" value="N" aria-required="true" <c:out value="${activeN}"/> /> No
                                 </div>
                                 <div style="padding:2%" id="formButtons">
                                     <input type="submit" value="${requestScope.permCode == 'userCre8' ? 'Add' : 'Update'}" />

@@ -88,8 +88,14 @@ public class projCre8 extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        HttpSession session = request.getSession(false);
+        
+        if(session == null){
+            request.setAttribute("error", "Session timedout");
+            response.sendRedirect("/");
+        }
+
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        HttpSession session = request.getSession(true);
 
         try{
             // TODO: Verify that user has permission

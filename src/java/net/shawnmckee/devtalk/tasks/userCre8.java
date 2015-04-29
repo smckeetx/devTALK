@@ -39,6 +39,12 @@ public class userCre8 extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        if(request.getSession(false) == null){
+            request.setAttribute("error", "Session timedout");
+            response.sendRedirect("/");
+        }
+
         response.setContentType("text/html;charset=UTF-8");
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         String error = "";
@@ -177,8 +183,13 @@ public class userCre8 extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        if(request.getSession(false) == null){
+            request.setAttribute("error", "Session timedout");
+            response.sendRedirect("/");
+        }
+
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        HttpSession session = request.getSession(true);
 
         try{
             String url = request.getRequestURL().toString();
