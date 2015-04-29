@@ -12,6 +12,10 @@
                         <div class="error">${error}</div>
                     </c:if>
 
+                    <c:if test="${param.error != null}">
+                        <div class="error">${param.error}</div>
+                    </c:if>
+
                     <form action="security" method="post" name="login">
                         <input type="hidden" name="action" value="login"/>
                         <div style="width: 500px;" id="fieldset" class="centerAlignDiv">
