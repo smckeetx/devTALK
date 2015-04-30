@@ -64,7 +64,8 @@ public class Security extends HttpServlet {
             List<User> user = q.getResultList();
 
             if(user.size() > 0 &&
-               user.get(0).getUserPassword().equals(request.getParameter("password"))
+               user.get(0).getUserPassword().equals(request.getParameter("password")) &&
+               user.get(0).getUserActive()
               ){
                     HttpSession session = request.getSession(true);
                     session.setAttribute("User", user.get(0));
