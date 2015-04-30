@@ -5,6 +5,7 @@ package net.shawnmckee.devtalk.entities;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,6 +15,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -33,8 +36,13 @@ import javax.persistence.Table;
     @NamedQuery(name = "Thread.findByUserID", query = "SELECT t FROM Thread t WHERE t.userID = :userID"),
     @NamedQuery(name = "Thread.findByThreadTitle", query = "SELECT t FROM Thread t WHERE t.threadTitle = :threadTitle"),
     @NamedQuery(name = "Thread.findByThreadActive", query = "SELECT t FROM Thread t WHERE t.threadActive = :threadActive")})
-public class Thread implements Serializable {
+    public class Thread implements Serializable {
     private static final long serialVersionUID = 1L;
+    @JoinTable(name = "userThread", joinColumns = {
+        @JoinColumn(name = "threadID", referencedColumnName = "threadID")}, inverseJoinColumns = {
+        @JoinColumn(name = "userID", referencedColumnName = "userID")})
+    @ManyToMany(cascade=CascadeType.PERSIST)
+    private List<User> userList;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -95,6 +103,15 @@ public class Thread implements Serializable {
         this.threadPublic = threadPublic;
     }
 
+    public List<User> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
+    }
+    
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -119,5 +136,5 @@ public class Thread implements Serializable {
     public String toString() {
         return "net.shawnmckee.devtalk.entities.Thread[ threadID=" + threadID + " ]";
     }
-    
-}
+
+    }

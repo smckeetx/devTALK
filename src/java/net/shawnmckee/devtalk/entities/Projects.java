@@ -132,5 +132,5 @@ public class Projects implements Serializable {
     public String toString() {
         return "net.shawnmckee.devtalk.entities.Projects[ projectID=" + projectID + " ]";
     }
-   
-}
+
+    }

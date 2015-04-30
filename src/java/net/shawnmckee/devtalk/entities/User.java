@@ -37,7 +37,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "User.findByUserExtension", query = "SELECT u FROM User u WHERE u.userExtension = :userExtension"),
     @NamedQuery(name = "User.findByUserPassword", query = "SELECT u FROM User u WHERE u.userPassword = :userPassword"),
     @NamedQuery(name = "Users.findByUserActive", query = "SELECT u FROM User u WHERE u.userActive = :userActive")})
-public class User implements Serializable {
+    public class User implements Serializable {
     @JoinTable(name = "projectUsers", joinColumns = {
         @JoinColumn(name = "userID", referencedColumnName = "userID")}, inverseJoinColumns = {
         @JoinColumn(name = "projectID", referencedColumnName = "projectID")})
@@ -46,7 +46,7 @@ public class User implements Serializable {
     @JoinTable(name = "userroles", joinColumns = {
         @JoinColumn(name = "userID", referencedColumnName = "userID")}, inverseJoinColumns = {
         @JoinColumn(name = "roleID", referencedColumnName = "roleID")})
-    @ManyToMany(cascade=CascadeType.PERSIST)//(fetch=javax.persistence.FetchType.EAGER)
+    @ManyToMany(cascade=CascadeType.PERSIST)
     private List<Roles> rolesList;
     private static final long serialVersionUID = 1L;
     @Id

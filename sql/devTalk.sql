@@ -148,6 +148,7 @@ CREATE TABLE `thread` (
   `userID` int(10) unsigned NOT NULL,
   `threadTitle` varchar(45) NOT NULL,
   `threadActive` tinyint(1) NOT NULL DEFAULT '1',
+  `threadPublic` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`threadID`,`projectID`, `userID`),
   KEY `fk_thread_projects1_idx` (`projectID`),
   KEY `fk_thread_user1` (`userID`),
@@ -299,6 +300,25 @@ VALUES
 UNLOCK TABLES;
 
 
+-- -----------------------------------------------------
+-- Table `devtalk`.`userThread`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `devtalk`.`userThread` (
+  `threadID` INT(10) UNSIGNED NOT NULL,
+  `userID` INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`threadID`, `userID`),
+  INDEX `userThreadFK2_idx` (`userID` ASC),
+  CONSTRAINT `userThreadFK1`
+    FOREIGN KEY (`threadID`)
+    REFERENCES `devtalk`.`thread` (`threadID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `userThreadFK2`
+    FOREIGN KEY (`userID`)
+    REFERENCES `devtalk`.`users` (`userID`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
