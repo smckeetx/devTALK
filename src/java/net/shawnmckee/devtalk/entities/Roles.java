@@ -98,7 +98,7 @@ public class Roles implements Serializable {
     }
 
     public List getSubRoles() {
-        List<Integer> rolesList = new ArrayList<Integer>();
+        List<Integer> rolesList = new ArrayList<>();
         for (String s : subRoles.split(","))
             rolesList.add(new Integer(s));
         return rolesList;

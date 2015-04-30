@@ -5,6 +5,7 @@ package net.shawnmckee.devtalk.tasks;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -116,8 +117,24 @@ public class thrdRead extends HttpServlet {
             }else if(request.getParameter("project") != null){
                 Query q = em.createNamedQuery("Thread.findByProjectID");
                 q.setParameter("projectID", Integer.parseInt(request.getParameter("project")));
+                User user = (User) request.getSession().getAttribute("User");
                 List<Thread> threads = q.getResultList();
-                request.setAttribute("threads", threads);
+                Iterator itr = threads.iterator();
+                
+                while(itr.hasNext()){
+                    Thread thrd = (Thread) itr.next();
+                    List<User> tUsers = thrd.getUserList();
+                    if(!thrd.getThreadPublic() &&
+                       !tUsers.contains(user) &&
+                       !thrd.getUserID().equals(user.getUserID()))
+                        itr.remove();
+                }
+                
+                if(threads.isEmpty())
+                    request.setAttribute("error", "You are not connected to any conversations in this project");
+                else
+                    request.setAttribute("threads", threads);
+
                 request.getSession().setAttribute("thread", null);
             }
             processRequest(request, response);

@@ -79,6 +79,10 @@ import javax.persistence.Table;
         return threadID;
     }
     
+    public Integer getUserID(){
+        return userID;
+    }
+    
     public String getThreadTitle() {
         return threadTitle;
     }

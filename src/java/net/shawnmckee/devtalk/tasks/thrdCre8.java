@@ -100,16 +100,17 @@ public class thrdCre8 extends HttpServlet {
                         em.getTransaction().begin();
                         em.persist(thread);
 
-                        q = em.createNamedQuery("User.findByUserID");
-                        q.setParameter("userID", Integer.parseInt(participants[0]));
-                        List<User> users = q.getResultList();
-                        for(Integer i=1; i<participants.length; i++){
-                            q.setParameter("userID", Integer.parseInt(participants[i]));
-                            users.addAll(q.getResultList());
+                        if(participants != null){
+                            q = em.createNamedQuery("User.findByUserID");
+                            q.setParameter("userID", Integer.parseInt(participants[0]));
+                            List<User> users = q.getResultList();
+                            for(Integer i=1; i<participants.length; i++){
+                                q.setParameter("userID", Integer.parseInt(participants[i]));
+                                users.addAll(q.getResultList());
+                            }
+
+                            thread.setUserList(users);
                         }
-
-                        thread.setUserList(users);
-
                         em.merge(thread);
                         em.getTransaction().commit();
 
