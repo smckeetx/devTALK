@@ -76,7 +76,6 @@ public class thrdRead extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -104,8 +103,7 @@ public class thrdRead extends HttpServlet {
             throws ServletException, IOException {
 
         if(request.getSession(false) == null){
-            request.setAttribute("error", "Session timedout");
-            response.sendRedirect("/devTALK");
+            response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
         }else{
             EntityManager em = DBUtil.getEmFactory().createEntityManager();
 

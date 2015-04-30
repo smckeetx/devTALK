@@ -43,103 +43,104 @@ public class thrdCre8 extends HttpServlet {
         HttpSession session = request.getSession(false);
         
         if(session == null){
-            request.setAttribute("error", "Session timedout");
-            response.sendRedirect("/");
-        }
-
-        response.setContentType("text/html;charset=UTF-8");
-        EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        String error = "";
-
-        User user = (User)session.getAttribute("User");
-        Query q = null;
-        List<Projects> projects = null;
-
-        // get the projects the user can see
-        if(user.getPrimaryRoleCode().equals("user")){
-            projects = user.getProjectsList();
+            response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
         }else{
-            q = em.createNamedQuery("Projects.findByProjectActive");
-            q.setParameter("projectActive", true);
-            projects = q.getResultList();
-        }
-        request.setAttribute("projects", projects);
 
-        try{
-            Integer proj = Integer.parseInt(request.getParameter("project"));
-            if(proj.equals(0))
-                error += "You must select a project.<br/>";
-            
-            String title = request.getParameter("title");
-            title = title.replaceAll("<", "&lt;");
-            if(title.trim().equals(""))
-                error += "You must enter a title.<br/>";
-            
-            String postTxt = request.getParameter("post");
-            if(postTxt.trim().equals(""))
-                error += "You must enter some content.<br/>";
+            response.setContentType("text/html;charset=UTF-8");
+            EntityManager em = DBUtil.getEmFactory().createEntityManager();
+            String error = "";
 
-            Boolean isPublic = request.getParameter("pubPriv").equals("public");
-            
-            String[] participants = null;
+            User user = (User)session.getAttribute("User");
+            Query q = null;
+            List<Projects> projects = null;
+
+            // get the projects the user can see
+            if(user.getPrimaryRoleCode().equals("user")){
+                projects = user.getProjectsList();
+            }else{
+                q = em.createNamedQuery("Projects.findByProjectActive");
+                q.setParameter("projectActive", true);
+                projects = q.getResultList();
+            }
+            request.setAttribute("projects", projects);
+
             try{
-                participants = request.getParameterValues("participants");
-                if(!isPublic && 
-                   (participants == null || 
-                    (participants.length == 1 && participants[0].equals("0"))
-                   )
-                  )
-                    error += "You must add at least one participant.<br/>";
-            }catch(NullPointerException npe){
-                error += "You must add at least one participant.<br/>";
-            }
+                Integer proj = Integer.parseInt(request.getParameter("project"));
+                if(proj.equals(0))
+                    error += "You must select a project.<br/>";
 
-            if(error.equals("")){
+                String title = request.getParameter("title");
+                title = title.replaceAll("<", "&lt;");
+                if(title.trim().equals(""))
+                    error += "You must enter a title.<br/>";
+
+                String postTxt = request.getParameter("post");
+                if(postTxt.trim().equals(""))
+                    error += "You must enter some content.<br/>";
+
+                Boolean isPublic = request.getParameter("pubPriv").equals("public");
+
+                String[] participants = null;
                 try{
-                    Thread thread = new Thread(title, proj, user.getUserID(), true, isPublic);
-
-                    em.getTransaction().begin();
-                    em.persist(thread);
-
-                    q = em.createNamedQuery("User.findByUserID");
-                    q.setParameter("userID", Integer.parseInt(participants[0]));
-                    List<User> users = q.getResultList();
-                    for(Integer i=1; i<participants.length; i++){
-                        q.setParameter("userID", Integer.parseInt(participants[i]));
-                        users.addAll(q.getResultList());
-                    }
-
-                    thread.setUserList(users);
-                    
-                    em.merge(thread);
-                    em.getTransaction().commit();
-
-                    Posts post = new Posts(thread.getThreadID(), user.getUserID(), postTxt);
-                    em.getTransaction().begin();
-                    em.persist(post);
-                    em.merge(post);
-                    em.getTransaction().commit();
-
-                    request.getSession().setAttribute("thread", thread);
-                    q = em.createNamedQuery("Posts.findByThreadID");
-                    q.setParameter("threadID", thread.getThreadID());
-                    List<Posts> posts = q.getResultList();
-                    request.setAttribute("posts", posts);
-
-                } catch (Exception e) {
-                    error +=  "1: " + e.getMessage() + "<br/>";
+                    participants = request.getParameterValues("participants");
+                    if(!isPublic && 
+                       (participants == null || 
+                        (participants.length == 1 && participants[0].equals("0"))
+                       )
+                      )
+                        error += "You must add at least one participant.<br/>";
+                }catch(NullPointerException npe){
+                    error += "You must add at least one participant.<br/>";
                 }
+
+                if(error.equals("")){
+                    try{
+                        Thread thread = new Thread(title, proj, user.getUserID(), true, isPublic);
+
+                        em.getTransaction().begin();
+                        em.persist(thread);
+
+                        q = em.createNamedQuery("User.findByUserID");
+                        q.setParameter("userID", Integer.parseInt(participants[0]));
+                        List<User> users = q.getResultList();
+                        for(Integer i=1; i<participants.length; i++){
+                            q.setParameter("userID", Integer.parseInt(participants[i]));
+                            users.addAll(q.getResultList());
+                        }
+
+                        thread.setUserList(users);
+
+                        em.merge(thread);
+                        em.getTransaction().commit();
+
+                        Posts post = new Posts(thread.getThreadID(), user.getUserID(), postTxt);
+                        em.getTransaction().begin();
+                        em.persist(post);
+                        em.merge(post);
+                        em.getTransaction().commit();
+
+                        request.getSession().setAttribute("thread", thread);
+                        q = em.createNamedQuery("Posts.findByThreadID");
+                        q.setParameter("threadID", thread.getThreadID());
+                        List<Posts> posts = q.getResultList();
+                        request.setAttribute("posts", posts);
+
+                    } catch (Exception e) {
+                        error +=  "1: " + e.getMessage() + "<br/>";
+                    }
+                }
+            }catch(Exception e){
+                    error +=  "2: " + e.getMessage() + "<br/>";
             }
-        }catch(Exception e){
-                error +=  "2: " + e.getMessage() + "<br/>";
-        }
 
-        if(!error.equals("")){
-            request.setAttribute("error", error);
-        }
+            if(!error.equals("")){
+                request.setAttribute("error", error);
+            }
 
-        request.getRequestDispatcher("/threadList.jsp").forward(request, response);
-    }
+            request.getRequestDispatcher("/threadList.jsp").forward(request, response);
+
+        }
+    }    
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -156,48 +157,48 @@ public class thrdCre8 extends HttpServlet {
         HttpSession session = request.getSession(false);
 
         if(session == null){
-            request.setAttribute("error", "Session timedout");
-            response.sendRedirect("/");
-        }
-
-        EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        Query q = null;
-        List<Projects> projects = null;
-        User user = (User)session.getAttribute("User");
-
-        // get the projects the user can see
-        if(user.getPrimaryRoleCode().equals("user")){
-            projects = user.getProjectsList();
+            response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
         }else{
-            q = em.createNamedQuery("Projects.findByProjectActive");
-            q.setParameter("projectActive", true);
-            projects = q.getResultList();
-        }
-        request.setAttribute("projects", projects);
 
-        try{
-            String url = request.getRequestURL().toString();
-            String permCode = url.substring(url.lastIndexOf("/") + 1);
-            // String permCode = (String)request.getAttribute("permCode");
-            if(permCode == null)
-                permCode = "thrdCre8";
-            // TODO: Verify that logged in user has permission to do this
-            q = em.createNamedQuery("Permissions.findByPermissionCode");
-            q.setParameter("permissionCode", permCode);
-            Permissions perm = (Permissions)q.getSingleResult();
+            EntityManager em = DBUtil.getEmFactory().createEntityManager();
+            Query q = null;
+            List<Projects> projects = null;
+            User user = (User)session.getAttribute("User");
 
-            // get the list of ALL users and store that
-            q = em.createNamedQuery("User.findAll");
-            List<User> users = q.getResultList();
-            request.setAttribute("users", users);
+            // get the projects the user can see
+            if(user.getPrimaryRoleCode().equals("user")){
+                projects = user.getProjectsList();
+            }else{
+                q = em.createNamedQuery("Projects.findByProjectActive");
+                q.setParameter("projectActive", true);
+                projects = q.getResultList();
+            }
+            request.setAttribute("projects", projects);
 
-            request.setAttribute("task"  , perm.getPermissionDesc());
-            request.setAttribute("taskID", perm.getPermissionID());
-            request.setAttribute("permCode", permCode);
-            
-            request.getRequestDispatcher("/threadAddEdit.jsp").forward(request, response);
-        }catch(Exception e){
-            System.out.println(e.getMessage());
+            try{
+                String url = request.getRequestURL().toString();
+                String permCode = url.substring(url.lastIndexOf("/") + 1);
+                // String permCode = (String)request.getAttribute("permCode");
+                if(permCode == null)
+                    permCode = "thrdCre8";
+                // TODO: Verify that logged in user has permission to do this
+                q = em.createNamedQuery("Permissions.findByPermissionCode");
+                q.setParameter("permissionCode", permCode);
+                Permissions perm = (Permissions)q.getSingleResult();
+
+                // get the list of ALL users and store that
+                q = em.createNamedQuery("User.findAll");
+                List<User> users = q.getResultList();
+                request.setAttribute("users", users);
+
+                request.setAttribute("task"  , perm.getPermissionDesc());
+                request.setAttribute("taskID", perm.getPermissionID());
+                request.setAttribute("permCode", permCode);
+
+                request.getRequestDispatcher("/threadAddEdit.jsp").forward(request, response);
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
         }
     }
 

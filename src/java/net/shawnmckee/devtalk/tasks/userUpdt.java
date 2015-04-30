@@ -40,141 +40,141 @@ public class userUpdt extends HttpServlet {
             throws ServletException, IOException {
 
         if(request.getSession(false) == null){
-            request.setAttribute("error", "Session timedout");
-            response.sendRedirect("/");
-        }
+            response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
+        }else{
 
-        response.setContentType("text/html;charset=UTF-8");
-        EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        String error = "";
+            response.setContentType("text/html;charset=UTF-8");
+            EntityManager em = DBUtil.getEmFactory().createEntityManager();
+            String error = "";
 
-        String url = request.getRequestURL().toString();
-        String permCode = url.substring(url.lastIndexOf("/") + 1);
+            String url = request.getRequestURL().toString();
+            String permCode = url.substring(url.lastIndexOf("/") + 1);
 
-        // TODO: Verify that logged in user has permission to do this
-        Query q = em.createNamedQuery("Permissions.findByPermissionCode");
-        q.setParameter("permissionCode", permCode);
-        Permissions perm = (Permissions)q.getSingleResult();
+            // TODO: Verify that logged in user has permission to do this
+            Query q = em.createNamedQuery("Permissions.findByPermissionCode");
+            q.setParameter("permissionCode", permCode);
+            Permissions perm = (Permissions)q.getSingleResult();
 
-        request.setAttribute("task"  , perm.getPermissionDesc());
-        request.setAttribute("taskID", perm.getPermissionID());
-        request.setAttribute("permCode", permCode);
+            request.setAttribute("task"  , perm.getPermissionDesc());
+            request.setAttribute("taskID", perm.getPermissionID());
+            request.setAttribute("permCode", permCode);
 
-        // get the list of active projects and store it
-        q = em.createNamedQuery("Projects.findByProjectActive");
-        q.setParameter("projectActive", true);
-        List<Projects> projects = q.getResultList();
-        request.setAttribute("projects", projects);
+            // get the list of active projects and store it
+            q = em.createNamedQuery("Projects.findByProjectActive");
+            q.setParameter("projectActive", true);
+            List<Projects> projects = q.getResultList();
+            request.setAttribute("projects", projects);
 
-        // get the list of ALL users and store that
-        q = em.createNamedQuery("User.findAll");
-        List<User> users = q.getResultList();
-        request.setAttribute("users", users);
+            // get the list of ALL users and store that
+            q = em.createNamedQuery("User.findAll");
+            List<User> users = q.getResultList();
+            request.setAttribute("users", users);
 
-        // if a user has been selected from the drop down then get and store them
-        if(request.getParameter("user") != null &&
-           !request.getParameter("user").equals("")){
-            q = em.createNamedQuery("User.findByUserID");
-            q.setParameter("userID", Integer.parseInt(request.getParameter("user")));
-            User user = (User)q.getSingleResult();
-            request.setAttribute("user", user);
-        }
-
-        // we have a specific user to update now
-        if(request.getParameter("userID") != null && 
-           request.getParameter("userID") != ""){
-            
-            q = em.createNamedQuery("User.findByUserID");
-            q.setParameter("userID", Integer.parseInt(request.getParameter("userID")));
-            User user = (User)q.getSingleResult();
-            
-            String fn     = request.getParameter("firstName");
-            String ln     = request.getParameter("lastName");
-            String un     = request.getParameter("userName");
-            String eml    = request.getParameter("email");
-            BigInteger pn = null;
-            try{
-                pn = new BigInteger(request.getParameter("userPhone"));
-            }catch(java.lang.NumberFormatException e){
-                // error message is set below to keep them in a logical order
+            // if a user has been selected from the drop down then get and store them
+            if(request.getParameter("user") != null &&
+               !request.getParameter("user").equals("")){
+                q = em.createNamedQuery("User.findByUserID");
+                q.setParameter("userID", Integer.parseInt(request.getParameter("user")));
+                User user = (User)q.getSingleResult();
+                request.setAttribute("user", user);
             }
-            Boolean ac = request.getParameter("active").equals("Y");
-            String[] projectIDs = request.getParameterValues("projects");
-            
-            em.getTransaction().begin();
-            em.persist(user);
 
-            if(!fn.equals(""))
-                user.setUserFirstName(fn);
-            else
-                error +=  "First name required<br/>";
-            
-            if(!ln.equals(""))
-                user.setUserLastName(ln);
-            else
-                error +=  "Last name required<br/>";
-            
-            if(!un.equals("")){
-                q = em.createNamedQuery("User.findByUserName");
-                q.setParameter("userName", un);
-                if(q.getResultList().isEmpty() ||
-                   q.getResultList().get(0).equals(user)){
-                    user.setUserName(un);
-                } else {
-                    error += "User name, " + un + " in use.<br/>";
-                }
-            }else
-                error +=  "User name required<br/>";
-            
-            if(!eml.equals("")){
-                q = em.createNamedQuery("User.findByUserEmail");
-                q.setParameter("userEmail", eml);
-                if(q.getResultList().isEmpty() ||
-                   q.getResultList().get(0).equals(user)){
-                    user.setUserEmail(eml);
-                } else {
-                    error += "User eMail " + eml + " in use.<br/>";
-                }
-            }else
-                error +=  "eMail required<br/>";
-            
-            if(pn != null)
-                user.setUserExtension(pn);
-            else
-                error +=  "Phone Number required<br/>";
-            
-            if(ac != null)
-                user.setUserActive(ac);
-            else
-                error +=  "Active status required<br/>";
-            
-            if(projectIDs != null &&
-               projectIDs.length > 0){
-                q = em.createNamedQuery("Projects.findByProjectID");
-                q.setParameter("projectID", Integer.parseInt(projectIDs[0]));
-                List<Projects> userProjects = q.getResultList();
+            // we have a specific user to update now
+            if(request.getParameter("userID") != null && 
+               request.getParameter("userID") != ""){
 
-                for(Integer i=1; i<projectIDs.length; i++){
-                    q.setParameter("projectID", Integer.parseInt(projectIDs[i]));
-                    userProjects.addAll(q.getResultList());
+                q = em.createNamedQuery("User.findByUserID");
+                q.setParameter("userID", Integer.parseInt(request.getParameter("userID")));
+                User user = (User)q.getSingleResult();
+
+                String fn     = request.getParameter("firstName");
+                String ln     = request.getParameter("lastName");
+                String un     = request.getParameter("userName");
+                String eml    = request.getParameter("email");
+                BigInteger pn = null;
+                try{
+                    pn = new BigInteger(request.getParameter("userPhone"));
+                }catch(java.lang.NumberFormatException e){
+                    // error message is set below to keep them in a logical order
                 }
-                if(!userProjects.isEmpty())
-                    user.setProjectsList(userProjects);
+                Boolean ac = request.getParameter("active").equals("Y");
+                String[] projectIDs = request.getParameterValues("projects");
+
+                em.getTransaction().begin();
+                em.persist(user);
+
+                if(!fn.equals(""))
+                    user.setUserFirstName(fn);
                 else
-                    error +=  "At least one project is required<br/>";
-            }else{
-                error +=  "At least one project is required<br/>";
-            }
-            
-            em.merge(user);
-            em.getTransaction().commit();
-            request.setAttribute("user", user);
-        }
+                    error +=  "First name required<br/>";
 
-        if(!error.equals("")){
-            request.setAttribute("error", error);
+                if(!ln.equals(""))
+                    user.setUserLastName(ln);
+                else
+                    error +=  "Last name required<br/>";
+
+                if(!un.equals("")){
+                    q = em.createNamedQuery("User.findByUserName");
+                    q.setParameter("userName", un);
+                    if(q.getResultList().isEmpty() ||
+                       q.getResultList().get(0).equals(user)){
+                        user.setUserName(un);
+                    } else {
+                        error += "User name, " + un + " in use.<br/>";
+                    }
+                }else
+                    error +=  "User name required<br/>";
+
+                if(!eml.equals("")){
+                    q = em.createNamedQuery("User.findByUserEmail");
+                    q.setParameter("userEmail", eml);
+                    if(q.getResultList().isEmpty() ||
+                       q.getResultList().get(0).equals(user)){
+                        user.setUserEmail(eml);
+                    } else {
+                        error += "User eMail " + eml + " in use.<br/>";
+                    }
+                }else
+                    error +=  "eMail required<br/>";
+
+                if(pn != null)
+                    user.setUserExtension(pn);
+                else
+                    error +=  "Phone Number required<br/>";
+
+                if(ac != null)
+                    user.setUserActive(ac);
+                else
+                    error +=  "Active status required<br/>";
+
+                if(projectIDs != null &&
+                   projectIDs.length > 0){
+                    q = em.createNamedQuery("Projects.findByProjectID");
+                    q.setParameter("projectID", Integer.parseInt(projectIDs[0]));
+                    List<Projects> userProjects = q.getResultList();
+
+                    for(Integer i=1; i<projectIDs.length; i++){
+                        q.setParameter("projectID", Integer.parseInt(projectIDs[i]));
+                        userProjects.addAll(q.getResultList());
+                    }
+                    if(!userProjects.isEmpty())
+                        user.setProjectsList(userProjects);
+                    else
+                        error +=  "At least one project is required<br/>";
+                }else{
+                    error +=  "At least one project is required<br/>";
+                }
+
+                em.merge(user);
+                em.getTransaction().commit();
+                request.setAttribute("user", user);
+            }
+
+            if(!error.equals("")){
+                request.setAttribute("error", error);
+            }
+            request.getRequestDispatcher("/userAddEdit.jsp").forward(request, response);
         }
-        request.getRequestDispatcher("/userAddEdit.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

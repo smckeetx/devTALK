@@ -89,24 +89,24 @@ public class projCre8 extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-        
+
         if(session == null){
-            request.setAttribute("error", "Session timedout");
-            response.sendRedirect("/");
-        }
+            response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
+        }else{
 
-        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+            EntityManager em = DBUtil.getEmFactory().createEntityManager();
 
-        try{
-            // TODO: Verify that user has permission
-            Query q = em.createNamedQuery("Permissions.findByPermissionCode");
-            q.setParameter("permissionCode", "projCre8");
-            Permissions perm = (Permissions)q.getSingleResult();
+            try{
+                // TODO: Verify that user has permission
+                Query q = em.createNamedQuery("Permissions.findByPermissionCode");
+                q.setParameter("permissionCode", "projCre8");
+                Permissions perm = (Permissions)q.getSingleResult();
 
-            session.setAttribute("task", perm.getPermissionDesc());
-            request.getRequestDispatcher("/projAddEdit.jsp").forward(request, response);
-        }catch(Exception e){
-            System.out.println(e.getMessage());
+                session.setAttribute("task", perm.getPermissionDesc());
+                request.getRequestDispatcher("/projAddEdit.jsp").forward(request, response);
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
         }
     }
 
