@@ -13,5 +13,4 @@
             30
         </session-timeout>
     </session-config>
-    <welcome-file-list>&gt;</welcome-file-list>
 </web-app>
