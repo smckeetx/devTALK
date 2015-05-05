@@ -117,7 +117,6 @@ public class thrdCre8 extends HttpServlet {
                         Posts post = new Posts(thread.getThreadID(), user.getUserID(), postTxt);
                         em.getTransaction().begin();
                         em.persist(post);
-                        em.merge(post);
                         em.getTransaction().commit();
 
                         request.getSession().setAttribute("thread", thread);

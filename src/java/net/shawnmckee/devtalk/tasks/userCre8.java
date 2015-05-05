@@ -107,7 +107,6 @@ public class userCre8 extends HttpServlet {
 
                         em.getTransaction().begin();
                         em.persist(user);
-                        em.merge(user);
                         em.getTransaction().commit();
 
                         em.getTransaction().begin();

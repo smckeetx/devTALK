@@ -57,7 +57,6 @@ public class projCre8 extends HttpServlet {
                     Projects proj = new Projects(pn, user.getUserID(), ac);
                     em.getTransaction().begin();
                     em.persist(proj);
-                    em.merge(proj);
                     em.getTransaction().commit();
 
                     request.getSession().setAttribute("proj", proj);

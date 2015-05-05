@@ -57,7 +57,6 @@ public class postCre8 extends HttpServlet {
 
                 em.getTransaction().begin();
                 em.persist(post);
-                em.merge(post);
                 em.getTransaction().commit();
             }else{
                 error = "Post exceeds 20,000 characters.";
