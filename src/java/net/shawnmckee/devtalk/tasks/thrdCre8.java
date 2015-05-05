@@ -4,7 +4,6 @@
 package net.shawnmckee.devtalk.tasks;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -29,17 +28,77 @@ import net.shawnmckee.devtalk.entities.Thread;
 public class thrdCre8 extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
+        HttpSession session = request.getSession(false);
+
+        if(session == null){
+            response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
+        }else{
+
+            EntityManager em = DBUtil.getEmFactory().createEntityManager();
+            Query q = null;
+            List<Projects> projects = null;
+            User user = (User)session.getAttribute("User");
+
+            // get the projects the user can see
+            if(user.getPrimaryRoleCode().equals("user")){
+                projects = user.getProjectsList();
+            }else{
+                q = em.createNamedQuery("Projects.findByProjectActive");
+                q.setParameter("projectActive", true);
+                projects = q.getResultList();
+            }
+            request.setAttribute("projects", projects);
+
+            try{
+                String url = request.getRequestURL().toString();
+                String permCode = url.substring(url.lastIndexOf("/") + 1);
+
+                if(permCode == null)
+                    permCode = "thrdCre8";
+                // TODO: Verify that logged in user has permission to do this
+                q = em.createNamedQuery("Permissions.findByPermissionCode");
+                q.setParameter("permissionCode", permCode);
+                Permissions perm = (Permissions)q.getSingleResult();
+
+                // get the list of ALL users and store that
+                q = em.createNamedQuery("User.findAll");
+                List<User> users = q.getResultList();
+                request.setAttribute("users", users);
+
+                request.setAttribute("task"  , perm.getPermissionDesc());
+                request.setAttribute("taskID", perm.getPermissionID());
+                request.setAttribute("permCode", permCode);
+
+                request.getRequestDispatcher("/WEB-INF/threadAddEdit.jsp").forward(request, response);
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
         HttpSession session = request.getSession(false);
         
         if(session == null){
@@ -140,80 +199,6 @@ public class thrdCre8 extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/threadList.jsp").forward(request, response);
 
         }
-    }    
-
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        HttpSession session = request.getSession(false);
-
-        if(session == null){
-            response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
-        }else{
-
-            EntityManager em = DBUtil.getEmFactory().createEntityManager();
-            Query q = null;
-            List<Projects> projects = null;
-            User user = (User)session.getAttribute("User");
-
-            // get the projects the user can see
-            if(user.getPrimaryRoleCode().equals("user")){
-                projects = user.getProjectsList();
-            }else{
-                q = em.createNamedQuery("Projects.findByProjectActive");
-                q.setParameter("projectActive", true);
-                projects = q.getResultList();
-            }
-            request.setAttribute("projects", projects);
-
-            try{
-                String url = request.getRequestURL().toString();
-                String permCode = url.substring(url.lastIndexOf("/") + 1);
-
-                if(permCode == null)
-                    permCode = "thrdCre8";
-                // TODO: Verify that logged in user has permission to do this
-                q = em.createNamedQuery("Permissions.findByPermissionCode");
-                q.setParameter("permissionCode", permCode);
-                Permissions perm = (Permissions)q.getSingleResult();
-
-                // get the list of ALL users and store that
-                q = em.createNamedQuery("User.findAll");
-                List<User> users = q.getResultList();
-                request.setAttribute("users", users);
-
-                request.setAttribute("task"  , perm.getPermissionDesc());
-                request.setAttribute("taskID", perm.getPermissionID());
-                request.setAttribute("permCode", permCode);
-
-                request.getRequestDispatcher("/WEB-INF/threadAddEdit.jsp").forward(request, response);
-            }catch(Exception e){
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**

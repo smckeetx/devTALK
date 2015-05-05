@@ -4,7 +4,6 @@
 package net.shawnmckee.devtalk.tasks;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -14,7 +13,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import net.shawnmckee.devtalk.entities.DBUtil;
 import net.shawnmckee.devtalk.entities.Permissions;
 import net.shawnmckee.devtalk.entities.Projects;
@@ -29,15 +27,61 @@ import net.shawnmckee.devtalk.entities.User;
 public class userCre8 extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        if(request.getSession(false) == null){
+            response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
+        }else{
+
+            EntityManager em = DBUtil.getEmFactory().createEntityManager();
+
+            try{
+                String url = request.getRequestURL().toString();
+                String permCode = url.substring(url.lastIndexOf("/") + 1);
+
+                if(permCode == null)
+                    permCode = "userCre8";
+                // TODO: Verify that logged in user has permission to do this
+                Query q = em.createNamedQuery("Permissions.findByPermissionCode");
+                q.setParameter("permissionCode", permCode);
+                Permissions perm = (Permissions)q.getSingleResult();
+
+                request.setAttribute("task"  , perm.getPermissionDesc());
+                request.setAttribute("taskID", perm.getPermissionID());
+                request.setAttribute("permCode", permCode);
+
+                q = em.createNamedQuery("Projects.findByProjectActive");
+                q.setParameter("projectActive", true);
+                List<Projects> projects = q.getResultList();
+                request.setAttribute("projects", projects);
+
+                request.getRequestDispatcher("/WEB-INF/userAddEdit.jsp").forward(request, response);
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         if(request.getSession(false) == null){
@@ -168,66 +212,6 @@ public class userCre8 extends HttpServlet {
             request.setAttribute("permCode", permCode);
             request.getRequestDispatcher("/WEB-INF/userAddEdit.jsp").forward(request, response);
         }
-    }
-
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        if(request.getSession(false) == null){
-            response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
-        }else{
-
-            EntityManager em = DBUtil.getEmFactory().createEntityManager();
-
-            try{
-                String url = request.getRequestURL().toString();
-                String permCode = url.substring(url.lastIndexOf("/") + 1);
-
-                if(permCode == null)
-                    permCode = "userCre8";
-                // TODO: Verify that logged in user has permission to do this
-                Query q = em.createNamedQuery("Permissions.findByPermissionCode");
-                q.setParameter("permissionCode", permCode);
-                Permissions perm = (Permissions)q.getSingleResult();
-
-                request.setAttribute("task"  , perm.getPermissionDesc());
-                request.setAttribute("taskID", perm.getPermissionID());
-                request.setAttribute("permCode", permCode);
-
-                q = em.createNamedQuery("Projects.findByProjectActive");
-                q.setParameter("projectActive", true);
-                List<Projects> projects = q.getResultList();
-                request.setAttribute("projects", projects);
-
-                request.getRequestDispatcher("/WEB-INF/userAddEdit.jsp").forward(request, response);
-            }catch(Exception e){
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**

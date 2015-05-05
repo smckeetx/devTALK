@@ -25,58 +25,6 @@ import net.shawnmckee.devtalk.entities.User;
 public class projCre8 extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        response.setContentType("text/html;charset=UTF-8");
-        EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        String error = "";
-
-        try{
-            String pn  = request.getParameter("projectDesc");
-            Boolean ac = request.getParameter("active").equals("Y");
-
-            Query q = em.createNamedQuery("Projects.findByProjectDesc");
-            q.setParameter("projectDesc", pn);
-            if(!q.getResultList().isEmpty()){
-                error += "Project description, " + pn + " in use.<br/>";
-            }
-
-            if(error.equals("")){
-                try{
-                    HttpSession session = request.getSession();
-                    User user = (User)session.getAttribute("User");
-                    Projects proj = new Projects(pn, user.getUserID(), ac);
-                    em.getTransaction().begin();
-                    em.persist(proj);
-                    em.getTransaction().commit();
-
-                    request.getSession().setAttribute("proj", proj);
-                } catch (Exception e) {
-                    error += "1: " + e.getMessage() + "<br/>";
-                }
-            }
-        }catch(Exception e){
-                error += "2: " + e.getMessage() + "<br/>";
-        }
-
-        if(!error.equals("")){
-            request.setAttribute("error", error);
-        }
-        
-        request.getRequestDispatcher("/WEB-INF/projAddEdit.jsp").forward(request, response);
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
      * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
@@ -121,7 +69,44 @@ public class projCre8 extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        response.setContentType("text/html;charset=UTF-8");
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String error = "";
+
+        try{
+            String pn  = request.getParameter("projectDesc");
+            Boolean ac = request.getParameter("active").equals("Y");
+
+            Query q = em.createNamedQuery("Projects.findByProjectDesc");
+            q.setParameter("projectDesc", pn);
+            if(!q.getResultList().isEmpty()){
+                error += "Project description, " + pn + " in use.<br/>";
+            }
+
+            if(error.equals("")){
+                try{
+                    HttpSession session = request.getSession();
+                    User user = (User)session.getAttribute("User");
+                    Projects proj = new Projects(pn, user.getUserID(), ac);
+                    em.getTransaction().begin();
+                    em.persist(proj);
+                    em.getTransaction().commit();
+
+                    request.getSession().setAttribute("proj", proj);
+                } catch (Exception e) {
+                    error += "1: " + e.getMessage() + "<br/>";
+                }
+            }
+        }catch(Exception e){
+                error += "2: " + e.getMessage() + "<br/>";
+        }
+
+        if(!error.equals("")){
+            request.setAttribute("error", error);
+        }
+        
+        request.getRequestDispatcher("/WEB-INF/projAddEdit.jsp").forward(request, response);
     }
 
     /**

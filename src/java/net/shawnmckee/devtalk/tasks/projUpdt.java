@@ -16,8 +16,6 @@ import javax.servlet.http.HttpSession;
 import net.shawnmckee.devtalk.entities.DBUtil;
 import net.shawnmckee.devtalk.entities.Permissions;
 import net.shawnmckee.devtalk.entities.Projects;
-import net.shawnmckee.devtalk.entities.User;
-import org.eclipse.persistence.sessions.Project;
 
 /**
  *
