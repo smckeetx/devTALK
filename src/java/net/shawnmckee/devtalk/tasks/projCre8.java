@@ -37,7 +37,6 @@ public class projCre8 extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-
         if(session == null){
             response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
         }else{

@@ -84,7 +84,7 @@ public class Security extends HttpServlet {
         if (session != null) {
             session.invalidate();
         }
-        return "WEB-INF/index.jsp";
+        return "";
 }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
