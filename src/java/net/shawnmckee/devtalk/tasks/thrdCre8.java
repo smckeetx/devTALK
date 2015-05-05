@@ -41,49 +41,44 @@ public class thrdCre8 extends HttpServlet {
 
         HttpSession session = request.getSession(false);
 
-        if(session == null){
-            response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        Query q = null;
+        List<Projects> projects = null;
+        User user = (User)session.getAttribute("User");
+
+        // get the projects the user can see
+        if(user.getPrimaryRoleCode().equals("user")){
+            projects = user.getProjectsList();
         }else{
+            q = em.createNamedQuery("Projects.findByProjectActive");
+            q.setParameter("projectActive", true);
+            projects = q.getResultList();
+        }
+        request.setAttribute("projects", projects);
 
-            EntityManager em = DBUtil.getEmFactory().createEntityManager();
-            Query q = null;
-            List<Projects> projects = null;
-            User user = (User)session.getAttribute("User");
+        try{
+            String url = request.getRequestURL().toString();
+            String permCode = url.substring(url.lastIndexOf("/") + 1);
 
-            // get the projects the user can see
-            if(user.getPrimaryRoleCode().equals("user")){
-                projects = user.getProjectsList();
-            }else{
-                q = em.createNamedQuery("Projects.findByProjectActive");
-                q.setParameter("projectActive", true);
-                projects = q.getResultList();
-            }
-            request.setAttribute("projects", projects);
+            if(permCode == null)
+                permCode = "thrdCre8";
+            // TODO: Verify that logged in user has permission to do this
+            q = em.createNamedQuery("Permissions.findByPermissionCode");
+            q.setParameter("permissionCode", permCode);
+            Permissions perm = (Permissions)q.getSingleResult();
 
-            try{
-                String url = request.getRequestURL().toString();
-                String permCode = url.substring(url.lastIndexOf("/") + 1);
+            // get the list of ALL users and store that
+            q = em.createNamedQuery("User.findAll");
+            List<User> users = q.getResultList();
+            request.setAttribute("users", users);
 
-                if(permCode == null)
-                    permCode = "thrdCre8";
-                // TODO: Verify that logged in user has permission to do this
-                q = em.createNamedQuery("Permissions.findByPermissionCode");
-                q.setParameter("permissionCode", permCode);
-                Permissions perm = (Permissions)q.getSingleResult();
+            request.setAttribute("task"  , perm.getPermissionDesc());
+            request.setAttribute("taskID", perm.getPermissionID());
+            request.setAttribute("permCode", permCode);
 
-                // get the list of ALL users and store that
-                q = em.createNamedQuery("User.findAll");
-                List<User> users = q.getResultList();
-                request.setAttribute("users", users);
-
-                request.setAttribute("task"  , perm.getPermissionDesc());
-                request.setAttribute("taskID", perm.getPermissionID());
-                request.setAttribute("permCode", permCode);
-
-                request.getRequestDispatcher("/WEB-INF/threadAddEdit.jsp").forward(request, response);
-            }catch(Exception e){
-                System.out.println(e.getMessage());
-            }
+            request.getRequestDispatcher("/WEB-INF/threadAddEdit.jsp").forward(request, response);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
         }
     }
 

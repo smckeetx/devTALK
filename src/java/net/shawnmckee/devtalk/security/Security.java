@@ -36,7 +36,7 @@ public class Security extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String destination = "/WEB-INF/index.jsp";
+        String destination = "/index.jsp";
         
         switch(request.getParameter("action")){
             case "login":
@@ -56,7 +56,6 @@ public class Security extends HttpServlet {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         String un = request.getParameter("userName");
         String FAILURE_MESSAGE = "Login failed";
-        String rtnValue = "WEB-INF/main.jsp";
         
         try{
             Query q = em.createNamedQuery("User.findByUserName");
@@ -77,7 +76,7 @@ public class Security extends HttpServlet {
         }catch(Exception e){
             request.setAttribute("error", FAILURE_MESSAGE);
         }    
-        return "/WEB-INF/index.jsp";
+        return "/index.jsp";
     }
     private String logout(HttpServletRequest request) {
         HttpSession session = request.getSession();
