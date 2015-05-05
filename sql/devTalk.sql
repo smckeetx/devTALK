@@ -90,13 +90,9 @@ VALUES
 	(10,'Add Project','projCre8'),
 	(11,'Edit Project','projUpdt'),
 	(12,'Delete Project','projDel'),
-	(13,'Lock Project','projLock'),
 	(14,'Add Users','userCre8'),
 	(15,'Edit Users','userUpdt'),
 	(16,'Delete Users','userDel'),
-	(17,'Lock Users','userLock'),
-	(18,'Assign Users to Projects','user2Proj'),
-	(19,'Remove Users from Projects','userRemove'),
 	(20,'Start Conversations','thrdCre8'),
 	(21,'Delete Conversations','thrdDel'),
 	(22,'Lock Conversations','thrdLock');

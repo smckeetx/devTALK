@@ -179,7 +179,7 @@ public class thrdCre8 extends HttpServlet {
             try{
                 String url = request.getRequestURL().toString();
                 String permCode = url.substring(url.lastIndexOf("/") + 1);
-                // String permCode = (String)request.getAttribute("permCode");
+
                 if(permCode == null)
                     permCode = "thrdCre8";
                 // TODO: Verify that logged in user has permission to do this

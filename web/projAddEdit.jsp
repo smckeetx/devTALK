@@ -8,38 +8,70 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@include file="header.jsp" %>
 <%@include file="menu.jsp" %>
+<c:choose>
+    <c:when test="${!empty param.projectDesc}">
+        <c:set var="projectDesc" scope="page" value="${param.projectDesc}"/>
+        <c:set var="active"      scope="page" value="${param.active}"/>
+        <c:set var="pID"         scope="page" value="${param.pID}"/>
+    </c:when>
+    <c:when test="${!empty requestScope.projectDesc}">
+        <c:set var="projectDesc" scope="page" value="${requestScope.projectDesc}"/>
+        <c:set var="active"      scope="page" value="${requestScope.active}"/>
+        <c:set var="pID"         scope="page" value="${requestScope.pID}"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="projectDesc" scope="page" value=""/>
+        <c:set var="active"      scope="page" value=""/>
+    </c:otherwise>
+</c:choose>
+<c:set var="addUpdate1" value="Add"/>
+<c:set var="addUpdate2" value="added"/>
+<c:if test="${requestScope.permCode == 'projUpdt'}">
+    <c:set var="addUpdate1" value="Update"/>
+    <c:set var="addUpdate2" value="updated"/>
+</c:if>
 
             <div id="content">
                 <div class="centerAlignDiv">
-                    <h1>${sessionScope.User.getPrimaryRole()} : ${sessionScope.task}</h1>
+                    <h1>${sessionScope.User.getPrimaryRole()} : ${requestScope.task}</h1>
                 </div>
                 <div class="centerAlignDiv">
                     <c:if test="${error != null}">
                         <div class="error">${error}</div>
                     </c:if>
                     <c:if test="${error == null && param.projectDesc != null}">
-                        <div>${param.projectDesc} added!</div>
+                        <div>${param.projectDesc}&nbsp;${pageScope.addUpdate2}!</div>
                     </c:if>
 
-                    <c:choose>
-                        <c:when test="${error == null}">
-                            <c:set var="projectDesc" scope="page" value=""/>
-                            <c:set var="active"    scope="page" value=""/>
-                        </c:when>
-                        <c:otherwise>
-                            <c:set var="projectDesc" scope="page" value="${param.projectDesc}"/>
-                            <c:set var="active"      scope="page" value="${param.active}"/>
-                        </c:otherwise>
-                    </c:choose>
-
-                    <form action="projCre8" method="post" name="admin">
-                        <div style="width: 500px;" id="fieldset" class="centerAlignDiv">
-                            <div style="text-align: left; padding-top: 20px; padding-left: 10px;">
-                                <span class="required">*</span> denotes a required field
+                    <div style="text-align: left; padding-top: 20px; padding-left: 10px;">
+                        <span class="required">*</span> denotes a required field
+                    </div>
+                    <fieldset style="width: 95%;">
+                        <legend>Create/Edit Project</legend>
+                        <form action="projUpdt" method="post" name="admin">
+                            <div style="width: 500px;" class="centerAlignDiv">
+                                <c:if test="${!empty requestScope.projects}">
+                                    <div>
+                                        <span class="required">*</span>&nbsp;
+                                        <label for="projects" class="bold em7">
+                                            Project List:
+                                        </label>
+                                        <select name="projects" id="projects" style="width:17.5em;">
+                                            <option value="0">-- Select Project(s) --</option>
+                                            <c:forEach items="${requestScope.projects}" var="project">
+                                                <option value="${project.projectID}" <c:if test="${requestScope.user.projectsList.contains(project)}">selected</c:if>>${project.projectDesc}</option>
+                                            </c:forEach>
+                                        </select>
+                                        <input type="Submit" value="Go"/>
+                                    </div>
+                                </c:if>
                             </div>
-
-                            <fieldset style="width: 100%; margin-top: -5px">
-                                <legend>Create/Edit Project</legend>
+                        </form>
+                        <form action="${requestScope.permCode}" method="post" name="admin">
+                            <c:if test="${!empty pageScope.pID}">
+                                <input type="hidden" name="pID" value="${pageScope.pID}"/>
+                            </c:if>
+                            <div style="width: 500px;" class="centerAlignDiv">
                                 <div style="padding:2%;">
                                     <div id="error1" class="redbold" aria-live="assertive"></div>
                                     <span class="required">*</span>&nbsp;
@@ -55,22 +87,26 @@
                                     <label for="active" class="bold em7">
                                         Project Active:
                                     </label>
-                                    <c:set var="checked" value="" scope="request"/>
-                                    <c:if test="${empty pageScope.active || pageScope.active == 'Y'}">
-                                        <c:set var="checked" value="checked" scope="request"/>
+                                    <c:set var="checkedY" value="" scope="request"/>
+                                    <c:set var="checkedN" value="" scope="request"/>
+                                    <c:if test="${empty pageScope.active || pageScope.active == 'Y'|| pageScope.active == true}">
+                                        <c:set var="checkedY" value="checked" scope="request"/>
                                     </c:if>
-                                    <input type="radio" name="active" id="activeY" value="Y" aria-required="true" <c:out value="${checked}"/>> Yes
-                                    <input type="radio" name="active" id="activeN" value="Y" aria-required="true" /> No
+                                    <c:if test="${!empty pageScope.active && pageScope.active == 'N'}">
+                                        <c:set var="checkedN" value="checked" scope="request"/>
+                                    </c:if>
+                                    <input type="radio" name="active" id="activeY" value="Y" aria-required="true" <c:out value="${checkedY}"/>> Yes
+                                    <input type="radio" name="active" id="activeN" value="N" aria-required="true" <c:out value="${checkedN}"/> /> No
                                 </div>
                                 <div style="padding:2%" id="formButtons">
-                                    <input type="submit" value="Add" />
+                                    <input type="submit" value="${pageScope.addUpdate1}" />
                                     <span style="padding-left:5%; margin-left:5%">
                                         <input type="reset" value="Clear" title="Clear" />
                                     </span>
                                 </div>
-                            </fieldset>
-                        </div>
-                    </form>
+                            </div>
+                        </form>
+                    </fieldset>
                 </div>
             </div>
 

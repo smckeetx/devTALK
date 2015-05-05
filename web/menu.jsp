@@ -5,7 +5,7 @@
 --%>
 
 <%-- this, and the associated if checks, only exists during development --%>
-<c:set var="unsupportedList" value=",3,4,5,6,7,8,9,11,12,13,16,17,18,19,21,22,"/>
+<c:set var="unsupportedList" value=",3,4,5,6,7,8,9,12,13,16,17,18,19,21,22,"/>
             <nav>
                 <div id="menu" aria-role="nav">
                     <div class="pure-menu pure-menu-open">

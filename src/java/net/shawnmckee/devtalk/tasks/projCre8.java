@@ -35,6 +35,7 @@ public class projCre8 extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         response.setContentType("text/html;charset=UTF-8");
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         String error = "";
@@ -46,7 +47,7 @@ public class projCre8 extends HttpServlet {
             Query q = em.createNamedQuery("Projects.findByProjectDesc");
             q.setParameter("projectDesc", pn);
             if(!q.getResultList().isEmpty()){
-                error = error + "Project description, " + pn + " in use.<br/>";
+                error += "Project description, " + pn + " in use.<br/>";
             }
 
             if(error.equals("")){
@@ -61,11 +62,11 @@ public class projCre8 extends HttpServlet {
 
                     request.getSession().setAttribute("proj", proj);
                 } catch (Exception e) {
-                    error = error +  "1: " + e.getMessage() + "<br/>";
+                    error += "1: " + e.getMessage() + "<br/>";
                 }
             }
         }catch(Exception e){
-                error = error +  "2: " + e.getMessage() + "<br/>";
+                error += "2: " + e.getMessage() + "<br/>";
         }
 
         if(!error.equals("")){
@@ -101,8 +102,8 @@ public class projCre8 extends HttpServlet {
                 Query q = em.createNamedQuery("Permissions.findByPermissionCode");
                 q.setParameter("permissionCode", "projCre8");
                 Permissions perm = (Permissions)q.getSingleResult();
-
-                session.setAttribute("task", perm.getPermissionDesc());
+                request.setAttribute("permCode", "projCre8");
+                request.setAttribute("task", perm.getPermissionDesc());
                 request.getRequestDispatcher("/projAddEdit.jsp").forward(request, response);
             }catch(Exception e){
                 System.out.println(e.getMessage());
