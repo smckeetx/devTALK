@@ -44,8 +44,9 @@ public class userCre8 extends HttpServlet {
             String url = request.getRequestURL().toString();
             String permCode = url.substring(url.lastIndexOf("/") + 1);
 
-            if(permCode == null)
+            if(permCode == null){
                 permCode = "userCre8";
+            }
             // TODO: Verify that logged in user has permission to do this
             Query q = em.createNamedQuery("Permissions.findByPermissionCode");
             q.setParameter("permissionCode", permCode);
@@ -90,13 +91,15 @@ public class userCre8 extends HttpServlet {
             fn = fn.replaceAll("<", "&lt;");
 
             String ln = request.getParameter("lastName");
-            if(ln.equals(""))
+            if(ln.equals("")){
                 error +=  "Last name required<br/>";
+            }
             ln = ln.replaceAll("<", "&lt;");
 
             String un = request.getParameter("userName");
-            if(un.equals(""))
+            if(un.equals("")){
                 error +=  "User name required<br/>";
+            }
             un = un.replaceAll("<", "&lt;");
 
             Query q = em.createNamedQuery("User.findByUserName");
@@ -106,8 +109,9 @@ public class userCre8 extends HttpServlet {
             }
 
             String eml = request.getParameter("email");
-            if(eml.equals(""))
+            if(eml.equals("")){
                 error +=  "eMail required<br/>";
+            }
             eml = eml.replaceAll("<", "&lt;");
 
             q = em.createNamedQuery("User.findByUserEmail");
@@ -124,12 +128,14 @@ public class userCre8 extends HttpServlet {
             }
 
             Boolean ac = request.getParameter("active").equals("Y");
-            if(ac == null)
+            if(ac == null){
                 error +=  "Active status required<br/>";
-
+            }
+            
             String[] projectIDs = request.getParameterValues("projects");
             if(projectIDs == null ||
-               projectIDs.length == 0){
+               projectIDs.length == 0
+              ){
                 error +=  "At least one project is required<br/>";
             }
 
@@ -191,8 +197,10 @@ public class userCre8 extends HttpServlet {
         String url = request.getRequestURL().toString();
         String permCode = url.substring(url.lastIndexOf("/") + 1);
 
-        if(permCode == null)
+        if(permCode == null){
             permCode = "userCre8";
+        }
+        
         // TODO: Verify that logged in user has permission to do this
         q = em.createNamedQuery("Permissions.findByPermissionCode");
         q.setParameter("permissionCode", permCode);

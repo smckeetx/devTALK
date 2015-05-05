@@ -68,7 +68,8 @@ public class userUpdt extends HttpServlet {
 
         // if a user has been selected from the drop down then get and store them
         if(request.getParameter("user") != null &&
-           !request.getParameter("user").equals("")){
+           !request.getParameter("user").equals("")
+          ){
             q = em.createNamedQuery("User.findByUserID");
             q.setParameter("userID", Integer.parseInt(request.getParameter("user")));
             User user = (User)q.getSingleResult();
@@ -77,7 +78,8 @@ public class userUpdt extends HttpServlet {
 
         // we have a specific user to update now
         if(request.getParameter("userID") != null && 
-           request.getParameter("userID") != ""){
+           request.getParameter("userID") != ""
+          ){
 
             q = em.createNamedQuery("User.findByUserID");
             q.setParameter("userID", Integer.parseInt(request.getParameter("userID")));
@@ -99,16 +101,17 @@ public class userUpdt extends HttpServlet {
             em.getTransaction().begin();
             em.persist(user);
 
-            if(!fn.equals(""))
+            if(!fn.equals("")){
                 user.setUserFirstName(fn);
-            else
+            }else{
                 error +=  "First name required<br/>";
-
-            if(!ln.equals(""))
+            }
+            
+            if(!ln.equals("")){
                 user.setUserLastName(ln);
-            else
+            }else{
                 error +=  "Last name required<br/>";
-
+            }
             if(!un.equals("")){
                 q = em.createNamedQuery("User.findByUserName");
                 q.setParameter("userName", un);
@@ -118,8 +121,9 @@ public class userUpdt extends HttpServlet {
                 } else {
                     error += "User name, " + un + " in use.<br/>";
                 }
-            }else
+            }else{
                 error +=  "User name required<br/>";
+            }
 
             if(!eml.equals("")){
                 q = em.createNamedQuery("User.findByUserEmail");
@@ -130,19 +134,21 @@ public class userUpdt extends HttpServlet {
                 } else {
                     error += "User eMail " + eml + " in use.<br/>";
                 }
-            }else
+            }else{
                 error +=  "eMail required<br/>";
-
-            if(pn != null)
+            }
+            
+            if(pn != null){
                 user.setUserExtension(pn);
-            else
+            }else{
                 error +=  "Phone Number required<br/>";
-
-            if(ac != null)
+            }
+            if(ac != null){
                 user.setUserActive(ac);
-            else
+            }else{
                 error +=  "Active status required<br/>";
-
+        }
+        
             if(projectIDs != null &&
                projectIDs.length > 0){
                 q = em.createNamedQuery("Projects.findByProjectID");
@@ -153,10 +159,11 @@ public class userUpdt extends HttpServlet {
                     q.setParameter("projectID", Integer.parseInt(projectIDs[i]));
                     userProjects.addAll(q.getResultList());
                 }
-                if(!userProjects.isEmpty())
+                if(!userProjects.isEmpty()){
                     user.setProjectsList(userProjects);
-                else
+                }else{
                     error +=  "At least one project is required<br/>";
+                }
             }else{
                 error +=  "At least one project is required<br/>";
             }

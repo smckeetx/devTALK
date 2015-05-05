@@ -12,7 +12,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import net.shawnmckee.devtalk.entities.DBUtil;
 import net.shawnmckee.devtalk.entities.Permissions;
 import net.shawnmckee.devtalk.entities.Projects;
@@ -35,8 +34,6 @@ public class projUpdt extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        HttpSession session = request.getSession(false);
 
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
 
@@ -70,6 +67,7 @@ public class projUpdt extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         response.setContentType("text/html;charset=UTF-8");
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         String error = "";
@@ -85,8 +83,9 @@ public class projUpdt extends HttpServlet {
             String pn  = request.getParameter("projectDesc");
             String active = request.getParameter("active");
             Boolean ac = false;
-            if(active != null)
+            if(active != null){
                 ac = active.equals("Y");
+            }
 
             if(request.getParameter("projects") != null){
                 Integer pID = Integer.parseInt(request.getParameter("projects"));
@@ -97,8 +96,10 @@ public class projUpdt extends HttpServlet {
                 pn = proj.getProjectDesc();
                 ac = proj.getProjectActive();
                 active = "N";
-                if(ac)
+                if(ac){
                     active = "Y";
+                }
+                
                 request.setAttribute("projectDesc", pn);
                 request.setAttribute("active", active);
                 request.setAttribute("pID", pID);

@@ -60,8 +60,9 @@ public class thrdCre8 extends HttpServlet {
             String url = request.getRequestURL().toString();
             String permCode = url.substring(url.lastIndexOf("/") + 1);
 
-            if(permCode == null)
+            if(permCode == null){
                 permCode = "thrdCre8";
+            }
             // TODO: Verify that logged in user has permission to do this
             q = em.createNamedQuery("Permissions.findByPermissionCode");
             q.setParameter("permissionCode", permCode);
@@ -141,8 +142,9 @@ public class thrdCre8 extends HttpServlet {
                        (participants == null || 
                         (participants.length == 1 && participants[0].equals("0"))
                        )
-                      )
+                      ){
                         error += "You must add at least one participant.<br/>";
+                    }
                 }catch(NullPointerException npe){
                     error += "You must add at least one participant.<br/>";
                 }

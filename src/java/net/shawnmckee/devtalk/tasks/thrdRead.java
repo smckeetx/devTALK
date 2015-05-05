@@ -43,7 +43,6 @@ public class thrdRead extends HttpServlet {
 
         response.setContentType("text/html;charset=UTF-8");
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        String error = "";
 
         Query q = null;
         List<Projects> projects = null;
@@ -121,11 +120,12 @@ public class thrdRead extends HttpServlet {
                     itr.remove();
             }
 
-            if(threads.isEmpty())
+            if(threads.isEmpty()){
                 request.setAttribute("error", "You are not connected to any conversations in this project");
-            else
+            }else{
                 request.setAttribute("threads", threads);
-
+            }
+            
             request.getSession().setAttribute("thread", null);
         }
         processRequest(request, response);
