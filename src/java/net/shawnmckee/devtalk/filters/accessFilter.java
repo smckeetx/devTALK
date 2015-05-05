@@ -114,7 +114,7 @@ public class accessFilter implements Filter {
         Throwable problem = null;
         try {
             String url = req.getRequestURL().toString();
-            log(url);
+            // there has to be a better way of handling this
             if(!url.endsWith("/devTALK/")){
                 if(req.getSession(false) == null){
                     res.sendRedirect("/devTALK/?error=Your+session+timed+out!");
