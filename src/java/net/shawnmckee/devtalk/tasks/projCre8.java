@@ -72,7 +72,7 @@ public class projCre8 extends HttpServlet {
             request.setAttribute("error", error);
         }
         
-        request.getRequestDispatcher("/projAddEdit.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/projAddEdit.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -103,7 +103,7 @@ public class projCre8 extends HttpServlet {
                 Permissions perm = (Permissions)q.getSingleResult();
                 request.setAttribute("permCode", "projCre8");
                 request.setAttribute("task", perm.getPermissionDesc());
-                request.getRequestDispatcher("/projAddEdit.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/projAddEdit.jsp").forward(request, response);
             }catch(Exception e){
                 System.out.println(e.getMessage());
             }

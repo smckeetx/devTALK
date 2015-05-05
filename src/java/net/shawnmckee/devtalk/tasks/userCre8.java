@@ -166,7 +166,7 @@ public class userCre8 extends HttpServlet {
             request.setAttribute("task"  , perm.getPermissionDesc());
             request.setAttribute("taskID", perm.getPermissionID());
             request.setAttribute("permCode", permCode);
-            request.getRequestDispatcher("/userAddEdit.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/userAddEdit.jsp").forward(request, response);
         }
     }
 
@@ -208,7 +208,7 @@ public class userCre8 extends HttpServlet {
                 List<Projects> projects = q.getResultList();
                 request.setAttribute("projects", projects);
 
-                request.getRequestDispatcher("/userAddEdit.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/userAddEdit.jsp").forward(request, response);
             }catch(Exception e){
                 System.out.println(e.getMessage());
             }

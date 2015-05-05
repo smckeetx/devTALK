@@ -173,7 +173,7 @@ public class userUpdt extends HttpServlet {
             if(!error.equals("")){
                 request.setAttribute("error", error);
             }
-            request.getRequestDispatcher("/userAddEdit.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/userAddEdit.jsp").forward(request, response);
         }
     }
 

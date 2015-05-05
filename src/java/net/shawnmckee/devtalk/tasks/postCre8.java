@@ -67,7 +67,7 @@ public class postCre8 extends HttpServlet {
             q.setParameter("threadID", thread.getThreadID());
             List<Posts> posts = q.getResultList();
             request.setAttribute("posts", posts);
-            request.getRequestDispatcher("/threadList.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/threadList.jsp").forward(request, response);
         }
     }
 

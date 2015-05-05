@@ -36,7 +36,7 @@ public class Security extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String destination = "/index.jsp";
+        String destination = "/WEB-INF/index.jsp";
         
         switch(request.getParameter("action")){
             case "login":
@@ -56,7 +56,7 @@ public class Security extends HttpServlet {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         String un = request.getParameter("userName");
         String FAILURE_MESSAGE = "Login failed";
-        String rtnValue = "main.jsp";
+        String rtnValue = "WEB-INF/main.jsp";
         
         try{
             Query q = em.createNamedQuery("User.findByUserName");
@@ -70,23 +70,22 @@ public class Security extends HttpServlet {
                     HttpSession session = request.getSession(true);
                     session.setAttribute("User", user.get(0));
                     request.setAttribute("loggedIn", true);
-                    return "/main.jsp";
+                    return "/WEB-INF/main.jsp";
             }else{
                 request.setAttribute("error", FAILURE_MESSAGE);
             }
         }catch(Exception e){
             request.setAttribute("error", FAILURE_MESSAGE);
         }    
-        return "/index.jsp";
+        return "/WEB-INF/index.jsp";
     }
     private String logout(HttpServletRequest request) {
         HttpSession session = request.getSession();
         if (session != null) {
             session.invalidate();
         }
-        return "index.jsp";
+        return "WEB-INF/index.jsp";
 }
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

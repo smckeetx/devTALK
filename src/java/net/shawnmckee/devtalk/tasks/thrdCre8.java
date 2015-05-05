@@ -137,7 +137,7 @@ public class thrdCre8 extends HttpServlet {
                 request.setAttribute("error", error);
             }
 
-            request.getRequestDispatcher("/threadList.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/threadList.jsp").forward(request, response);
 
         }
     }    
@@ -195,7 +195,7 @@ public class thrdCre8 extends HttpServlet {
                 request.setAttribute("taskID", perm.getPermissionID());
                 request.setAttribute("permCode", permCode);
 
-                request.getRequestDispatcher("/threadAddEdit.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/threadAddEdit.jsp").forward(request, response);
             }catch(Exception e){
                 System.out.println(e.getMessage());
             }

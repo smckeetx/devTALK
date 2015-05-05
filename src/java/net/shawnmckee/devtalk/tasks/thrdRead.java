@@ -73,7 +73,7 @@ public class thrdRead extends HttpServlet {
             }else{
                 request.setAttribute("posts", null);
             }
-            request.getRequestDispatcher("/threadList.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/threadList.jsp").forward(request, response);
         }
     }
 

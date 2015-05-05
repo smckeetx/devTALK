@@ -5,7 +5,7 @@
 --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
-<%@include file="header.jsp" %>
+<%@include file="WEB-INF/header.jsp" %>
             <div id="content">
                 <div class="centerAlignDiv">
                     <c:if test="${error != null}">
@@ -56,4 +56,4 @@
                     </form>
                 </div>
             </div>
-<%@include file="footer.jsp" %>
+<%@include file="WEB-INF/footer.jsp" %>

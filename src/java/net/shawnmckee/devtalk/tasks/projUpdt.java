@@ -59,7 +59,7 @@ public class projUpdt extends HttpServlet {
                 List<Projects> projects = q.getResultList();
                 request.setAttribute("projects", projects);
 
-                request.getRequestDispatcher("/projAddEdit.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/projAddEdit.jsp").forward(request, response);
             }catch(Exception e){
                 System.out.println(e.getMessage());
             }
@@ -141,7 +141,7 @@ public class projUpdt extends HttpServlet {
         List<Projects> projects = q.getResultList();
         request.setAttribute("projects", projects);
 
-        request.getRequestDispatcher("/projAddEdit.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/projAddEdit.jsp").forward(request, response);
     }
 
     /**
