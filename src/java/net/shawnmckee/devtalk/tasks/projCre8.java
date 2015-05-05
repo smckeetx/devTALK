@@ -77,7 +77,7 @@ public class projCre8 extends HttpServlet {
                 error += "Project description, " + pn + " in use.<br/>";
             }
 
-            if(error.equals("")){
+            if(error.isEmpty()){
                 try{
                     HttpSession session = request.getSession();
                     User user = (User)session.getAttribute("User");
@@ -95,7 +95,7 @@ public class projCre8 extends HttpServlet {
                 error += "2: " + e.getMessage() + "<br/>";
         }
 
-        if(!error.equals("")){
+        if(!error.isEmpty()){
             request.setAttribute("error", error);
         }
         

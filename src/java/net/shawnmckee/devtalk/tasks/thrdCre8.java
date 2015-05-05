@@ -126,11 +126,11 @@ public class thrdCre8 extends HttpServlet {
 
                 String title = request.getParameter("title");
                 title = title.replaceAll("<", "&lt;");
-                if(title.trim().equals(""))
+                if(title.trim().isEmpty())
                     error += "You must enter a title.<br/>";
 
                 String postTxt = request.getParameter("post");
-                if(postTxt.trim().equals(""))
+                if(postTxt.trim().isEmpty())
                     error += "You must enter some content.<br/>";
 
                 Boolean isPublic = request.getParameter("pubPriv").equals("public");
@@ -149,7 +149,7 @@ public class thrdCre8 extends HttpServlet {
                     error += "You must add at least one participant.<br/>";
                 }
 
-                if(error.equals("")){
+                if(error.isEmpty()){
                     try{
                         Thread thread = new Thread(title, proj, user.getUserID(), true, isPublic);
 
@@ -189,7 +189,7 @@ public class thrdCre8 extends HttpServlet {
                     error +=  "2: " + e.getMessage() + "<br/>";
             }
 
-            if(!error.equals("")){
+            if(!error.isEmpty()){
                 request.setAttribute("error", error);
             }
 

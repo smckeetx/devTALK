@@ -126,7 +126,7 @@ public class projUpdt extends HttpServlet {
                 error = error +  "2: " + e.getMessage() + "<br/>";
         }
 
-        if(!error.equals("")){
+        if(!error.isEmpty()){
             request.setAttribute("error", error);
         }
         

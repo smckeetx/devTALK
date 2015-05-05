@@ -4,7 +4,6 @@
 package net.shawnmckee.devtalk.tasks;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -40,7 +39,6 @@ public class postCre8 extends HttpServlet {
         
         response.setContentType("text/html;charset=UTF-8");
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        String error = "";
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("User");
         Thread thread = (Thread)session.getAttribute("thread");
@@ -55,7 +53,7 @@ public class postCre8 extends HttpServlet {
             em.persist(post);
             em.getTransaction().commit();
         }else{
-            error = "Post exceeds 20,000 characters.";
+            String error = "Post exceeds 20,000 characters.";
             request.setAttribute("error", error);
         }
 

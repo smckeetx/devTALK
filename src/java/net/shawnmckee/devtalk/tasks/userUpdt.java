@@ -66,7 +66,7 @@ public class userUpdt extends HttpServlet {
 
         // if a user has been selected from the drop down then get and store them
         if(request.getParameter("user") != null &&
-           !request.getParameter("user").equals("")
+           !request.getParameter("user").isEmpty()
           ){
             q = em.createNamedQuery("User.findByUserID");
             q.setParameter("userID", Integer.parseInt(request.getParameter("user")));
@@ -76,7 +76,7 @@ public class userUpdt extends HttpServlet {
 
         // we have a specific user to update now
         if(request.getParameter("userID") != null && 
-           request.getParameter("userID") != ""
+           !request.getParameter("userID").isEmpty()
           ){
 
             q = em.createNamedQuery("User.findByUserID");
@@ -99,18 +99,18 @@ public class userUpdt extends HttpServlet {
             em.getTransaction().begin();
             em.persist(user);
 
-            if(!fn.equals("")){
+            if(!fn.isEmpty()){
                 user.setUserFirstName(fn);
             }else{
                 error +=  "First name required<br/>";
             }
             
-            if(!ln.equals("")){
+            if(!ln.isEmpty()){
                 user.setUserLastName(ln);
             }else{
                 error +=  "Last name required<br/>";
             }
-            if(!un.equals("")){
+            if(!un.isEmpty()){
                 q = em.createNamedQuery("User.findByUserName");
                 q.setParameter("userName", un);
                 if(q.getResultList().isEmpty() ||
@@ -123,7 +123,7 @@ public class userUpdt extends HttpServlet {
                 error +=  "User name required<br/>";
             }
 
-            if(!eml.equals("")){
+            if(!eml.isEmpty()){
                 q = em.createNamedQuery("User.findByUserEmail");
                 q.setParameter("userEmail", eml);
                 if(q.getResultList().isEmpty() ||
@@ -170,7 +170,7 @@ public class userUpdt extends HttpServlet {
             em.getTransaction().commit();
             request.setAttribute("user", user);
 
-            if(!error.equals("")){
+            if(!error.isEmpty()){
                 request.setAttribute("error", error);
             }
         }

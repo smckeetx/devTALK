@@ -86,18 +86,18 @@ public class userCre8 extends HttpServlet {
 
         try{
             String fn = request.getParameter("firstName");
-            if(fn.equals(""))
+            if(fn.isEmpty())
                 error +=  "First name required<br/>";
             fn = fn.replaceAll("<", "&lt;");
 
             String ln = request.getParameter("lastName");
-            if(ln.equals("")){
+            if(ln.isEmpty()){
                 error +=  "Last name required<br/>";
             }
             ln = ln.replaceAll("<", "&lt;");
 
             String un = request.getParameter("userName");
-            if(un.equals("")){
+            if(un.isEmpty()){
                 error +=  "User name required<br/>";
             }
             un = un.replaceAll("<", "&lt;");
@@ -109,7 +109,7 @@ public class userCre8 extends HttpServlet {
             }
 
             String eml = request.getParameter("email");
-            if(eml.equals("")){
+            if(eml.isEmpty()){
                 error +=  "eMail required<br/>";
             }
             eml = eml.replaceAll("<", "&lt;");
@@ -142,7 +142,7 @@ public class userCre8 extends HttpServlet {
             String roleCode = request.getParameter("permCode");
             roleCode = roleCode.substring(0, roleCode.length() - 4);
 
-            if(error.equals("")){
+            if(error.isEmpty()){
                 try{
                     User user = new User(fn, ln, un, eml, pn, "password", ac);
 
@@ -185,7 +185,7 @@ public class userCre8 extends HttpServlet {
                 error += "2: " + e.getMessage() + "<br/>";
         }
 
-        if(!error.equals("")){
+        if(!error.isEmpty()){
             request.setAttribute("error", error);
         }
 
