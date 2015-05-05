@@ -38,29 +38,24 @@ public class projUpdt extends HttpServlet {
 
         HttpSession session = request.getSession(false);
 
-        if(session == null){
-            response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
-        }else{
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
 
-            EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        try{
+            // TODO: Verify that user has permission
+            Query q = em.createNamedQuery("Permissions.findByPermissionCode");
+            q.setParameter("permissionCode", "projUpdt");
+            Permissions perm = (Permissions)q.getSingleResult();
+            request.setAttribute("permCode", "projUpdt");
+            request.setAttribute("task", perm.getPermissionDesc());
 
-            try{
-                // TODO: Verify that user has permission
-                Query q = em.createNamedQuery("Permissions.findByPermissionCode");
-                q.setParameter("permissionCode", "projUpdt");
-                Permissions perm = (Permissions)q.getSingleResult();
-                request.setAttribute("permCode", "projUpdt");
-                request.setAttribute("task", perm.getPermissionDesc());
+            // get the list of active projects and store it
+            q = em.createNamedQuery("Projects.findAll");
+            List<Projects> projects = q.getResultList();
+            request.setAttribute("projects", projects);
 
-                // get the list of active projects and store it
-                q = em.createNamedQuery("Projects.findAll");
-                List<Projects> projects = q.getResultList();
-                request.setAttribute("projects", projects);
-
-                request.getRequestDispatcher("/WEB-INF/projAddEdit.jsp").forward(request, response);
-            }catch(Exception e){
-                System.out.println(e.getMessage());
-            }
+            request.getRequestDispatcher("/WEB-INF/projAddEdit.jsp").forward(request, response);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
         }
     }
 

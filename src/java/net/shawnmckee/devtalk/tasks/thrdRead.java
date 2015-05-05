@@ -41,39 +41,34 @@ public class thrdRead extends HttpServlet {
 
         HttpSession session = request.getSession(false);
 
-        if(session == null){
-            response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
+        response.setContentType("text/html;charset=UTF-8");
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String error = "";
+
+        Query q = null;
+        List<Projects> projects = null;
+        User user = (User)session.getAttribute("User");
+
+        // get the projects the user can see
+        if(user.getPrimaryRoleCode().equals("user")){
+            projects = user.getProjectsList();
         }else{
-
-            response.setContentType("text/html;charset=UTF-8");
-            EntityManager em = DBUtil.getEmFactory().createEntityManager();
-            String error = "";
-
-            Query q = null;
-            List<Projects> projects = null;
-            User user = (User)session.getAttribute("User");
-
-            // get the projects the user can see
-            if(user.getPrimaryRoleCode().equals("user")){
-                projects = user.getProjectsList();
-            }else{
-                q = em.createNamedQuery("Projects.findByProjectActive");
-                q.setParameter("projectActive", true);
-                projects = q.getResultList();
-            }
-            request.setAttribute("projects", projects);
-
-            Thread thread = (Thread)session.getAttribute("thread");
-            if(thread != null){
-                q = em.createNamedQuery("Posts.findByThreadID");
-                q.setParameter("threadID", thread.getThreadID());
-                List<Posts> posts = q.getResultList();
-                request.setAttribute("posts", posts);
-            }else{
-                request.setAttribute("posts", null);
-            }
-            request.getRequestDispatcher("/WEB-INF/threadList.jsp").forward(request, response);
+            q = em.createNamedQuery("Projects.findByProjectActive");
+            q.setParameter("projectActive", true);
+            projects = q.getResultList();
         }
+        request.setAttribute("projects", projects);
+
+        Thread thread = (Thread)session.getAttribute("thread");
+        if(thread != null){
+            q = em.createNamedQuery("Posts.findByThreadID");
+            q.setParameter("threadID", thread.getThreadID());
+            List<Posts> posts = q.getResultList();
+            request.setAttribute("posts", posts);
+        }else{
+            request.setAttribute("posts", null);
+        }
+        request.getRequestDispatcher("/WEB-INF/threadList.jsp").forward(request, response);
     }
 
     /**
@@ -102,42 +97,38 @@ public class thrdRead extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        if(request.getSession(false) == null){
-            response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
-        }else{
-            EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
 
-            if(request.getParameter("thread") != null){
-                Query q = em.createNamedQuery("Thread.findByThreadID");
-                q.setParameter("threadID", Integer.parseInt(request.getParameter("thread")));
-                List<Thread> threads = q.getResultList();
-                Thread thread = threads.get(0);
-                request.getSession().setAttribute("thread", thread);
-            }else if(request.getParameter("project") != null){
-                Query q = em.createNamedQuery("Thread.findByProjectID");
-                q.setParameter("projectID", Integer.parseInt(request.getParameter("project")));
-                User user = (User) request.getSession().getAttribute("User");
-                List<Thread> threads = q.getResultList();
-                Iterator itr = threads.iterator();
-                
-                while(itr.hasNext()){
-                    Thread thrd = (Thread) itr.next();
-                    List<User> tUsers = thrd.getUserList();
-                    if(!thrd.getThreadPublic() &&
-                       !tUsers.contains(user) &&
-                       !thrd.getUserID().equals(user.getUserID()))
-                        itr.remove();
-                }
-                
-                if(threads.isEmpty())
-                    request.setAttribute("error", "You are not connected to any conversations in this project");
-                else
-                    request.setAttribute("threads", threads);
+        if(request.getParameter("thread") != null){
+            Query q = em.createNamedQuery("Thread.findByThreadID");
+            q.setParameter("threadID", Integer.parseInt(request.getParameter("thread")));
+            List<Thread> threads = q.getResultList();
+            Thread thread = threads.get(0);
+            request.getSession().setAttribute("thread", thread);
+        }else if(request.getParameter("project") != null){
+            Query q = em.createNamedQuery("Thread.findByProjectID");
+            q.setParameter("projectID", Integer.parseInt(request.getParameter("project")));
+            User user = (User) request.getSession().getAttribute("User");
+            List<Thread> threads = q.getResultList();
+            Iterator itr = threads.iterator();
 
-                request.getSession().setAttribute("thread", null);
+            while(itr.hasNext()){
+                Thread thrd = (Thread) itr.next();
+                List<User> tUsers = thrd.getUserList();
+                if(!thrd.getThreadPublic() &&
+                   !tUsers.contains(user) &&
+                   !thrd.getUserID().equals(user.getUserID()))
+                    itr.remove();
             }
-            processRequest(request, response);
+
+            if(threads.isEmpty())
+                request.setAttribute("error", "You are not connected to any conversations in this project");
+            else
+                request.setAttribute("threads", threads);
+
+            request.getSession().setAttribute("thread", null);
         }
+        processRequest(request, response);
     }
 
     /**

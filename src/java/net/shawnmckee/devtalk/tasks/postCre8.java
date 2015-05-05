@@ -39,36 +39,31 @@ public class postCre8 extends HttpServlet {
             throws ServletException, IOException {
         
         response.setContentType("text/html;charset=UTF-8");
-        if(request.getSession(false) == null){
-            response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String error = "";
+        HttpSession session = request.getSession();
+        User user = (User)session.getAttribute("User");
+        Thread thread = (Thread)session.getAttribute("thread");
+        String postText = request.getParameter("postTxt");
+        postText = postText.replaceAll("<", "&lt;");
+        postText = postText.replaceAll("(\r\n|\n)", "<br />");
+
+        if(postText.length() < 20000){
+            Posts post = new Posts(thread.getThreadID(), user.getUserID(), postText);
+
+            em.getTransaction().begin();
+            em.persist(post);
+            em.getTransaction().commit();
         }else{
-
-            EntityManager em = DBUtil.getEmFactory().createEntityManager();
-            String error = "";
-            HttpSession session = request.getSession();
-            User user = (User)session.getAttribute("User");
-            Thread thread = (Thread)session.getAttribute("thread");
-            String postText = request.getParameter("postTxt");
-            postText = postText.replaceAll("<", "&lt;");
-            postText = postText.replaceAll("(\r\n|\n)", "<br />");
-
-            if(postText.length() < 20000){
-                Posts post = new Posts(thread.getThreadID(), user.getUserID(), postText);
-
-                em.getTransaction().begin();
-                em.persist(post);
-                em.getTransaction().commit();
-            }else{
-                error = "Post exceeds 20,000 characters.";
-                request.setAttribute("error", error);
-            }
-
-            Query q = em.createNamedQuery("Posts.findByThreadID");
-            q.setParameter("threadID", thread.getThreadID());
-            List<Posts> posts = q.getResultList();
-            request.setAttribute("posts", posts);
-            request.getRequestDispatcher("/WEB-INF/threadList.jsp").forward(request, response);
+            error = "Post exceeds 20,000 characters.";
+            request.setAttribute("error", error);
         }
+
+        Query q = em.createNamedQuery("Posts.findByThreadID");
+        q.setParameter("threadID", thread.getThreadID());
+        List<Posts> posts = q.getResultList();
+        request.setAttribute("posts", posts);
+        request.getRequestDispatcher("/WEB-INF/threadList.jsp").forward(request, response);
     }
 
     /**

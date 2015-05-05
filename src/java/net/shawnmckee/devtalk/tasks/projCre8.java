@@ -36,24 +36,18 @@ public class projCre8 extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession(false);
-        if(session == null){
-            response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
-        }else{
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
 
-            EntityManager em = DBUtil.getEmFactory().createEntityManager();
-
-            try{
-                // TODO: Verify that user has permission
-                Query q = em.createNamedQuery("Permissions.findByPermissionCode");
-                q.setParameter("permissionCode", "projCre8");
-                Permissions perm = (Permissions)q.getSingleResult();
-                request.setAttribute("permCode", "projCre8");
-                request.setAttribute("task", perm.getPermissionDesc());
-                request.getRequestDispatcher("/WEB-INF/projAddEdit.jsp").forward(request, response);
-            }catch(Exception e){
-                System.out.println(e.getMessage());
-            }
+        try{
+            // TODO: Verify that user has permission
+            Query q = em.createNamedQuery("Permissions.findByPermissionCode");
+            q.setParameter("permissionCode", "projCre8");
+            Permissions perm = (Permissions)q.getSingleResult();
+            request.setAttribute("permCode", "projCre8");
+            request.setAttribute("task", perm.getPermissionDesc());
+            request.getRequestDispatcher("/WEB-INF/projAddEdit.jsp").forward(request, response);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
         }
     }
 

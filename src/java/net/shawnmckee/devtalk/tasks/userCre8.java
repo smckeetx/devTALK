@@ -38,36 +38,31 @@ public class userCre8 extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        if(request.getSession(false) == null){
-            response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
-        }else{
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
 
-            EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        try{
+            String url = request.getRequestURL().toString();
+            String permCode = url.substring(url.lastIndexOf("/") + 1);
 
-            try{
-                String url = request.getRequestURL().toString();
-                String permCode = url.substring(url.lastIndexOf("/") + 1);
+            if(permCode == null)
+                permCode = "userCre8";
+            // TODO: Verify that logged in user has permission to do this
+            Query q = em.createNamedQuery("Permissions.findByPermissionCode");
+            q.setParameter("permissionCode", permCode);
+            Permissions perm = (Permissions)q.getSingleResult();
 
-                if(permCode == null)
-                    permCode = "userCre8";
-                // TODO: Verify that logged in user has permission to do this
-                Query q = em.createNamedQuery("Permissions.findByPermissionCode");
-                q.setParameter("permissionCode", permCode);
-                Permissions perm = (Permissions)q.getSingleResult();
+            request.setAttribute("task"  , perm.getPermissionDesc());
+            request.setAttribute("taskID", perm.getPermissionID());
+            request.setAttribute("permCode", permCode);
 
-                request.setAttribute("task"  , perm.getPermissionDesc());
-                request.setAttribute("taskID", perm.getPermissionID());
-                request.setAttribute("permCode", permCode);
+            q = em.createNamedQuery("Projects.findByProjectActive");
+            q.setParameter("projectActive", true);
+            List<Projects> projects = q.getResultList();
+            request.setAttribute("projects", projects);
 
-                q = em.createNamedQuery("Projects.findByProjectActive");
-                q.setParameter("projectActive", true);
-                List<Projects> projects = q.getResultList();
-                request.setAttribute("projects", projects);
-
-                request.getRequestDispatcher("/WEB-INF/userAddEdit.jsp").forward(request, response);
-            }catch(Exception e){
-                System.out.println(e.getMessage());
-            }
+            request.getRequestDispatcher("/WEB-INF/userAddEdit.jsp").forward(request, response);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
         }
     }
 
@@ -84,134 +79,129 @@ public class userCre8 extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        if(request.getSession(false) == null){
-            response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
-        }else{
+        response.setContentType("text/html;charset=UTF-8");
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String error = "";
 
-            response.setContentType("text/html;charset=UTF-8");
-            EntityManager em = DBUtil.getEmFactory().createEntityManager();
-            String error = "";
+        try{
+            String fn = request.getParameter("firstName");
+            if(fn.equals(""))
+                error +=  "First name required<br/>";
+            fn = fn.replaceAll("<", "&lt;");
 
+            String ln = request.getParameter("lastName");
+            if(ln.equals(""))
+                error +=  "Last name required<br/>";
+            ln = ln.replaceAll("<", "&lt;");
+
+            String un = request.getParameter("userName");
+            if(un.equals(""))
+                error +=  "User name required<br/>";
+            un = un.replaceAll("<", "&lt;");
+
+            Query q = em.createNamedQuery("User.findByUserName");
+            q.setParameter("userName", un);
+            if(!q.getResultList().isEmpty()){
+                error += "User name, " + un + " in use.<br/>";
+            }
+
+            String eml = request.getParameter("email");
+            if(eml.equals(""))
+                error +=  "eMail required<br/>";
+            eml = eml.replaceAll("<", "&lt;");
+
+            q = em.createNamedQuery("User.findByUserEmail");
+            q.setParameter("userEmail", eml);
+            if(!q.getResultList().isEmpty()){
+                error += "User eMail " + eml + " in use.<br/>";
+            }
+
+            BigInteger pn = null;
             try{
-                String fn = request.getParameter("firstName");
-                if(fn.equals(""))
-                    error +=  "First name required<br/>";
-                fn = fn.replaceAll("<", "&lt;");
+                pn = new BigInteger(request.getParameter("userPhone"));
+            }catch(java.lang.NumberFormatException e){
+                error +=  "Phone Number required<br/>";
+            }
 
-                String ln = request.getParameter("lastName");
-                if(ln.equals(""))
-                    error +=  "Last name required<br/>";
-                ln = ln.replaceAll("<", "&lt;");
+            Boolean ac = request.getParameter("active").equals("Y");
+            if(ac == null)
+                error +=  "Active status required<br/>";
 
-                String un = request.getParameter("userName");
-                if(un.equals(""))
-                    error +=  "User name required<br/>";
-                un = un.replaceAll("<", "&lt;");
+            String[] projectIDs = request.getParameterValues("projects");
+            if(projectIDs == null ||
+               projectIDs.length == 0){
+                error +=  "At least one project is required<br/>";
+            }
 
-                Query q = em.createNamedQuery("User.findByUserName");
-                q.setParameter("userName", un);
-                if(!q.getResultList().isEmpty()){
-                    error += "User name, " + un + " in use.<br/>";
-                }
+            String roleCode = request.getParameter("permCode");
+            roleCode = roleCode.substring(0, roleCode.length() - 4);
 
-                String eml = request.getParameter("email");
-                if(eml.equals(""))
-                    error +=  "eMail required<br/>";
-                eml = eml.replaceAll("<", "&lt;");
-
-                q = em.createNamedQuery("User.findByUserEmail");
-                q.setParameter("userEmail", eml);
-                if(!q.getResultList().isEmpty()){
-                    error += "User eMail " + eml + " in use.<br/>";
-                }
-
-                BigInteger pn = null;
+            if(error.equals("")){
                 try{
-                    pn = new BigInteger(request.getParameter("userPhone"));
-                }catch(java.lang.NumberFormatException e){
-                    error +=  "Phone Number required<br/>";
-                }
+                    User user = new User(fn, ln, un, eml, pn, "password", ac);
 
-                Boolean ac = request.getParameter("active").equals("Y");
-                if(ac == null)
-                    error +=  "Active status required<br/>";
+                    em.getTransaction().begin();
+                    em.persist(user);
+                    em.getTransaction().commit();
 
-                String[] projectIDs = request.getParameterValues("projects");
-                if(projectIDs == null ||
-                   projectIDs.length == 0){
-                    error +=  "At least one project is required<br/>";
-                }
-
-                String roleCode = request.getParameter("permCode");
-                roleCode = roleCode.substring(0, roleCode.length() - 4);
-
-                if(error.equals("")){
-                    try{
-                        User user = new User(fn, ln, un, eml, pn, "password", ac);
-
-                        em.getTransaction().begin();
-                        em.persist(user);
-                        em.getTransaction().commit();
-
-                        em.getTransaction().begin();
-                        q = em.createNamedQuery("Roles.findByRoleCode");
-                        q.setParameter("roleCode", roleCode);
-                        List<Roles> role = q.getResultList();
-                        List<Integer> subRoles = role.get(0).getSubRoles();
-                        q = em.createNamedQuery("Roles.findByRoleID");
-                        for(Integer i : subRoles){
-                            if(!role.get(0).getRoleID().equals(i)){
-                                q.setParameter("roleID", i);
-                                role.addAll(q.getResultList());
-                            }
+                    em.getTransaction().begin();
+                    q = em.createNamedQuery("Roles.findByRoleCode");
+                    q.setParameter("roleCode", roleCode);
+                    List<Roles> role = q.getResultList();
+                    List<Integer> subRoles = role.get(0).getSubRoles();
+                    q = em.createNamedQuery("Roles.findByRoleID");
+                    for(Integer i : subRoles){
+                        if(!role.get(0).getRoleID().equals(i)){
+                            q.setParameter("roleID", i);
+                            role.addAll(q.getResultList());
                         }
-                        user.setRolesList(role);
-
-                        q = em.createNamedQuery("Projects.findByProjectID");
-                        q.setParameter("projectID", Integer.parseInt(projectIDs[0]));
-                        List<Projects> projects = q.getResultList();
-                        for(Integer i=1; i<projectIDs.length; i++){
-                            q.setParameter("projectID", Integer.parseInt(projectIDs[i]));
-                            projects.addAll(q.getResultList());
-                        }
-                        user.setProjectsList(projects);
-
-                        em.merge(user);
-                        em.getTransaction().commit();
-
-                        request.getSession().setAttribute("user", user);
-                    } catch (Exception e) {
-                        error += "1: " + e.getMessage() + "<br/>";
                     }
+                    user.setRolesList(role);
+
+                    q = em.createNamedQuery("Projects.findByProjectID");
+                    q.setParameter("projectID", Integer.parseInt(projectIDs[0]));
+                    List<Projects> projects = q.getResultList();
+                    for(Integer i=1; i<projectIDs.length; i++){
+                        q.setParameter("projectID", Integer.parseInt(projectIDs[i]));
+                        projects.addAll(q.getResultList());
+                    }
+                    user.setProjectsList(projects);
+
+                    em.merge(user);
+                    em.getTransaction().commit();
+
+                    request.getSession().setAttribute("user", user);
+                } catch (Exception e) {
+                    error += "1: " + e.getMessage() + "<br/>";
                 }
-            }catch(Exception e){
-                    error += "2: " + e.getMessage() + "<br/>";
             }
-
-            if(!error.equals("")){
-                request.setAttribute("error", error);
-            }
-
-            Query q = em.createNamedQuery("Projects.findByProjectActive");
-            q.setParameter("projectActive", true);
-            List<Projects> projects = q.getResultList();
-            request.setAttribute("projects", projects);
-
-            String url = request.getRequestURL().toString();
-            String permCode = url.substring(url.lastIndexOf("/") + 1);
-
-            if(permCode == null)
-                permCode = "userCre8";
-            // TODO: Verify that logged in user has permission to do this
-            q = em.createNamedQuery("Permissions.findByPermissionCode");
-            q.setParameter("permissionCode", permCode);
-            Permissions perm = (Permissions)q.getSingleResult();
-
-            request.setAttribute("task"  , perm.getPermissionDesc());
-            request.setAttribute("taskID", perm.getPermissionID());
-            request.setAttribute("permCode", permCode);
-            request.getRequestDispatcher("/WEB-INF/userAddEdit.jsp").forward(request, response);
+        }catch(Exception e){
+                error += "2: " + e.getMessage() + "<br/>";
         }
+
+        if(!error.equals("")){
+            request.setAttribute("error", error);
+        }
+
+        Query q = em.createNamedQuery("Projects.findByProjectActive");
+        q.setParameter("projectActive", true);
+        List<Projects> projects = q.getResultList();
+        request.setAttribute("projects", projects);
+
+        String url = request.getRequestURL().toString();
+        String permCode = url.substring(url.lastIndexOf("/") + 1);
+
+        if(permCode == null)
+            permCode = "userCre8";
+        // TODO: Verify that logged in user has permission to do this
+        q = em.createNamedQuery("Permissions.findByPermissionCode");
+        q.setParameter("permissionCode", permCode);
+        Permissions perm = (Permissions)q.getSingleResult();
+
+        request.setAttribute("task"  , perm.getPermissionDesc());
+        request.setAttribute("taskID", perm.getPermissionID());
+        request.setAttribute("permCode", permCode);
+        request.getRequestDispatcher("/WEB-INF/userAddEdit.jsp").forward(request, response);
     }
 
     /**
