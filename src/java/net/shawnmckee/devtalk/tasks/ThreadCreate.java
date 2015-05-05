@@ -25,7 +25,7 @@ import net.shawnmckee.devtalk.entities.Thread;
  * @author smckee
  */
 @WebServlet(name = "thrdCre8", urlPatterns = {"/thrdCre8"})
-public class thrdCre8 extends HttpServlet {
+public class ThreadCreate extends HttpServlet {
 
     /**
      * Handles the HTTP <code>GET</code> method.

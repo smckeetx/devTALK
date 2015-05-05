@@ -23,7 +23,7 @@ import net.shawnmckee.devtalk.entities.Thread;
  * @author smckee
  */
 @WebServlet(name = "postCre8", urlPatterns = {"/postCre8"})
-public class postCre8 extends HttpServlet {
+public class PostCreate extends HttpServlet {
 
     /**
      * Handles the HTTP <code>POST</code> method.

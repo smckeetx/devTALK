@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author smckee
  */
 @WebFilter(filterName = "accessFilter", urlPatterns = {"/thrdCre8"})
-public class accessFilter implements Filter {
+public class AccessFilter implements Filter {
     
     private static final boolean debug = true;
 
@@ -33,7 +33,7 @@ public class accessFilter implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
     
-    public accessFilter() {
+    public AccessFilter() {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)

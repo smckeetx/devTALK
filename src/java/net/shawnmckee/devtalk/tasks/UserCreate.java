@@ -24,7 +24,7 @@ import net.shawnmckee.devtalk.entities.User;
  * @author smckee
  */
 @WebServlet(name = "userCre8", urlPatterns = {"/userCre8", "/adminCre8"})
-public class userCre8 extends HttpServlet {
+public class UserCreate extends HttpServlet {
 
     /**
      * Handles the HTTP <code>GET</code> method.

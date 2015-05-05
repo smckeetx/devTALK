@@ -23,7 +23,7 @@ import net.shawnmckee.devtalk.entities.User;
  * @author smckee
  */
 @WebServlet(name = "userUpdt", urlPatterns = {"/userUpdt"})
-public class userUpdt extends HttpServlet {
+public class UserUpdate extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

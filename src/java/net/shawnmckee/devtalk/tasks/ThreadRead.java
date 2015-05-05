@@ -25,7 +25,7 @@ import net.shawnmckee.devtalk.entities.Thread;
  * @author smckee
  */
 @WebServlet(name = "thrdRead", urlPatterns = {"/thrdRead"})
-public class thrdRead extends HttpServlet {
+public class ThreadRead extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
