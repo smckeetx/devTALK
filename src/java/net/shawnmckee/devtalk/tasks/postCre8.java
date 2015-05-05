@@ -26,9 +26,6 @@ import net.shawnmckee.devtalk.entities.Thread;
 @WebServlet(name = "postCre8", urlPatterns = {"/postCre8"})
 public class postCre8 extends HttpServlet {
 
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    
     /**
      * Handles the HTTP <code>POST</code> method.
      *
