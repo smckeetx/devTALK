@@ -1683,6 +1683,7 @@ The content `<div>` is where all your content goes.
     font-size: .85em;
     font-weight: bold;
     padding-top:.75em;
+    color: lightslategrey;
 }
 
 .post{
