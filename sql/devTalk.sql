@@ -88,12 +88,9 @@ VALUES
 	(9,'Delete Roles','rolesDel'),
 	(10,'Add Project','projCre8'),
 	(11,'Edit Project','projUpdt'),
-	(12,'Delete Project','projDel'),
 	(14,'Add Users','userCre8'),
 	(15,'Edit Users','userUpdt'),
-	(16,'Delete Users','userDel'),
 	(20,'Start Conversations','thrdCre8'),
-	(21,'Delete Conversations','thrdDel'),
 	(22,'Lock Conversations','thrdLock');
 
 /*!40000 ALTER TABLE `permissions` ENABLE KEYS */;
@@ -251,13 +248,10 @@ VALUES
 	(1,9),
 	(2,10),
 	(2,11),
-	(2,12),
 	(2,14),
 	(2,15),
-	(2,16),
         (3,2),
 	(3,20),
-	(3,21),
 	(3,22);
 
 
