@@ -27,11 +27,11 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "posts")
 @NamedQueries({
-    @NamedQuery(name = "Posts.findAll", query = "SELECT p FROM Posts p ORDER BY p.threadID, p.postTime"),
+    @NamedQuery(name = "Posts.findAll", query = "SELECT p FROM Posts p WHERE p.active = true ORDER BY p.threadID, p.postTime"),
     @NamedQuery(name = "Posts.findByPostID", query = "SELECT p FROM Posts p WHERE p.postID = :postID"),
-    @NamedQuery(name = "Posts.findByThreadID", query = "SELECT p FROM Posts p WHERE p.threadID = :threadID ORDER BY p.postTime DESC"),
-    @NamedQuery(name = "Posts.findByUserID", query = "SELECT p FROM Posts p WHERE p.userID = :userID ORDER BY p.threadID, p.postTime DESC"),
-    @NamedQuery(name = "Posts.findByPostTime", query = "SELECT p FROM Posts p WHERE p.postTime >= :postTime")})
+    @NamedQuery(name = "Posts.findByThreadID", query = "SELECT p FROM Posts p WHERE p.active = true  AND p.threadID = :threadID ORDER BY p.postTime DESC"),
+    @NamedQuery(name = "Posts.findByUserID", query = "SELECT p FROM Posts p WHERE p.active = true  AND p.userID = :userID ORDER BY p.threadID, p.postTime DESC"),
+    @NamedQuery(name = "Posts.findByPostTime", query = "SELECT p FROM Posts p WHERE p.active = true  AND p.postTime >= :postTime")})
 public class Posts implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -42,6 +42,9 @@ public class Posts implements Serializable {
     @Basic(optional = false)
     @Column(name = "userID")
     private Integer userID;
+    @JoinColumn(name = "userID", referencedColumnName = "userID", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private User user;
     @Basic(optional = false)
     @Column(name = "threadID")
     private Integer threadID;
@@ -52,6 +55,8 @@ public class Posts implements Serializable {
     @Column(name = "postTime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date postTime;
+    @Column(name = "active")
+    private boolean active = true;
 
     public Posts() {
     }
@@ -61,6 +66,7 @@ public class Posts implements Serializable {
         this.userID = userID;
         this.postContent = postContent;
         this.postTime = new Date(System.currentTimeMillis());
+        
     }
 
     public String getPostContent() {
@@ -73,6 +79,26 @@ public class Posts implements Serializable {
 
     public Date getPostTime() {
         return postTime;
+    }
+    
+    public Integer getUserID(){
+        return userID;
+    }
+    
+    public Integer getPostID(){
+        return postID;
+    }
+    
+    public User getUser(){
+        return user;
+    }
+
+    public Boolean getActive(){
+        return active;
+    }
+
+    public void setActive(Boolean active){
+        this.active = active;
     }
 
     @Override

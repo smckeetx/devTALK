@@ -172,6 +172,7 @@ CREATE TABLE `posts` (
   `userID` int(10) unsigned NOT NULL COMMENT 'Creator of post',
   `postContent` varchar(20000) NOT NULL,
   `postTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `active` TINYINT(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`postID`,`threadID`,`userID`),
   KEY `fk_posts_thread1_idx` (`threadID`),
   KEY `fk_posts_users1` (`userID`),

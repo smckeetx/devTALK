@@ -70,12 +70,19 @@
                     </c:if>
 
                     <c:forEach items="${requestScope.posts}" var="post">
-                        <div class="postTime">
-                            <fmt:formatDate type="both" value="${post.postTime}"/> - ${sessionScope.User.getUserFirstName()} ${sessionScope.User.getUserLastName()}
-                        </div>
-                        <div class="post">
-                            ${post.postContent}
-                        </div>
+                        <form action="thrdUpdt" method="post">
+                            <div class="postTime">
+                                <fmt:formatDate type="both" value="${post.postTime}"/> - ${post.getUser().getUserFirstName()}&nbsp;${post.getUser().getUserLastName()}
+                            </div>
+                            <div class="post">
+                                ${post.postContent}
+                            </div>
+                            <input type="hidden" name="postID" value="${post.postID}"/>
+                            <c:if test="${post.userID == sessionScope.User.getUserID() || sessionScope.User.getPrimaryRoleCode() != 'user'}">
+                                <input type="submit" value="Delete"/>
+                            </c:if>
+                        </form>
+                            <hr style="border-bottom: 1px double black;"/>
                     </c:forEach>
                 <div
             <div
