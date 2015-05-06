@@ -80,7 +80,6 @@ INSERT INTO `permissions` (`permissionID`, `permissionDesc`, `permissionCode`)
 VALUES
 	(1,'Add Administrators','adminCre8'),
 	(2,'Follow Conversations','thrdRead'),
-	(3,'Edit Conversations','thrdUpdt'),
 	(4,'Add Permissions','permsCre8'),
 	(5,'Edit Permissions','permsUpdt'),
 	(6,'Delete Permissions','permsDel'),
@@ -257,7 +256,6 @@ VALUES
 	(2,15),
 	(2,16),
         (3,2),
-        (3,3),
 	(3,20),
 	(3,21),
 	(3,22);
