@@ -49,13 +49,7 @@ public class ThreadRead extends HttpServlet {
         User user = (User)session.getAttribute("User");
 
         // get the projects the user can see
-        if(user.getPrimaryRoleCode().equals("user")){
-            projects = user.getProjectsList();
-        }else{
-            q = em.createNamedQuery("Projects.findByProjectActive");
-            q.setParameter("projectActive", true);
-            projects = q.getResultList();
-        }
+        projects = user.getProjectsList();
         request.setAttribute("projects", projects);
 
         Thread thread = (Thread)session.getAttribute("thread");

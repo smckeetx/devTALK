@@ -11,6 +11,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,6 +20,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Query;
 import javax.persistence.Table;
 
 /**
@@ -177,7 +179,15 @@ import javax.persistence.Table;
 
 
     public List<Projects> getProjectsList() {
-        return projectsList;
+        if(rolesList.get(0).getRoleCode().equals("user")){
+            return projectsList;
+        }else{
+            EntityManager em = DBUtil.getEmFactory().createEntityManager();
+            Query q = em.createNamedQuery("Projects.findByProjectActive");
+            q.setParameter("projectActive", true);
+            List<Projects> projects = q.getResultList();
+            return projects;
+        }
     }
 
     public void setProjectsList(List<Projects> projectsList) {
