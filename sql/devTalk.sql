@@ -80,12 +80,6 @@ INSERT INTO `permissions` (`permissionID`, `permissionDesc`, `permissionCode`)
 VALUES
 	(1,'Add Administrators','adminCre8'),
 	(2,'Follow Conversations','thrdRead'),
-	(4,'Add Permissions','permsCre8'),
-	(5,'Edit Permissions','permsUpdt'),
-	(6,'Delete Permissions','permsDel'),
-	(7,'Add Roles','rolesCre8'),
-	(8,'Edit Roles','rolesUpdt'),
-	(9,'Delete Roles','rolesDel'),
 	(10,'Add Project','projCre8'),
 	(11,'Edit Project','projUpdt'),
 	(14,'Add Users','userCre8'),
@@ -240,12 +234,6 @@ LOCK TABLES `roleperms` WRITE;
 INSERT INTO `roleperms` (`roleID`, `permissionID`)
 VALUES
 	(1,1),
-	(1,4),
-	(1,5),
-	(1,6),
-	(1,7),
-	(1,8),
-	(1,9),
 	(2,10),
 	(2,11),
 	(2,14),
