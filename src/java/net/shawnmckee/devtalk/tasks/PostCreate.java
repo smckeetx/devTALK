@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 import net.shawnmckee.devtalk.entities.DBUtil;
 import net.shawnmckee.devtalk.entities.Posts;
 import net.shawnmckee.devtalk.entities.User;
-import net.shawnmckee.devtalk.entities.Thread;
+import net.shawnmckee.devtalk.entities.Conversation;
 
 /**
  *
@@ -41,7 +41,7 @@ public class PostCreate extends HttpServlet {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("User");
-        Thread thread = (Thread)session.getAttribute("thread");
+        Conversation thread = (Conversation)session.getAttribute("thread");
         String postText = request.getParameter("postTxt");
         postText = postText.replaceAll("<", "&lt;");
         postText = postText.replaceAll("(\r\n|\n)", "<br />");
@@ -57,7 +57,7 @@ public class PostCreate extends HttpServlet {
             request.setAttribute("error", error);
         }
 
-        Query q = em.createNamedQuery("Posts.findByThreadID");
+        Query q = em.createNamedQuery("Posts.findByConversationID");
         q.setParameter("threadID", thread.getThreadID());
         List<Posts> posts = q.getResultList();
         request.setAttribute("posts", posts);

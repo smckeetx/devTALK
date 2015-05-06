@@ -18,7 +18,7 @@ import net.shawnmckee.devtalk.entities.Permissions;
 import net.shawnmckee.devtalk.entities.Posts;
 import net.shawnmckee.devtalk.entities.Projects;
 import net.shawnmckee.devtalk.entities.User;
-import net.shawnmckee.devtalk.entities.Thread;
+import net.shawnmckee.devtalk.entities.Conversation;
 
 /**
  *
@@ -151,7 +151,7 @@ public class ThreadCreate extends HttpServlet {
 
                 if(error.isEmpty()){
                     try{
-                        Thread thread = new Thread(title, proj, user.getUserID(), true, isPublic);
+                        Conversation thread = new Conversation(title, proj, user.getUserID(), true, isPublic);
 
                         em.getTransaction().begin();
                         em.persist(thread);
@@ -176,7 +176,7 @@ public class ThreadCreate extends HttpServlet {
                         em.getTransaction().commit();
 
                         request.getSession().setAttribute("thread", thread);
-                        q = em.createNamedQuery("Posts.findByThreadID");
+                        q = em.createNamedQuery("Posts.findByConversationID");
                         q.setParameter("threadID", thread.getThreadID());
                         List<Posts> posts = q.getResultList();
                         request.setAttribute("posts", posts);

@@ -84,8 +84,7 @@ VALUES
 	(11,'Edit Project','projUpdt'),
 	(14,'Add Users','userCre8'),
 	(15,'Edit Users','userUpdt'),
-	(20,'Start Conversations','thrdCre8'),
-	(22,'Lock Conversations','thrdLock');
+	(20,'Start Conversations','thrdCre8');
 
 /*!40000 ALTER TABLE `permissions` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -239,8 +238,7 @@ VALUES
 	(2,14),
 	(2,15),
         (3,2),
-	(3,20),
-	(3,22);
+	(3,20);
 
 
 /*!40000 ALTER TABLE `roleperms` ENABLE KEYS */;

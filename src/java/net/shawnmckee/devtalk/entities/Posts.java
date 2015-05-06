@@ -29,7 +29,7 @@ import javax.persistence.TemporalType;
 @NamedQueries({
     @NamedQuery(name = "Posts.findAll", query = "SELECT p FROM Posts p WHERE p.active = true ORDER BY p.threadID, p.postTime"),
     @NamedQuery(name = "Posts.findByPostID", query = "SELECT p FROM Posts p WHERE p.postID = :postID"),
-    @NamedQuery(name = "Posts.findByThreadID", query = "SELECT p FROM Posts p WHERE p.active = true  AND p.threadID = :threadID ORDER BY p.postTime DESC"),
+    @NamedQuery(name = "Posts.findByConversationID", query = "SELECT p FROM Posts p WHERE p.active = true  AND p.threadID = :threadID ORDER BY p.postTime DESC"),
     @NamedQuery(name = "Posts.findByUserID", query = "SELECT p FROM Posts p WHERE p.active = true  AND p.userID = :userID ORDER BY p.threadID, p.postTime DESC"),
     @NamedQuery(name = "Posts.findByPostTime", query = "SELECT p FROM Posts p WHERE p.active = true  AND p.postTime >= :postTime")})
 public class Posts implements Serializable {

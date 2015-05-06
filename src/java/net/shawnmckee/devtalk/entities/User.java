@@ -195,11 +195,11 @@ import javax.persistence.Table;
         this.projectsList = projectsList;
     }
 
-/*    public List<Thread> getThreadList() {
+/*    public List<Conversation> getThreadList() {
         return threadList;
     }
 
-    public void setThreadList(List<Thread> threadList) {
+    public void setThreadList(List<Conversation> threadList) {
         this.threadList = threadList;
     }
 

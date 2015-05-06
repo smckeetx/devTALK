@@ -37,10 +37,10 @@
                         <form action="thrdRead" method="post">
                             <p>
                                 <label for="thread" class="bold em7">
-                                    Thread List:
+                                    Conversation List:
                                 </label>
                                 <select name="thread" id="thread" required style="width:17.5em;">
-                                    <option value="0">-- Select Thread --</option>
+                                    <option value="0">-- Select Conversation --</option>
                                     <c:forEach items="${requestScope.threads}" var="thread">
                                         <option value="${thread.threadID}" ${thread.threadID == param.thread ? 'selected' : ''}>${thread.threadTitle}</option>
                                     </c:forEach>
@@ -50,6 +50,12 @@
                             </p>
                         </form>
                     </c:if>
+                    <form action="thrdUpdt" method="post">
+                        <c:if test="${(thread.userID == sessionScope.User.getUserID() || sessionScope.User.getPrimaryRoleCode() != 'user')}">
+                            <input type="hidden" name="threadID" value="${thread.threadID}"/>
+                            <input type="submit" value="Lock Conversation"/>
+                        </c:if>
+                    </form>
                     <h1>
                         ${sessionScope.thread.threadTitle}
                     </h1>
@@ -78,7 +84,13 @@
                                 ${post.postContent}
                             </div>
                             <input type="hidden" name="postID" value="${post.postID}"/>
-                            <c:if test="${post.userID == sessionScope.User.getUserID() || sessionScope.User.getPrimaryRoleCode() != 'user'}">
+                            <c:if test="${!thread.threadLocked && 
+                                          (post.userID == sessionScope.User.getUserID() || 
+                                           sessionScope.User.getPrimaryRoleCode() != 'user'
+                                          )
+                                         }
+                                       "
+                            >
                                 <input type="submit" value="Delete"/>
                             </c:if>
                         </form>

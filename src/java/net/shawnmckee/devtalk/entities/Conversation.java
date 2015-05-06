@@ -4,12 +4,10 @@
 package net.shawnmckee.devtalk.entities;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,10 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -30,15 +26,15 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "thread")
 @NamedQueries({
-    @NamedQuery(name = "Thread.findAll", query = "SELECT t FROM Thread t"),
-    @NamedQuery(name = "Thread.findByThreadID", query = "SELECT t FROM Thread t WHERE t.threadID = :threadID"),
-    @NamedQuery(name = "Thread.findByProjectID", query = "SELECT t FROM Thread t WHERE t.projectID = :projectID"),
-    @NamedQuery(name = "Thread.findByUserID", query = "SELECT t FROM Thread t WHERE t.userID = :userID"),
-    @NamedQuery(name = "Thread.findByThreadTitle", query = "SELECT t FROM Thread t WHERE t.threadTitle = :threadTitle"),
-    @NamedQuery(name = "Thread.findByThreadActive", query = "SELECT t FROM Thread t WHERE t.threadActive = :threadActive")})
-    public class Thread implements Serializable {
+    @NamedQuery(name = "Conversation.findAll", query = "SELECT t FROM Conversation t"),
+    @NamedQuery(name = "Conversation.findByConversationID", query = "SELECT t FROM Conversation t WHERE t.threadID = :threadID"),
+    @NamedQuery(name = "Conversation.findByProjectID", query = "SELECT t FROM Conversation t WHERE t.projectID = :projectID"),
+    @NamedQuery(name = "Conversation.findByUserID", query = "SELECT t FROM Conversation t WHERE t.userID = :userID"),
+    @NamedQuery(name = "Conversation.findByConversationTitle", query = "SELECT t FROM Conversation t WHERE t.threadTitle = :threadTitle"),
+    @NamedQuery(name = "Conversation.findByConversationActive", query = "SELECT t FROM Conversation t WHERE t.threadActive = :threadActive")})
+    public class Conversation implements Serializable {
     private static final long serialVersionUID = 1L;
-    @JoinTable(name = "userThread", joinColumns = {
+    @JoinTable(name = "userConversation", joinColumns = {
         @JoinColumn(name = "threadID", referencedColumnName = "threadID")}, inverseJoinColumns = {
         @JoinColumn(name = "userID", referencedColumnName = "userID")})
     @ManyToMany(cascade=CascadeType.PERSIST)
@@ -63,11 +59,14 @@ import javax.persistence.Table;
     @Basic(optional = false)
     @Column(name = "threadPublic")
     private boolean threadPublic;
+    @Basic(optional = false)
+    @Column(name = "threadLocked")
+    private boolean threadLocked;
 
-    public Thread() {
+    public Conversation() {
     }
 
-    public Thread(String threadTitle, Integer projectID, Integer userID, boolean threadActive, boolean threadPublic) {
+    public Conversation(String threadTitle, Integer projectID, Integer userID, boolean threadActive, boolean threadPublic) {
         this.threadTitle = threadTitle;
         this.userID = userID;
         this.projectID = projectID;
@@ -107,6 +106,14 @@ import javax.persistence.Table;
         this.threadPublic = threadPublic;
     }
 
+    public boolean getThreadLocked() {
+        return threadActive;
+    }
+
+    public void setThreadLocked(boolean threadLocked) {
+        this.threadLocked = threadLocked;
+    }
+
     public List<User> getUserList() {
         return userList;
     }
@@ -126,10 +133,10 @@ import javax.persistence.Table;
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Thread)) {
+        if (!(object instanceof Conversation)) {
             return false;
         }
-        Thread other = (Thread) object;
+        Conversation other = (Conversation) object;
         if ((this.threadID == null && other.threadID != null) || (this.threadID != null && !this.equals(other.threadID))) {
             return false;
         }
@@ -138,7 +145,7 @@ import javax.persistence.Table;
 
     @Override
     public String toString() {
-        return "net.shawnmckee.devtalk.entities.Thread[ threadID=" + threadID + " ]";
+        return "net.shawnmckee.devtalk.entities.Conversation[ threadID=" + threadID + " ]";
     }
 
     }

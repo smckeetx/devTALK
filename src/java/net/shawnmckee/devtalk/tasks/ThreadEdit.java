@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.shawnmckee.devtalk.entities.DBUtil;
 import net.shawnmckee.devtalk.entities.Posts;
+import net.shawnmckee.devtalk.entities.Conversation;
 
 /**
  *
@@ -40,8 +41,9 @@ public class ThreadEdit extends HttpServlet {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         String error = "";
 
-        Integer postID = Integer.parseInt(request.getParameter("postID"));
-        if(postID != null){
+        String postStr = request.getParameter("postID");
+        if(postStr != null){
+            Integer postID = Integer.parseInt(postStr);
             // Right now all we do with a post is "delete" it
             Query q = em.createNamedQuery("Posts.findByPostID");
             q.setParameter("postID", postID);
@@ -50,6 +52,20 @@ public class ThreadEdit extends HttpServlet {
             //em.persist(post);
             post.setActive(false);
             em.merge(post);
+            em.getTransaction().commit();
+        }
+
+        String threadStr = request.getParameter("threadID");
+        if(threadStr != null){
+            Integer threadID = Integer.parseInt(threadStr);
+            // Right now all we do with a post is "delete" it
+            Query q = em.createNamedQuery("Conversation.findByConversationID");
+            q.setParameter("threadID", threadID);
+            Conversation thread = (Conversation)q.getSingleResult();
+            em.getTransaction().begin();
+            //em.persist(post);
+            thread.setThreadLocked(true);
+            em.merge(thread);
             em.getTransaction().commit();
         }
         request.getRequestDispatcher("/thrdRead").forward(request, response);

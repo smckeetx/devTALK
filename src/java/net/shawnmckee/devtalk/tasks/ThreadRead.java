@@ -18,7 +18,7 @@ import net.shawnmckee.devtalk.entities.DBUtil;
 import net.shawnmckee.devtalk.entities.Posts;
 import net.shawnmckee.devtalk.entities.Projects;
 import net.shawnmckee.devtalk.entities.User;
-import net.shawnmckee.devtalk.entities.Thread;
+import net.shawnmckee.devtalk.entities.Conversation;
 
 /**
  *
@@ -52,9 +52,9 @@ public class ThreadRead extends HttpServlet {
         projects = user.getProjectsList();
         request.setAttribute("projects", projects);
 
-        Thread thread = (Thread)session.getAttribute("thread");
+        Conversation thread = (Conversation)session.getAttribute("thread");
         if(thread != null){
-            q = em.createNamedQuery("Posts.findByThreadID");
+            q = em.createNamedQuery("Posts.findByConversationID");
             q.setParameter("threadID", thread.getThreadID());
             List<Posts> posts = q.getResultList();
             request.setAttribute("posts", posts);
@@ -93,20 +93,20 @@ public class ThreadRead extends HttpServlet {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
 
         if(request.getParameter("thread") != null){
-            Query q = em.createNamedQuery("Thread.findByThreadID");
+            Query q = em.createNamedQuery("Conversation.findByConversationID");
             q.setParameter("threadID", Integer.parseInt(request.getParameter("thread")));
-            List<Thread> threads = q.getResultList();
-            Thread thread = threads.get(0);
+            List<Conversation> threads = q.getResultList();
+            Conversation thread = threads.get(0);
             request.getSession().setAttribute("thread", thread);
         }else if(request.getParameter("project") != null){
-            Query q = em.createNamedQuery("Thread.findByProjectID");
+            Query q = em.createNamedQuery("Conversation.findByProjectID");
             q.setParameter("projectID", Integer.parseInt(request.getParameter("project")));
             User user = (User) request.getSession().getAttribute("User");
-            List<Thread> threads = q.getResultList();
+            List<Conversation> threads = q.getResultList();
             Iterator itr = threads.iterator();
 
             while(itr.hasNext()){
-                Thread thrd = (Thread) itr.next();
+                Conversation thrd = (Conversation) itr.next();
                 List<User> tUsers = thrd.getUserList();
                 if(!thrd.getThreadPublic() &&
                    !tUsers.contains(user) &&
