@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author smckee
  */
-@WebFilter(filterName = "accessFilter", urlPatterns = {"/thrdCre8"})
+@WebFilter(filterName = "accessFilter", urlPatterns = {"/*"})
 public class AccessFilter implements Filter {
     
     private static final boolean debug = true;
