@@ -82,7 +82,7 @@
                                 <input type="submit" value="Delete"/>
                             </c:if>
                         </form>
-                            <hr style="border-bottom: 1px double black;"/>
+                        <hr class="postHR"/>
                     </c:forEach>
                 <div
             <div

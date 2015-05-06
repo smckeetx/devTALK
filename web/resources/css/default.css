@@ -779,7 +779,10 @@ dfn {
 hr {
     -moz-box-sizing: content-box;
     box-sizing: content-box;
-    height: 0
+    height: 0;
+}
+.postHR{
+    border-bottom: 5px double black;
 }
 mark {
     background: #ff0;
