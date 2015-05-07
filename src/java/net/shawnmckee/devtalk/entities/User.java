@@ -20,7 +20,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Query;
 import javax.persistence.Table;
 
@@ -31,15 +30,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "users")
 @NamedQueries({
-    @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u ORDER BY u.userFirstName, u.userLastName, u.userName"),
+    @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u WHERE u.userID != 1 ORDER BY u.userFirstName, u.userLastName, u.userName"),
     @NamedQuery(name = "User.findByUserID", query = "SELECT u FROM User u WHERE u.userID = :userID"),
     @NamedQuery(name = "User.findByUserName", query = "SELECT u FROM User u WHERE u.userName = :userName"),
     @NamedQuery(name = "User.findByUserFirstName", query = "SELECT u FROM User u WHERE u.userFirstName = :userFirstName"),
     @NamedQuery(name = "User.findByUserLastName", query = "SELECT u FROM User u WHERE u.userLastName = :userLastName"),
     @NamedQuery(name = "User.findByUserEmail", query = "SELECT u FROM User u WHERE u.userEmail = :userEmail"),
     @NamedQuery(name = "User.findByUserExtension", query = "SELECT u FROM User u WHERE u.userExtension = :userExtension"),
-    @NamedQuery(name = "User.findByUserPassword", query = "SELECT u FROM User u WHERE u.userPassword = :userPassword"),
-    @NamedQuery(name = "Users.findByUserActive", query = "SELECT u FROM User u WHERE u.userActive = :userActive")})
+    @NamedQuery(name = "User.findByUserActive", query = "SELECT u FROM User u WHERE u.userID != 1 AND u.userActive = :userActive")})
     public class User implements Serializable {
     @JoinTable(name = "projectUsers", joinColumns = {
         @JoinColumn(name = "userID", referencedColumnName = "userID")}, inverseJoinColumns = {
