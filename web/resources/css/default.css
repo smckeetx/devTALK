@@ -490,6 +490,14 @@ form#loginForm label.error {
     float:left;
     width:48%;
 }   
+
+.cL50TxtRgt
+{
+    float:left;
+    width:48%;
+    text-align:right;
+    height:1.5em;
+}   
 .colL60
 {
     float:left;
@@ -513,6 +521,15 @@ form#loginForm label.error {
     float:right;
     width:49.5%;
     padding-left:1%;
+}   
+
+.cR50TxtLft
+{
+    float:right;
+    width:49.5%;
+    padding-left:1%;
+    height:1.5em;
+    text-align: left;
 }   
 .colL
 {

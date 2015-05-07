@@ -85,85 +85,110 @@
                             <div style="width: 500px;" id="fieldset" class="centerAlignDiv">
                                 <input type="hidden" name="userID" value="${requestScope.user.userID}">
 
-                                <div style="padding:2%;">
-                                    <div id="error1" class="redbold" aria-live="assertive"></div>
-                                    <span class="required">*</span>&nbsp;
-                                    <label for="firstName" class="bold em7">
-                                        First Name:
-                                    </label>
-                                    <input type="text" name="firstName" id="firstName" size="32" maxlength="25" value="${pageScope.firstName}" aria-required="true" required />
+                                <div style="height:2em;">
+                                    <div class="cL50TxtRgt">
+                                        <span class="required">*</span>&nbsp;
+                                        <label for="firstName" class="bold em7">
+                                            First Name:
+                                        </label>
+                                    </div>
+                                    <div class="cR50TxtLft">
+                                        <input type="text" name="firstName" id="firstName"  style="width:18em;"maxlength="25" value="${pageScope.firstName}" aria-required="true" required />
+                                    </div>
                                 </div>
-                                <div style="padding:2%;">
-                                    <div id="error1" class="redbold" aria-live="assertive"></div>
-                                    <span class="required">*</span>&nbsp;
-                                    <label for="lastName" class="bold em7">
-                                        Last Name:
-                                    </label>
-                                    <input type="text" name="lastName" id="lastName" size="32" maxlength="25" value="${pageScope.lastName}" aria-required="true" required />
+                                <div style="height:2em;">
+                                    <div class="cL50TxtRgt">
+                                        <span class="required">*</span>&nbsp;
+                                        <label for="lastName" class="bold em7">
+                                            Last Name:
+                                        </label>
+                                    </div>
+                                    <div class="cR50TxtLft">
+                                        <input type="text" name="lastName" id="lastName"  style="width:18em;"maxlength="25" value="${pageScope.lastName}" aria-required="true" required />
+                                    </div>
                                 </div>
-                                <div style="padding:2%;">
-                                    <div id="error1" class="redbold" aria-live="assertive"></div>
-                                    <span class="required">*</span>&nbsp;
-                                    <label for="email" class="bold em7">
-                                        eMail:
-                                    </label>
-                                    <input type="email" name="email" id="email" size="32" maxlength="50" value="${pageScope.email}" aria-required="true" required />
+                                <div style="height:2em;">
+                                    
+                                    <div class="cL50TxtRgt">
+                                        <span class="required">*</span>&nbsp;
+                                        <label for="email" class="bold em7">
+                                            eMail:
+                                        </label>
+                                    </div>
+                                    <div class="cR50TxtLft">
+                                        <input type="email" name="email" id="email"  style="width:18em;"maxlength="50" value="${pageScope.email}" aria-required="true" required />
+                                    </div>
                                 </div>
-                                <div style="padding:2%;">
-                                    <div id="error1" class="redbold" aria-live="assertive"></div>
-                                    <span class="required">*</span>&nbsp;
-                                    <label for="userName" class="bold em7">
-                                        User Name:
-                                    </label>
-                                    <input type="userName" name="userName" id="userName" size="32" maxlength="25" value="${pageScope.userName}" aria-required="true" required />
+                                <div style="height:2em;">
+                                    
+                                    <div class="cL50TxtRgt">
+                                        <span class="required">*</span>&nbsp;
+                                        <label for="userName" class="bold em7">
+                                            User Name:
+                                        </label>
+                                    </div>
+                                    <div class="cR50TxtLft">
+                                        <input type="userName" name="userName" id="userName"  style="width:18em;" maxlength="25" value="${pageScope.userName}" aria-required="true" required />
+                                    </div>
                                 </div>
-                                <div style="padding:2%;">
-                                    <div id="error1" class="redbold" aria-live="assertive"></div>
-                                    <span class="required">*</span>&nbsp;
-                                    <label for="userPhone" class="bold em7">
-                                        Phone Number:
-                                    </label>
-                                    <input type="number" name="userPhone" id="userPhone" style="width:17.5em;" maxlength="10" value="${pageScope.userPhone}" aria-required="true" min="1000000000" max="9999999999" />
+                                <div style="height:2em;">
+                                    
+                                    <div class="cL50TxtRgt">
+                                        <span class="required">*</span>&nbsp;
+                                        <label for="userPhone" class="bold em7">
+                                            Phone Number:
+                                        </label>
+                                    </div>
+                                    <div class="cR50TxtLft">
+                                        <input type="number" name="userPhone" id="userPhone" style="width:18em;" maxlength="10" value="${pageScope.userPhone}" aria-required="true" min="1000000000" max="9999999999" />
+                                    </div>
                                 </div>
 
                                 <c:if test="${requestScope.selfEdit == null}">
-                                    <div>
-                                        <span class="required">*</span>&nbsp;
-                                        <label for="projects" class="bold em7">
-                                            Project List:
-                                        </label>
-                                        <select name="projects" id="projects" multiple="true" size="3" style="width:17.5em;">
-                                            <option value="0">-- Select Project(s) --</option>
-                                            <c:forEach items="${requestScope.projects}" var="project">
-                                                <option value="${project.projectID}" <c:if test="${requestScope.user.projectsList.contains(project)}">selected</c:if>>${project.projectDesc}</option>
-                                            </c:forEach>
-                                        </select>
+                                    <div style="height:4.5em;">
+                                        <div class="cL50TxtRgt" style="height:4em;">
+                                            <span class="required">*</span>&nbsp;
+                                            <label for="projects" class="bold em7">
+                                                Project List:
+                                            </label>
+                                        </div>
+                                        <div class="cR50TxtLft">
+                                            <select name="projects" id="projects" multiple="true" size="3" style="width:18em;">
+                                                <option value="0">-- Select Project(s) --</option>
+                                                <c:forEach items="${requestScope.projects}" var="project">
+                                                    <option value="${project.projectID}" <c:if test="${requestScope.user.projectsList.contains(project)}">selected</c:if>>${project.projectDesc}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
                                     </div>
 
-                                    <div style="padding:2%;">
-                                        <div id="error1" class="redbold" aria-live="assertive"></div>
-                                        <span class="required">*</span>&nbsp;
-                                        <label for="active" class="bold em7">
-                                            User Active:
-                                        </label>
+                                    <div style="height:2em;">
+                                        
+                                        <div class="cL50TxtRgt">
+                                            <span class="required">*</span>&nbsp;
+                                            <label for="active" class="bold em7">
+                                                User Active:
+                                            </label>
+                                        </div>
+                                        <div class="cR50TxtLft">
+                                            <c:set var="active" value="" scope="request"/>
+                                            <c:set var="inactive" value="" scope="request"/>
+                                            <c:if test="${empty pageScope.active || pageScope.active == 'Y' || pageScope.active == true}">
+                                                <c:set var="activeY" value="checked" scope="page"/>
+                                            </c:if>
+                                            <c:if test="${!empty pageScope.active && (pageScope.active == 'N' || pageScope.active == false)}">
+                                                <c:set var="activeN" value="checked" scope="page"/>
+                                            </c:if>
 
-                                        <c:set var="active" value="" scope="request"/>
-                                        <c:set var="inactive" value="" scope="request"/>
-                                        <c:if test="${empty pageScope.active || pageScope.active == 'Y' || pageScope.active == true}">
-                                            <c:set var="activeY" value="checked" scope="page"/>
-                                        </c:if>
-                                        <c:if test="${!empty pageScope.active && (pageScope.active == 'N' || pageScope.active == false)}">
-                                            <c:set var="activeN" value="checked" scope="page"/>
-                                        </c:if>
-
-                                        <input type="radio" name="active" id="activeY" value="Y" aria-required="true" <c:out value="${activeY}"/>> Yes
-                                        <input type="radio" name="active" id="activeN" value="N" aria-required="true" <c:out value="${activeN}"/> /> No
+                                            <input type="radio" name="active" id="activeY" value="Y" aria-required="true" <c:out value="${activeY}"/>> Yes
+                                            <input type="radio" name="active" id="activeN" value="N" aria-required="true" <c:out value="${activeN}"/> /> No
+                                        </div>
                                     </div>
                                 </c:if>
                                 <c:if test="${requestScope.selfEdit != null}">
                                     <input type="hidden" name="selfEdit" value="Y"/>
                                 </c:if>
-                                
+                                    <div class="clear"></div>
                                 <div style="padding:2%" id="formButtons">
                                     <input type="submit" value="${requestScope.permCode == 'userCre8' ? 'Add' : 'Update'}" />
                                     <span style="padding-left:5%; margin-left:5%">

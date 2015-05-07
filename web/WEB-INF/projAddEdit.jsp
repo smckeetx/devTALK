@@ -49,20 +49,24 @@
                     <fieldset style="width: 95%;">
                         <legend>Create/Edit Project</legend>
                         <form action="projUpdt" method="post" name="admin">
-                            <div style="width: 500px;" class="centerAlignDiv">
+                            <div class="centerAlignDiv">
                                 <c:if test="${!empty requestScope.projects}">
-                                    <div>
-                                        <span class="required">*</span>&nbsp;
-                                        <label for="projects" class="bold em7">
-                                            Project List:
-                                        </label>
-                                        <select name="projects" id="projects" style="width:17.5em;">
-                                            <option value="0">-- Select Project(s) --</option>
-                                            <c:forEach items="${requestScope.projects}" var="project">
-                                                <option value="${project.projectID}" <c:if test="${requestScope.user.projectsList.contains(project)}">selected</c:if>>${project.projectDesc}</option>
-                                            </c:forEach>
-                                        </select>
-                                        <input type="Submit" value="Go"/>
+                                    <div style="height:2em;">
+                                        <div class="cL50TxtRgt">
+                                            <span class="required">*</span>&nbsp;
+                                            <label for="projects" class="bold em7">
+                                                Project List:
+                                            </label>
+                                        </div>
+                                        <div class="cR50TxtLft">
+                                            <select name="projects" id="projects" style="width:17.5em;">
+                                                <option value="0">-- Select Project(s) --</option>
+                                                <c:forEach items="${requestScope.projects}" var="project">
+                                                    <option value="${project.projectID}" <c:if test="${requestScope.user.projectsList.contains(project)}">selected</c:if>>${project.projectDesc}</option>
+                                                </c:forEach>
+                                            </select>
+                                            <input type="Submit" value="Go"/>
+                                        </div>
                                     </div>
                                 </c:if>
                             </div>
@@ -72,31 +76,37 @@
                                 <input type="hidden" name="pID" value="${pageScope.pID}"/>
                             </c:if>
                             <div style="width: 500px;" class="centerAlignDiv">
-                                <div style="padding:2%;">
-                                    <div id="error1" class="redbold" aria-live="assertive"></div>
-                                    <span class="required">*</span>&nbsp;
-                                    <label for="projectDesc" class="bold em7">
-                                        Project Name:
-                                    </label>
-                                    <input type="text" name="projectDesc" id="projectDesc" size="32" maxlength="45" value="${pageScope.projectDesc}" aria-required="true" required />
+                                <div style="height:2em;">
+                                    <div class="cL50TxtRgt">
+                                        <span class="required">*</span>&nbsp;
+                                        <label for="projectDesc" class="bold em7">
+                                            Project Name:
+                                        </label>
+                                    </div>
+                                    <div class="cR50TxtLft">
+                                        <input type="text" name="projectDesc" id="projectDesc" size="32" maxlength="45" value="${pageScope.projectDesc}" aria-required="true" required />
+                                    </div>
                                 </div>
                                 <%-- TODO: add in drop down for Project Lead selection --%>
-                                <div style="padding:2%;">
-                                    <div id="error1" class="redbold" aria-live="assertive"></div>
-                                    <span class="required">*</span>&nbsp;
-                                    <label for="active" class="bold em7">
-                                        Project Active:
-                                    </label>
-                                    <c:set var="checkedY" value="" scope="request"/>
-                                    <c:set var="checkedN" value="" scope="request"/>
-                                    <c:if test="${empty pageScope.active || pageScope.active == 'Y'|| pageScope.active == true}">
-                                        <c:set var="checkedY" value="checked" scope="request"/>
-                                    </c:if>
-                                    <c:if test="${!empty pageScope.active && pageScope.active == 'N'}">
-                                        <c:set var="checkedN" value="checked" scope="request"/>
-                                    </c:if>
-                                    <input type="radio" name="active" id="activeY" value="Y" aria-required="true" <c:out value="${checkedY}"/>> Yes
-                                    <input type="radio" name="active" id="activeN" value="N" aria-required="true" <c:out value="${checkedN}"/> /> No
+                                <div style="height:2em;">
+                                    <div class="cL50TxtRgt">
+                                        <span class="required">*</span>&nbsp;
+                                        <label for="active" class="bold em7">
+                                            Project Active:
+                                        </label>
+                                    </div>
+                                    <div class="cR50TxtLft">
+                                        <c:set var="checkedY" value="" scope="request"/>
+                                        <c:set var="checkedN" value="" scope="request"/>
+                                        <c:if test="${empty pageScope.active || pageScope.active == 'Y'|| pageScope.active == true}">
+                                            <c:set var="checkedY" value="checked" scope="request"/>
+                                        </c:if>
+                                        <c:if test="${!empty pageScope.active && pageScope.active == 'N'}">
+                                            <c:set var="checkedN" value="checked" scope="request"/>
+                                        </c:if>
+                                        <input type="radio" name="active" id="activeY" value="Y" aria-required="true" <c:out value="${checkedY}"/>> Yes
+                                        <input type="radio" name="active" id="activeN" value="N" aria-required="true" <c:out value="${checkedN}"/> /> No
+                                    </div>
                                 </div>
                                 <div style="padding:2%" id="formButtons">
                                     <input type="submit" value="${pageScope.addUpdate1}" />
