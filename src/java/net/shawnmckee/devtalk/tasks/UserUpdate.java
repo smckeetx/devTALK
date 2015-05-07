@@ -83,34 +83,30 @@ public class UserUpdate extends HttpServlet {
             q.setParameter("userID", Integer.parseInt(request.getParameter("userID")));
             User user = (User)q.getSingleResult();
 
-            String fn     = request.getParameter("firstName");
-            String ln     = request.getParameter("lastName");
-            String un     = request.getParameter("userName");
-            String eml    = request.getParameter("email");
-            BigInteger pn = null;
-            try{
-                pn = new BigInteger(request.getParameter("userPhone"));
-            }catch(java.lang.NumberFormatException e){
-                // error message is set below to keep them in a logical order
-            }
-            Boolean ac = request.getParameter("active").equals("Y");
-            String[] projectIDs = request.getParameterValues("projects");
+            String fn        = request.getParameter("firstName");
+            String ln        = request.getParameter("lastName");
+            String un        = request.getParameter("userName");
+            String eml       = request.getParameter("email");
+            String phone     = request.getParameter("userPhone");
+            String active    = request.getParameter("active");
 
             em.getTransaction().begin();
-            em.persist(user);
 
-            if(!fn.isEmpty()){
+            if(fn != null &&
+               !fn.isEmpty()){
                 user.setUserFirstName(fn);
             }else{
                 error +=  "First name required<br/>";
             }
             
-            if(!ln.isEmpty()){
+            if(ln != null &&
+               !ln.isEmpty()){
                 user.setUserLastName(ln);
             }else{
                 error +=  "Last name required<br/>";
             }
-            if(!un.isEmpty()){
+            if(un != null &&
+               !un.isEmpty()){
                 q = em.createNamedQuery("User.findByUserName");
                 q.setParameter("userName", un);
                 if(q.getResultList().isEmpty() ||
@@ -123,7 +119,8 @@ public class UserUpdate extends HttpServlet {
                 error +=  "User name required<br/>";
             }
 
-            if(!eml.isEmpty()){
+            if(eml != null &&
+               !eml.isEmpty()){
                 q = em.createNamedQuery("User.findByUserEmail");
                 q.setParameter("userEmail", eml);
                 if(q.getResultList().isEmpty() ||
@@ -136,29 +133,39 @@ public class UserUpdate extends HttpServlet {
                 error +=  "eMail required<br/>";
             }
             
-            if(pn != null){
+            if(phone != null &&
+               !phone.isEmpty()){
+                BigInteger pn = new BigInteger(phone);
                 user.setUserExtension(pn);
             }else{
                 error +=  "Phone Number required<br/>";
             }
-            if(ac != null){
+            
+            if(active != null &&
+               !active.isEmpty()){
+                Boolean ac = active.equals("Y");
                 user.setUserActive(ac);
             }else{
                 error +=  "Active status required<br/>";
-        }
+            }
         
-            if(projectIDs != null &&
-               projectIDs.length > 0){
-                q = em.createNamedQuery("Projects.findByProjectID");
-                q.setParameter("projectID", Integer.parseInt(projectIDs[0]));
-                List<Projects> userProjects = q.getResultList();
+            if(request.getParameterValues("projects") != null){
+                String[] projectIDs = request.getParameterValues("projects");
+                if(projectIDs.length > 0){
+                    q = em.createNamedQuery("Projects.findByProjectID");
+                    q.setParameter("projectID", Integer.parseInt(projectIDs[0]));
+                    List<Projects> userProjects = q.getResultList();
 
-                for(Integer i=1; i<projectIDs.length; i++){
-                    q.setParameter("projectID", Integer.parseInt(projectIDs[i]));
-                    userProjects.addAll(q.getResultList());
-                }
-                if(!userProjects.isEmpty()){
-                    user.setProjectsList(userProjects);
+                    for(Integer i=1; i<projectIDs.length; i++){
+                        q.setParameter("projectID", Integer.parseInt(projectIDs[i]));
+                        userProjects.addAll(q.getResultList());
+                    }
+                    
+                    if(!userProjects.isEmpty()){
+                        user.setProjectsList(userProjects);
+                    }else{
+                        error +=  "At least one project is required<br/>";
+                    }
                 }else{
                     error +=  "At least one project is required<br/>";
                 }
@@ -189,6 +196,25 @@ public class UserUpdate extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+String myID1 = request.getParameter("myID");
+        if(request.getParameter("myID") != null && 
+           !request.getParameter("myID").isEmpty()
+          ){
+            Integer myID = Integer.parseInt(request.getParameter("myID"));
+            Query q = em.createNamedQuery("User.findByUserID");
+            q.setParameter("userID", Integer.parseInt(request.getParameter("myID")));
+            User user = (User)q.getSingleResult();
+            User me = (User)request.getSession().getAttribute("User");
+            
+            if(!me.getUserID().equals(myID) &&
+               me.getPrimaryRoleCode().equals("user")
+              ){
+                request.setAttribute("error", "User may only edit their own account.");
+                request.getRequestDispatcher("/WEB-INF/main.jsp").forward(request, response);
+            }
+        }
         processRequest(request, response);
     }
 
