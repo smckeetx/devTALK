@@ -72,58 +72,45 @@ public class ProjectUpdate extends HttpServlet {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         String error = "";
 
-        try{
-            // TODO: Verify that user has permission
-            Query q = em.createNamedQuery("Permissions.findByPermissionCode");
-            q.setParameter("permissionCode", "projUpdt");
-            Permissions perm = (Permissions)q.getSingleResult();
-            request.setAttribute("permCode", "projUpdt");
-            request.setAttribute("task", perm.getPermissionDesc());
+        TaskUtils.setAttributes(request);
+        
+        String pn  = request.getParameter("projectDesc");
+        String active = request.getParameter("active");
+        Boolean ac = false;
+        if(active != null){
+            ac = active.equals("Y");
+        }
 
-            String pn  = request.getParameter("projectDesc");
-            String active = request.getParameter("active");
-            Boolean ac = false;
-            if(active != null){
-                ac = active.equals("Y");
+        if(request.getParameter("projects") != null){
+            Integer pID = Integer.parseInt(request.getParameter("projects"));
+            Query q = em.createNamedQuery("Projects.findByProjectID");
+            q.setParameter("projectID", pID);
+            Projects proj = (Projects)q.getSingleResult();
+            request.getSession().setAttribute("proj", proj);
+            pn = proj.getProjectDesc();
+            ac = proj.getProjectActive();
+            active = "N";
+            if(ac){
+                active = "Y";
             }
 
-            if(request.getParameter("projects") != null){
-                Integer pID = Integer.parseInt(request.getParameter("projects"));
-                q = em.createNamedQuery("Projects.findByProjectID");
-                q.setParameter("projectID", pID);
-                Projects proj = (Projects)q.getSingleResult();
-                request.getSession().setAttribute("proj", proj);
-                pn = proj.getProjectDesc();
-                ac = proj.getProjectActive();
-                active = "N";
-                if(ac){
-                    active = "Y";
-                }
-                
-                request.setAttribute("projectDesc", pn);
-                request.setAttribute("active", active);
-                request.setAttribute("pID", pID);
-                
-            }else{
-            
-                try{
-                    Integer pID = Integer.parseInt(request.getParameter("pID"));
-                    q = em.createNamedQuery("Projects.findByProjectID");
-                    q.setParameter("projectID", pID);
-                    Projects proj = (Projects)q.getSingleResult();
-                    em.getTransaction().begin();
-                    proj.setProjectDesc(pn);
-                    proj.setProjectActive(ac);
-                    em.merge(proj);
-                    em.getTransaction().commit();
+            request.setAttribute("projectDesc", pn);
+            request.setAttribute("active", active);
+            request.setAttribute("pID", pID);
 
-                    request.getSession().setAttribute("proj", proj);
-                } catch (Exception e) {
-                    error = error +  "1: " + e.getMessage() + "<br/>";
-                }
-            }
-        }catch(Exception e){
-                error = error +  "2: " + e.getMessage() + "<br/>";
+        }else{
+
+            Integer pID = Integer.parseInt(request.getParameter("pID"));
+            Query q = em.createNamedQuery("Projects.findByProjectID");
+            q.setParameter("projectID", pID);
+            Projects proj = (Projects)q.getSingleResult();
+            em.getTransaction().begin();
+            proj.setProjectDesc(pn);
+            proj.setProjectActive(ac);
+            em.merge(proj);
+            em.getTransaction().commit();
+
+            request.getSession().setAttribute("proj", proj);
         }
 
         if(!error.isEmpty()){
@@ -147,5 +134,4 @@ public class ProjectUpdate extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

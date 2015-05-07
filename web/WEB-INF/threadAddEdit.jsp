@@ -10,7 +10,7 @@
 <%@include file="menu.jsp" %>
             <div id="content">
                 <div class="centerAlignDiv">
-                    <h1>${sessionScope.User.getPrimaryRole()} : ${requestScope.task}</h1>
+                    <div class="taskHeader">${requestScope.task}</div>
                 </div>
                 <div class="centerAlignDiv">
                     <c:if test="${error != null}">

@@ -11,7 +11,7 @@
 
             <div id="content">
                 <div class="centerAlignDiv">
-                    <h1>${sessionScope.User.getPrimaryRole()} : ${requestScope.task}</h1>
+                    <div class="taskHeader">${requestScope.task}</div>
                 </div>
                 <div class="centerAlignDiv">
                     <c:if test="${requestScope.error != null}">
@@ -125,37 +125,45 @@
                                     </label>
                                     <input type="number" name="userPhone" id="userPhone" style="width:17.5em;" maxlength="10" value="${pageScope.userPhone}" aria-required="true" min="1000000000" max="9999999999" />
                                 </div>
-                                <div>
-                                    <span class="required">*</span>&nbsp;
-                                    <label for="projects" class="bold em7">
-                                        Project List:
-                                    </label>
-                                    <select name="projects" id="projects" multiple="true" size="3" style="width:17.5em;">
-                                        <option value="0">-- Select Project(s) --</option>
-                                        <c:forEach items="${requestScope.projects}" var="project">
-                                            <option value="${project.projectID}" <c:if test="${requestScope.user.projectsList.contains(project)}">selected</c:if>>${project.projectDesc}</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                                <div style="padding:2%;">
-                                    <div id="error1" class="redbold" aria-live="assertive"></div>
-                                    <span class="required">*</span>&nbsp;
-                                    <label for="active" class="bold em7">
-                                        User Active:
-                                    </label>
 
-                                    <c:set var="active" value="" scope="request"/>
-                                    <c:set var="inactive" value="" scope="request"/>
-                                    <c:if test="${empty pageScope.active || pageScope.active == 'Y' || pageScope.active == true}">
-                                        <c:set var="activeY" value="checked" scope="page"/>
-                                    </c:if>
-                                    <c:if test="${!empty pageScope.active && (pageScope.active == 'N' || pageScope.active == false)}">
-                                        <c:set var="activeN" value="checked" scope="page"/>
-                                    </c:if>
+                                <c:if test="${requestScope.selfEdit == null}">
+                                    <div>
+                                        <span class="required">*</span>&nbsp;
+                                        <label for="projects" class="bold em7">
+                                            Project List:
+                                        </label>
+                                        <select name="projects" id="projects" multiple="true" size="3" style="width:17.5em;">
+                                            <option value="0">-- Select Project(s) --</option>
+                                            <c:forEach items="${requestScope.projects}" var="project">
+                                                <option value="${project.projectID}" <c:if test="${requestScope.user.projectsList.contains(project)}">selected</c:if>>${project.projectDesc}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
 
-                                    <input type="radio" name="active" id="activeY" value="Y" aria-required="true" <c:out value="${activeY}"/>> Yes
-                                    <input type="radio" name="active" id="activeN" value="N" aria-required="true" <c:out value="${activeN}"/> /> No
-                                </div>
+                                    <div style="padding:2%;">
+                                        <div id="error1" class="redbold" aria-live="assertive"></div>
+                                        <span class="required">*</span>&nbsp;
+                                        <label for="active" class="bold em7">
+                                            User Active:
+                                        </label>
+
+                                        <c:set var="active" value="" scope="request"/>
+                                        <c:set var="inactive" value="" scope="request"/>
+                                        <c:if test="${empty pageScope.active || pageScope.active == 'Y' || pageScope.active == true}">
+                                            <c:set var="activeY" value="checked" scope="page"/>
+                                        </c:if>
+                                        <c:if test="${!empty pageScope.active && (pageScope.active == 'N' || pageScope.active == false)}">
+                                            <c:set var="activeN" value="checked" scope="page"/>
+                                        </c:if>
+
+                                        <input type="radio" name="active" id="activeY" value="Y" aria-required="true" <c:out value="${activeY}"/>> Yes
+                                        <input type="radio" name="active" id="activeN" value="N" aria-required="true" <c:out value="${activeN}"/> /> No
+                                    </div>
+                                </c:if>
+                                <c:if test="${requestScope.selfEdit != null}">
+                                    <input type="hidden" name="selfEdit" value="Y"/>
+                                </c:if>
+                                
                                 <div style="padding:2%" id="formButtons">
                                     <input type="submit" value="${requestScope.permCode == 'userCre8' ? 'Add' : 'Update'}" />
                                     <span style="padding-left:5%; margin-left:5%">

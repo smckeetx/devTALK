@@ -697,6 +697,11 @@ a.skip:hover {
 .datCol{
     padding:3px 0;
 }
+
+.taskHeader{
+    font-size: 1.5em;
+    font-weight: bold;
+}
 /**
 * If there are any application specific styles or overrides they should go in here.
 */

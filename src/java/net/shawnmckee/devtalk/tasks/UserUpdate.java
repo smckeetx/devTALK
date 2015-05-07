@@ -41,26 +41,10 @@ public class UserUpdate extends HttpServlet {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         String error = "";
 
-        String url = request.getRequestURL().toString();
-        String permCode = url.substring(url.lastIndexOf("/") + 1);
-
-        // TODO: Verify that logged in user has permission to do this
-        Query q = em.createNamedQuery("Permissions.findByPermissionCode");
-        q.setParameter("permissionCode", permCode);
-        Permissions perm = (Permissions)q.getSingleResult();
-
-        request.setAttribute("task"  , perm.getPermissionDesc());
-        request.setAttribute("taskID", perm.getPermissionID());
-        request.setAttribute("permCode", permCode);
-
-        // get the list of active projects and store it
-        q = em.createNamedQuery("Projects.findByProjectActive");
-        q.setParameter("projectActive", true);
-        List<Projects> projects = q.getResultList();
-        request.setAttribute("projects", projects);
-
+        TaskUtils.setAttributes(request);
+        
         // get the list of ALL users and store that
-        q = em.createNamedQuery("User.findAll");
+        Query q = em.createNamedQuery("User.findAll");
         List<User> users = q.getResultList();
         request.setAttribute("users", users);
 
@@ -89,6 +73,7 @@ public class UserUpdate extends HttpServlet {
             String eml       = request.getParameter("email");
             String phone     = request.getParameter("userPhone");
             String active    = request.getParameter("active");
+            String selfEdit  = request.getParameter("selfEdit");
 
             em.getTransaction().begin();
 
@@ -141,28 +126,32 @@ public class UserUpdate extends HttpServlet {
                 error +=  "Phone Number required<br/>";
             }
             
-            if(active != null &&
-               !active.isEmpty()){
-                Boolean ac = active.equals("Y");
-                user.setUserActive(ac);
-            }else{
-                error +=  "Active status required<br/>";
-            }
-        
-            if(request.getParameterValues("projects") != null){
-                String[] projectIDs = request.getParameterValues("projects");
-                if(projectIDs.length > 0){
-                    q = em.createNamedQuery("Projects.findByProjectID");
-                    q.setParameter("projectID", Integer.parseInt(projectIDs[0]));
-                    List<Projects> userProjects = q.getResultList();
+            if(selfEdit == null){
+                if(active != null &&
+                   !active.isEmpty()){
+                    Boolean ac = active.equals("Y");
+                    user.setUserActive(ac);
+                }else{
+                    error +=  "Active status required<br/>";
+                }
 
-                    for(Integer i=1; i<projectIDs.length; i++){
-                        q.setParameter("projectID", Integer.parseInt(projectIDs[i]));
-                        userProjects.addAll(q.getResultList());
-                    }
-                    
-                    if(!userProjects.isEmpty()){
-                        user.setProjectsList(userProjects);
+                if(request.getParameterValues("projects") != null){
+                    String[] projectIDs = request.getParameterValues("projects");
+                    if(projectIDs.length > 0){
+                        q = em.createNamedQuery("Projects.findByProjectID");
+                        q.setParameter("projectID", Integer.parseInt(projectIDs[0]));
+                        List<Projects> userProjects = q.getResultList();
+
+                        for(Integer i=1; i<projectIDs.length; i++){
+                            q.setParameter("projectID", Integer.parseInt(projectIDs[i]));
+                            userProjects.addAll(q.getResultList());
+                        }
+
+                        if(!userProjects.isEmpty()){
+                            user.setProjectsList(userProjects);
+                        }else{
+                            error +=  "At least one project is required<br/>";
+                        }
                     }else{
                         error +=  "At least one project is required<br/>";
                     }
@@ -170,9 +159,9 @@ public class UserUpdate extends HttpServlet {
                     error +=  "At least one project is required<br/>";
                 }
             }else{
-                error +=  "At least one project is required<br/>";
+                request.setAttribute("selfEdit", "Y");
             }
-
+            
             em.merge(user);
             em.getTransaction().commit();
             request.setAttribute("user", user);
@@ -198,7 +187,9 @@ public class UserUpdate extends HttpServlet {
             throws ServletException, IOException {
 
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
-String myID1 = request.getParameter("myID");
+
+        TaskUtils.setAttributes(request);
+
         if(request.getParameter("myID") != null && 
            !request.getParameter("myID").isEmpty()
           ){
@@ -213,9 +204,12 @@ String myID1 = request.getParameter("myID");
               ){
                 request.setAttribute("error", "User may only edit their own account.");
                 request.getRequestDispatcher("/WEB-INF/main.jsp").forward(request, response);
+            }else{
+                request.setAttribute("user", me);
+                request.setAttribute("selfEdit", "Y");
             }
         }
-        processRequest(request, response);
+        request.getRequestDispatcher("/WEB-INF/userAddEdit.jsp").forward(request, response);
     }
 
     /**

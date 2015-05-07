@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import net.shawnmckee.devtalk.entities.DBUtil;
-import net.shawnmckee.devtalk.entities.Permissions;
 import net.shawnmckee.devtalk.entities.Posts;
 import net.shawnmckee.devtalk.entities.Projects;
 import net.shawnmckee.devtalk.entities.User;
@@ -41,8 +40,8 @@ public class ThreadCreate extends HttpServlet {
 
         HttpSession session = request.getSession(false);
 
+        TaskUtils.setAttributes(request);
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        Query q = null;
         List<Projects> projects = null;
         User user = (User)session.getAttribute("User");
 
@@ -50,26 +49,11 @@ public class ThreadCreate extends HttpServlet {
         projects = user.getProjectsList();
         request.setAttribute("projects", projects);
 
-        String url = request.getRequestURL().toString();
-        String permCode = url.substring(url.lastIndexOf("/") + 1);
-
-        if(permCode == null){
-            permCode = "thrdCre8";
-        }
-        // TODO: Verify that logged in user has permission to do this
-        q = em.createNamedQuery("Permissions.findByPermissionCode");
-        q.setParameter("permissionCode", permCode);
-        Permissions perm = (Permissions)q.getSingleResult();
-
         // get the list of ALL users and store that
-        q = em.createNamedQuery("User.findByUserActive");
+        Query q = em.createNamedQuery("User.findByUserActive");
         q.setParameter("userActive", true);
         List<User> users = q.getResultList();
         request.setAttribute("users", users);
-
-        request.setAttribute("task"  , perm.getPermissionDesc());
-        request.setAttribute("taskID", perm.getPermissionID());
-        request.setAttribute("permCode", permCode);
 
         request.getRequestDispatcher("/WEB-INF/threadAddEdit.jsp").forward(request, response);
     }

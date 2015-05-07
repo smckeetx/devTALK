@@ -13,10 +13,15 @@
 
             <div id="content">
                 <div class="centerAlignDiv">
+                    <div class="centerAlignDiv">
+                        <div class="taskHeader">${requestScope.task}</div>
+                    </div>
+
                     <c:if test="${error != null}">
                         <div class="error">${error}</div>
                         <c:set var="postTxt" value="${param.postTxt}"/>
                     </c:if>
+                        
                     <div class="datCol">
                         <form action="thrdRead" method="post">
                             <p>
@@ -70,7 +75,9 @@
                         ${sessionScope.thread.threadTitle}
                     </h1>
 
-                    <c:if test="${!empty sessionScope.thread}">
+                    <c:if test="${!empty sessionScope.thread &&
+                                  !thread.threadLocked
+                                 }">
                         <form action="postCre8" method="post">
                             <div class="datCol">
                                 <span class="required">*</span>&nbsp;

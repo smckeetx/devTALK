@@ -4,6 +4,7 @@
 package net.shawnmckee.devtalk.tasks;
 
 import java.io.IOException;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.servlet.ServletException;
@@ -36,19 +37,8 @@ public class ProjectCreate extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        EntityManager em = DBUtil.getEmFactory().createEntityManager();
-
-        try{
-            // TODO: Verify that user has permission
-            Query q = em.createNamedQuery("Permissions.findByPermissionCode");
-            q.setParameter("permissionCode", "projCre8");
-            Permissions perm = (Permissions)q.getSingleResult();
-            request.setAttribute("permCode", "projCre8");
-            request.setAttribute("task", perm.getPermissionDesc());
-            request.getRequestDispatcher("/WEB-INF/projAddEdit.jsp").forward(request, response);
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-        }
+        TaskUtils.setAttributes(request);
+        request.getRequestDispatcher("/WEB-INF/projAddEdit.jsp").forward(request, response);
     }
 
     /**
@@ -67,32 +57,24 @@ public class ProjectCreate extends HttpServlet {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         String error = "";
 
-        try{
-            String pn  = request.getParameter("projectDesc");
-            Boolean ac = request.getParameter("active").equals("Y");
+        String pn  = request.getParameter("projectDesc");
+        Boolean ac = request.getParameter("active").equals("Y");
 
-            Query q = em.createNamedQuery("Projects.findByProjectDesc");
-            q.setParameter("projectDesc", pn);
-            if(!q.getResultList().isEmpty()){
-                error += "Project description, " + pn + " in use.<br/>";
-            }
+        Query q = em.createNamedQuery("Projects.findByProjectDesc");
+        q.setParameter("projectDesc", pn);
+        if(!q.getResultList().isEmpty()){
+            error += "Project description, " + pn + " in use.<br/>";
+        }
 
-            if(error.isEmpty()){
-                try{
-                    HttpSession session = request.getSession();
-                    User user = (User)session.getAttribute("User");
-                    Projects proj = new Projects(pn, user.getUserID(), ac);
-                    em.getTransaction().begin();
-                    em.persist(proj);
-                    em.getTransaction().commit();
+        if(error.isEmpty()){
+            HttpSession session = request.getSession();
+            User user = (User)session.getAttribute("User");
+            Projects proj = new Projects(pn, user.getUserID(), ac);
+            em.getTransaction().begin();
+            em.persist(proj);
+            em.getTransaction().commit();
 
-                    request.getSession().setAttribute("proj", proj);
-                } catch (Exception e) {
-                    error += "1: " + e.getMessage() + "<br/>";
-                }
-            }
-        }catch(Exception e){
-                error += "2: " + e.getMessage() + "<br/>";
+            request.getSession().setAttribute("proj", proj);
         }
 
         if(!error.isEmpty()){
@@ -111,5 +93,4 @@ public class ProjectCreate extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

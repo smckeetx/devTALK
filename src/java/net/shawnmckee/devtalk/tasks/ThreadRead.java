@@ -19,6 +19,7 @@ import net.shawnmckee.devtalk.entities.Posts;
 import net.shawnmckee.devtalk.entities.Projects;
 import net.shawnmckee.devtalk.entities.User;
 import net.shawnmckee.devtalk.entities.Conversation;
+import net.shawnmckee.devtalk.entities.Permissions;
 
 /**
  *
@@ -44,6 +45,8 @@ public class ThreadRead extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
 
+        TaskUtils.setAttributes(request);
+        
         Query q = null;
         List<Projects> projects = null;
         User user = (User)session.getAttribute("User");
@@ -134,5 +137,4 @@ public class ThreadRead extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }
