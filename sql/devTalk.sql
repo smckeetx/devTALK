@@ -134,6 +134,7 @@ CREATE TABLE `thread` (
   `threadTitle` varchar(45) NOT NULL,
   `threadActive` tinyint(1) NOT NULL DEFAULT '1',
   `threadPublic` tinyint(1) NOT NULL DEFAULT '1',
+  `threadLocked` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`threadID`,`projectID`, `userID`),
   KEY `fk_thread_projects1_idx` (`projectID`),
   KEY `fk_thread_user1` (`userID`),

@@ -107,7 +107,7 @@ import javax.persistence.Table;
     }
 
     public boolean getThreadLocked() {
-        return threadActive;
+        return threadLocked;
     }
 
     public void setThreadLocked(boolean threadLocked) {

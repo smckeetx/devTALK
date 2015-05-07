@@ -50,12 +50,22 @@
                             </p>
                         </form>
                     </c:if>
-                    <form action="thrdUpdt" method="post">
-                        <c:if test="${(thread.userID == sessionScope.User.getUserID() || sessionScope.User.getPrimaryRoleCode() != 'user')}">
-                            <input type="hidden" name="threadID" value="${thread.threadID}"/>
-                            <input type="submit" value="Lock Conversation"/>
-                        </c:if>
-                    </form>
+                    <c:if test="${!empty thread}">
+                        <form action="thrdUpdt" method="post">
+                            <c:if test="${(thread.userID == sessionScope.User.getUserID() || sessionScope.User.getPrimaryRoleCode() != 'user')}">
+                                <input type="hidden" name="threadID" value="${thread.threadID}"/>
+                                <input type="hidden" name="threadLocked" value="${thread.threadLocked}"/>
+                                <c:choose>
+                                    <c:when test="${thread.threadLocked}">
+                                        <input type="submit" value="Unlock Conversation"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input type="submit" value="Lock Conversation"/>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:if>
+                        </form>
+                    </c:if>
                     <h1>
                         ${sessionScope.thread.threadTitle}
                     </h1>
@@ -86,12 +96,10 @@
                             <input type="hidden" name="postID" value="${post.postID}"/>
                             <c:if test="${!thread.threadLocked && 
                                           (post.userID == sessionScope.User.getUserID() || 
-                                           sessionScope.User.getPrimaryRoleCode() != 'user'
+                                           !sessionScope.User.getPrimaryRoleCode().equals('user')
                                           )
-                                         }
-                                       "
-                            >
-                                <input type="submit" value="Delete"/>
+                                         }">
+                                    <input type="submit" value="Delete"/>
                             </c:if>
                         </form>
                         <hr class="postHR"/>

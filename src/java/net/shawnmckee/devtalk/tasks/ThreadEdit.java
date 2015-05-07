@@ -58,15 +58,16 @@ public class ThreadEdit extends HttpServlet {
         String threadStr = request.getParameter("threadID");
         if(threadStr != null){
             Integer threadID = Integer.parseInt(threadStr);
-            // Right now all we do with a post is "delete" it
+            // Right now all we do with a thread is lock or unlock it
             Query q = em.createNamedQuery("Conversation.findByConversationID");
             q.setParameter("threadID", threadID);
             Conversation thread = (Conversation)q.getSingleResult();
             em.getTransaction().begin();
-            //em.persist(post);
-            thread.setThreadLocked(true);
+            Boolean tLocked = request.getParameter("threadLocked").equals("true");
+            thread.setThreadLocked(!tLocked);
             em.merge(thread);
             em.getTransaction().commit();
+            request.getSession().setAttribute("thread", thread);
         }
         request.getRequestDispatcher("/thrdRead").forward(request, response);
     }
