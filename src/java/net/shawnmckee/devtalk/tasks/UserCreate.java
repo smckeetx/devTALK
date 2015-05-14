@@ -39,32 +39,14 @@ public class UserCreate extends HttpServlet {
             throws ServletException, IOException {
 
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        TaskUtils.setAttributes(request);
 
-        try{
-            String url = request.getRequestURL().toString();
-            String permCode = url.substring(url.lastIndexOf("/") + 1);
+        Query q = em.createNamedQuery("Projects.findByProjectActive");
+        q.setParameter("projectActive", true);
+        List<Projects> projects = q.getResultList();
+        request.setAttribute("projects", projects);
 
-            if(permCode == null){
-                permCode = "userCre8";
-            }
-            // TODO: Verify that logged in user has permission to do this
-            Query q = em.createNamedQuery("Permissions.findByPermissionCode");
-            q.setParameter("permissionCode", permCode);
-            Permissions perm = (Permissions)q.getSingleResult();
-
-            request.setAttribute("task"  , perm.getPermissionDesc());
-            request.setAttribute("taskID", perm.getPermissionID());
-            request.setAttribute("permCode", permCode);
-
-            q = em.createNamedQuery("Projects.findByProjectActive");
-            q.setParameter("projectActive", true);
-            List<Projects> projects = q.getResultList();
-            request.setAttribute("projects", projects);
-
-            request.getRequestDispatcher("/WEB-INF/userAddEdit.jsp").forward(request, response);
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-        }
+        request.getRequestDispatcher("/WEB-INF/userAddEdit.jsp").forward(request, response);
     }
 
     
@@ -221,5 +203,4 @@ public class UserCreate extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

@@ -11,12 +11,14 @@
                         <ul class="pure-menu-children">
                             <c:forEach items="${sessionScope.User.getRolesList()}" var="role">
                                 <c:forEach items="${role.getPermissionsList()}" var="permission">
-                                    <c:set var="strng" value=",${permission.getPermissionID()},"/>
                                     <li class="s4">
                                         <a href="${permission.getPermissionCode()}">${permission.getPermissionDesc()}</a>
                                     </li>
                                 </c:forEach>
                             </c:forEach>
+                            <li class="s4">
+                                <a href="userUpdt?myID=${sessionScope.User.getUserID()}">Edit Account</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
