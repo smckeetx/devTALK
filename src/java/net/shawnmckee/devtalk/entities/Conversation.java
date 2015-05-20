@@ -34,7 +34,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "Conversation.findByConversationActive", query = "SELECT t FROM Conversation t WHERE t.threadActive = :threadActive")})
     public class Conversation implements Serializable {
     private static final long serialVersionUID = 1L;
-    @JoinTable(name = "userConversation", joinColumns = {
+    @JoinTable(name = "userthread", joinColumns = {
         @JoinColumn(name = "threadID", referencedColumnName = "threadID")}, inverseJoinColumns = {
         @JoinColumn(name = "userID", referencedColumnName = "userID")})
     @ManyToMany(cascade=CascadeType.PERSIST)
