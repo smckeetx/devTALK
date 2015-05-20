@@ -25,6 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
+package net.shawnmckee.devtalk.security;
 
 import java.security.SecureRandom;
 import javax.crypto.spec.PBEKeySpec;
@@ -75,7 +76,9 @@ public class PasswordHash
         // Generate a random salt
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[SALT_BYTE_SIZE];
+        System.out.println(toHex(salt));
         random.nextBytes(salt);
+        System.out.println(toHex(salt));
 
         // Hash the password
         byte[] hash = pbkdf2(password, salt, PBKDF2_ITERATIONS, HASH_BYTE_SIZE);

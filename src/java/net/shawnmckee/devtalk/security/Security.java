@@ -60,16 +60,26 @@ public class Security extends HttpServlet {
         try{
             Query q = em.createNamedQuery("User.findByUserName");
             q.setParameter("userName", un);
-            List<User> user = q.getResultList();
-
-            if(user.size() > 0 &&
-               user.get(0).getUserPassword().equals(request.getParameter("password")) &&
-               user.get(0).getUserActive()
-              ){
+            User user = (User)q.getSingleResult();
+            
+            if(user != null){
+                if(user.getUserPassword().equals("password") &&
+                   user.getUserActive()
+                ){
                     HttpSession session = request.getSession(true);
-                    session.setAttribute("User", user.get(0));
-                    request.setAttribute("loggedIn", true);
+                    session.setAttribute("User", user);
+                    request.setAttribute("selfEdit", "Y");
+                    request.setAttribute("permCode", "userUpdt");
+                    request.setAttribute("resetPW", true);
+                    return "/userUpdt?user=" + user.getUserID();
+                }else if(user.checkUserPassword(request.getParameter("password")) &&
+                         user.getUserActive()
+                        ){
+                    HttpSession session = request.getSession(true);
+                    session.setAttribute("User", user);
                     return "/WEB-INF/main.jsp";
+                }
+               
             }else{
                 request.setAttribute("error", FAILURE_MESSAGE);
             }

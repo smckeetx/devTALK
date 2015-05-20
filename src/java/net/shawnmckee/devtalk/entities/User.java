@@ -5,6 +5,8 @@ package net.shawnmckee.devtalk.entities;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -76,7 +78,8 @@ import javax.persistence.Table;
     public User() {
     }
 
-  public User(String firstName, String lastName, String userName, String email, BigInteger extension, String userPassword, boolean userActive) {
+  public User(String firstName, String lastName, String userName, String email, BigInteger extension, String userPassword, boolean userActive) 
+            throws NoSuchAlgorithmException, InvalidKeySpecException {
         this.userFirstName = firstName;
         this.userLastName = lastName;
         this.userName = userName;
@@ -138,9 +141,12 @@ import javax.persistence.Table;
         return userPassword;
     }
 
-    public void setUserPassword(String userPassword) {
-        // TODO: encrypt
-        this.userPassword = userPassword;
+    public final void setUserPassword(String userPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        this.userPassword = net.shawnmckee.devtalk.security.PasswordHash.createHash(userPassword);
+    }
+
+    public boolean checkUserPassword(String userPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return net.shawnmckee.devtalk.security.PasswordHash.validatePassword(userPassword, this.userPassword);
     }
 
     public boolean getUserActive() {

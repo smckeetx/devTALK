@@ -5,7 +5,11 @@ package net.shawnmckee.devtalk.tasks;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.servlet.ServletException;
@@ -35,7 +39,7 @@ public class UserUpdate extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, NoSuchAlgorithmException, InvalidKeySpecException {
 
         response.setContentType("text/html;charset=UTF-8");
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
@@ -49,13 +53,13 @@ public class UserUpdate extends HttpServlet {
         request.setAttribute("users", users);
 
         // if a user has been selected from the drop down then get and store them
-        if(request.getParameter("user") != null &&
-           !request.getParameter("user").isEmpty()
+        if((request.getParameter("user") != null &&
+           !request.getParameter("user").isEmpty())
           ){
             q = em.createNamedQuery("User.findByUserID");
             q.setParameter("userID", Integer.parseInt(request.getParameter("user")));
             User user = (User)q.getSingleResult();
-            request.setAttribute("user", user);
+            request.getSession().setAttribute("User", user);
         }
 
         // we have a specific user to update now
@@ -73,6 +77,8 @@ public class UserUpdate extends HttpServlet {
             String eml       = request.getParameter("email");
             String phone     = request.getParameter("userPhone");
             String active    = request.getParameter("active");
+            String password  = request.getParameter("password");
+            String cpassword = request.getParameter("cpassword");
             String selfEdit  = request.getParameter("selfEdit");
 
             em.getTransaction().begin();
@@ -160,11 +166,21 @@ public class UserUpdate extends HttpServlet {
                 }
             }else{
                 request.setAttribute("selfEdit", "Y");
+                if(password != null &&
+                   !password.isEmpty() &&
+                   cpassword != null &&
+                   !cpassword.isEmpty() &&
+                   password.equals(cpassword)){
+                    user.setUserPassword(password);
+                }else if(!password.equals(cpassword)){
+                    error +=  "Password and Check Password must match<br/>";
+                }
+
             }
             
             em.merge(user);
             em.getTransaction().commit();
-            request.setAttribute("user", user);
+            request.getSession().setAttribute("User", user);
 
             if(!error.isEmpty()){
                 request.setAttribute("error", error);
@@ -205,7 +221,7 @@ public class UserUpdate extends HttpServlet {
                 request.setAttribute("error", "User may only edit their own account.");
                 request.getRequestDispatcher("/WEB-INF/main.jsp").forward(request, response);
             }else{
-                request.setAttribute("user", me);
+                request.getSession().setAttribute("User", me);
                 request.setAttribute("selfEdit", "Y");
             }
         }
@@ -223,7 +239,13 @@ public class UserUpdate extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(UserUpdate.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeySpecException ex) {
+            Logger.getLogger(UserUpdate.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

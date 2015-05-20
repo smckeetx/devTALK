@@ -5,6 +5,7 @@
 --%>
 
 <%-- this, and the associated if checks, only exists during development --%>
+        <c:if test="${requestScope.resetPW == null}">
             <nav>
                 <div id="menu" aria-role="nav">
                     <div class="pure-menu pure-menu-open">
@@ -23,4 +24,5 @@
                     </div>
                 </div>
             </nav>
+        </c:if>
                                 
