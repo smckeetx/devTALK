@@ -50,7 +50,9 @@
                         <legend>Create/Edit Project</legend>
                         <form action="projUpdt" method="post" name="admin">
                             <div class="centerAlignDiv">
-                                <c:if test="${!empty requestScope.projects}">
+                                <c:if test="${requestScope.permCode == 'projUpdt' &&
+                                              !empty requestScope.projects
+                                             }">
                                     <div style="height:2em;">
                                         <div class="cL50TxtRgt">
                                             <span class="required">*</span>&nbsp;
