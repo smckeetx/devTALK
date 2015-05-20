@@ -59,7 +59,7 @@ public class UserUpdate extends HttpServlet {
             q = em.createNamedQuery("User.findByUserID");
             q.setParameter("userID", Integer.parseInt(request.getParameter("user")));
             User user = (User)q.getSingleResult();
-            request.getSession().setAttribute("User", user);
+            request.setAttribute("rUser", user);
         }
 
         // we have a specific user to update now
@@ -180,7 +180,7 @@ public class UserUpdate extends HttpServlet {
             
             em.merge(user);
             em.getTransaction().commit();
-            request.getSession().setAttribute("User", user);
+            request.setAttribute("rUser", user);
 
             if(!error.isEmpty()){
                 request.setAttribute("error", error);
@@ -221,11 +221,19 @@ public class UserUpdate extends HttpServlet {
                 request.setAttribute("error", "User may only edit their own account.");
                 request.getRequestDispatcher("/WEB-INF/main.jsp").forward(request, response);
             }else{
-                request.getSession().setAttribute("User", me);
+                request.setAttribute("rUser", me);
                 request.setAttribute("selfEdit", "Y");
             }
+            request.getRequestDispatcher("/WEB-INF/userAddEdit.jsp").forward(request, response);
+        }else{
+            try {
+                processRequest(request, response);
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(UserUpdate.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvalidKeySpecException ex) {
+                Logger.getLogger(UserUpdate.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        request.getRequestDispatcher("/WEB-INF/userAddEdit.jsp").forward(request, response);
     }
 
     /**

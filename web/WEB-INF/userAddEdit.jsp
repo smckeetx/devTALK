@@ -21,11 +21,23 @@
                         <div class="error">${requestScope.error}</div>
                     </c:if>
                     <c:if test="${requestScope.error == null && param.firstName != null}">
-                        <div>${param.userName}&nbsp;${requestScope.permCode == 'userCre8' ? 'added!':'updated!'}</div>
+                        <div>${param.userName}&nbsp;${requestScope.permCode == 'userCre8' || requestScope.permCode == 'adminCre8' ? 'added!':'updated!'}</div>
                     </c:if>
 
                     <c:choose>
-                        <c:when test="${requestScope.error == null  && sessionScope.User == null}">
+                        <c:when test="${requestScope.error == null  && requestScope.rUser != null}">
+                            <c:set var="firstName" scope="page" value="${requestScope.rUser.userFirstName}"/>
+                            <c:set var="lastName"  scope="page" value="${requestScope.rUser.userLastName}"/>
+                            <c:set var="userName"  scope="page" value="${requestScope.rUser.userName}"/>
+                            <c:set var="email"     scope="page" value="${requestScope.rUser.userEmail}"/>
+                            <c:set var="userPhone" scope="page" value="${requestScope.rUser.userExtension}"/>
+                            <c:set var="active"    scope="page" value="${requestScope.rUser.userActive}"/>
+                            <c:set var="permCode"  scope="page" value="${requestScope.permCode}"/>
+                            <c:if test="${empty permCode}">
+                                <c:set var="permCode"  scope="page" value="${param.permCode}"/>
+                            </c:if>
+                        </c:when>
+                        <c:when test="${requestScope.error == null  && param.firstName == null}">
                             <c:set var="firstName" scope="page" value=""/>
                             <c:set var="lastName"  scope="page" value=""/>
                             <c:set var="userName"  scope="page" value=""/>
@@ -33,18 +45,6 @@
                             <c:set var="userPhone" scope="page" value=""/>
                             <c:set var="active"    scope="page" value=""/>
                             <c:set var="permCode"  scope="page" value="${requestScope.permCode}"/>
-                            <c:if test="${empty permCode}">
-                                <c:set var="permCode"  scope="page" value="${param.permCode}"/>
-                            </c:if>
-                        </c:when>
-                        <c:when test="${requestScope.error == null  && sessionScope.User != null}">
-                            <c:set var="firstName" scope="page" value="${sessionScope.User.userFirstName}"/>
-                            <c:set var="lastName"  scope="page" value="${sessionScope.User.userLastName}"/>
-                            <c:set var="userName"  scope="page" value="${sessionScope.User.userName}"/>
-                            <c:set var="email"     scope="page" value="${sessionScope.User.userEmail}"/>
-                            <c:set var="userPhone" scope="page" value="${sessionScope.User.userExtension}"/>
-                            <c:set var="active"    scope="page" value="${sessionScope.User.userActive}"/>
-                            <c:set var="permCode"  scope="page" value="${sessionScope.permCode}"/>
                             <c:if test="${empty permCode}">
                                 <c:set var="permCode"  scope="page" value="${param.permCode}"/>
                             </c:if>
@@ -57,6 +57,9 @@
                             <c:set var="userPhone" scope="page" value="${param.userPhone}"/>
                             <c:set var="active"    scope="page" value="${param.active}"/>
                             <c:set var="permCode"  scope="page" value="${param.permCode}"/>
+                            <c:if test="${empty param.permCode}">
+                                <c:set var="permCode"  scope="page" value="${requestScope.permCode}"/>
+                            </c:if>
                         </c:otherwise>
                     </c:choose>
                         
@@ -66,27 +69,33 @@
                     </div>
                     <fieldset style="width: 95%;">
                         <legend>Create/Edit</legend>
-                        <c:if test="${!empty sessionScope.Users && requestScope.selfEdit == null}">
+                        <c:if test="${!empty requestScope.users && requestScope.selfEdit == null}">
                             <div>
                                 <form action="userUpdt" method="post">
-                                    <span class="required">*</span>&nbsp;
-                                    <label for="users" class="bold em7">
-                                        User List:
-                                    </label>
-                                    <select name="user" id="user" required>
-                                        <option value="">-- Select User --</option>
-                                        <c:forEach items="${sessionScope.Users}" var="user">
-                                            <option value="${user.userID}">${user.userFirstName}&nbsp;${user.userLastName}&nbsp;-&nbsp;${user.userName}</option>
-                                        </c:forEach>
-                                    </select>
-                                    <input type="submit" value="Go">
+                                    <div style="height:2em;">
+                                        <div class="cL50TxtRgt">
+                                            <span class="required">*</span>&nbsp;
+                                            <label for="users" class="bold em7">
+                                                User List:
+                                            </label>
+                                        </div>
+                                        <div class="cR50TxtLft">
+                                            <select name="user" id="user" aria-required="true" required>
+                                                <option value="">-- Select User --</option>
+                                                <c:forEach items="${requestScope.users}" var="user">
+                                                    <option value="${user.userID}">${user.userFirstName}&nbsp;${user.userLastName}&nbsp;-&nbsp;${user.userName}</option>
+                                                </c:forEach>
+                                            </select>
+                                            <input type="submit" value="Go">
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
                         </c:if>
 
                         <form action="${requestScope.permCode}" method="post" name="admin">
-                            <div style="width: 500px;" id="fieldset" class="centerAlignDiv">
-                                <input type="hidden" name="userID" value="${sessionScope.User.userID}">
+                            <div id="fieldset" class="centerAlignDiv">
+                                <input type="hidden" name="userID" value="${requestScope.rUser.userID}">
 
                                 <div style="height:2em;">
                                     <div class="cL50TxtRgt">
@@ -96,7 +105,7 @@
                                         </label>
                                     </div>
                                     <div class="cR50TxtLft">
-                                        <input type="text" name="firstName" id="firstName"  style="width:18em;"maxlength="25" value="${pageScope.firstName}" aria-required="true" required />
+                                        <input type="text" name="firstName" id="firstName"  style="width:18em;" maxlength="25" value="${pageScope.firstName}" aria-required="true" required />
                                     </div>
                                 </div>
                                 <div style="height:2em;">
@@ -200,7 +209,7 @@
                                             <select name="projects" id="projects" multiple="true" size="3" style="width:18em;">
                                                 <option value="0">-- Select Project(s) --</option>
                                                 <c:forEach items="${requestScope.projects}" var="project">
-                                                    <option value="${project.projectID}" <c:if test="${sessionScope.User.projectsList.contains(project)}">selected</c:if>>${project.projectDesc}</option>
+                                                    <option value="${project.projectID}" <c:if test="${requestScope.rUser.projectsList.contains(project)}">selected</c:if>>${project.projectDesc}</option>
                                                 </c:forEach>
                                             </select>
                                         </div>
@@ -234,7 +243,7 @@
                                 </c:if>
                                     <div class="clear"></div>
                                 <div style="padding:2%" id="formButtons">
-                                    <input type="submit" value="${requestScope.permCode == 'userCre8' ? 'Add' : 'Update'}" />
+                                    <input type="submit" value="${requestScope.permCode == 'userCre8' || requestScope.permCode == 'adminCre8' ? 'Add' : 'Update'}" />
                                     <span style="padding-left:5%; margin-left:5%">
                                         <input type="reset" value="Reset" title="Reset" />
                                     </span>

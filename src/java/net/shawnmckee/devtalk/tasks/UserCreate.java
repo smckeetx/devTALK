@@ -46,6 +46,15 @@ public class UserCreate extends HttpServlet {
         List<Projects> projects = q.getResultList();
         request.setAttribute("projects", projects);
 
+        String url = request.getRequestURL().toString();
+        String permCode = url.substring(url.lastIndexOf("/") + 1);
+
+        if(permCode == null){
+            permCode = "userCre8";
+        }
+        
+        request.setAttribute("permCode", permCode);
+
         request.getRequestDispatcher("/WEB-INF/userAddEdit.jsp").forward(request, response);
     }
 
@@ -158,7 +167,6 @@ public class UserCreate extends HttpServlet {
                     em.merge(user);
                     em.getTransaction().commit();
 
-                    request.getSession().setAttribute("user", user);
                 } catch (Exception e) {
                     error += "1: " + e.getMessage() + "<br/>";
                 }

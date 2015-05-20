@@ -85,7 +85,7 @@ import javax.persistence.Table;
         this.userName = userName;
         this.userEmail = email;
         this.userExtension = extension;
-        setUserPassword(userPassword);
+        this.userPassword = userPassword;
         this.userActive = userActive;
     }
 
