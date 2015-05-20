@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.shawnmckee.devtalk.entities.DBUtil;
-import net.shawnmckee.devtalk.entities.Permissions;
 import net.shawnmckee.devtalk.entities.Projects;
 import net.shawnmckee.devtalk.entities.User;
 
@@ -37,6 +36,8 @@ public class UserUpdate extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @throws java.security.NoSuchAlgorithmException
+     * @throws java.security.spec.InvalidKeySpecException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NoSuchAlgorithmException, InvalidKeySpecException {
@@ -228,9 +229,7 @@ public class UserUpdate extends HttpServlet {
         }else{
             try {
                 processRequest(request, response);
-            } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(UserUpdate.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvalidKeySpecException ex) {
+            } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
                 Logger.getLogger(UserUpdate.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -249,9 +248,7 @@ public class UserUpdate extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(UserUpdate.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeySpecException ex) {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
             Logger.getLogger(UserUpdate.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

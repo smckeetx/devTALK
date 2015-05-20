@@ -51,7 +51,7 @@ public class ProjectUpdate extends HttpServlet {
             request.setAttribute("projects", projects);
 
             request.getRequestDispatcher("/WEB-INF/projAddEdit.jsp").forward(request, response);
-        }catch(Exception e){
+        }catch(ServletException | IOException e){
             System.out.println(e.getMessage());
         }
     }

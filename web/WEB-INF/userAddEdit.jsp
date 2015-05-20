@@ -181,7 +181,7 @@
                                         </div>
                                         <script language='javascript' type='text/javascript'>
                                             function check(input) {
-                                                if (input.value != document.getElementById('password').value) {
+                                                if (input.value !== document.getElementById('password').value) {
                                                     document.getElementById("passwordMistmatch").textContent = 'Password Must be Matching.';
                                                 } else {
                                                     // input is valid -- reset the error message

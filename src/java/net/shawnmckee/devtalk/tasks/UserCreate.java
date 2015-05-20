@@ -5,6 +5,8 @@ package net.shawnmckee.devtalk.tasks;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -167,7 +169,7 @@ public class UserCreate extends HttpServlet {
                     em.merge(user);
                     em.getTransaction().commit();
 
-                } catch (Exception e) {
+                } catch (NoSuchAlgorithmException | InvalidKeySpecException | NumberFormatException e) {
                     error += "1: " + e.getMessage() + "<br/>";
                 }
             }

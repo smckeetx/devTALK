@@ -4,7 +4,8 @@
 package net.shawnmckee.devtalk.security;
 
 import java.io.IOException;
-import java.util.List;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.servlet.ServletException;
@@ -83,7 +84,7 @@ public class Security extends HttpServlet {
             }else{
                 request.setAttribute("error", FAILURE_MESSAGE);
             }
-        }catch(Exception e){
+        }catch(NoSuchAlgorithmException | InvalidKeySpecException e){
             request.setAttribute("error", FAILURE_MESSAGE);
         }    
         return "/index.jsp";

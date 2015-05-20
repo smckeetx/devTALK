@@ -87,7 +87,7 @@
             <script>
                 function toggleMenu() {
                     var thisMenu = document.getElementById('participantsDiv');
-                    if( thisMenu.style.display == 'block' ) {
+                    if( thisMenu.style.display === 'block' ) {
                         thisMenu.style.display = 'none';
                     } else { 
                         thisMenu.style.display = 'block';

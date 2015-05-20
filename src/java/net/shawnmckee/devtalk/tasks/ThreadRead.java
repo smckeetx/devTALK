@@ -19,7 +19,6 @@ import net.shawnmckee.devtalk.entities.Posts;
 import net.shawnmckee.devtalk.entities.Projects;
 import net.shawnmckee.devtalk.entities.User;
 import net.shawnmckee.devtalk.entities.Conversation;
-import net.shawnmckee.devtalk.entities.Permissions;
 
 /**
  *

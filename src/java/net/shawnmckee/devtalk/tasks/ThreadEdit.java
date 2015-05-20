@@ -6,7 +6,6 @@
 package net.shawnmckee.devtalk.tasks;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.servlet.ServletException;
