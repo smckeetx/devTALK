@@ -41,7 +41,7 @@ CREATE TABLE `users` (
   `userLastName` varchar(25) DEFAULT NULL,
   `userEmail` varchar(50) DEFAULT NULL,
   `userExtension` bigint(20) DEFAULT NULL,
-  `userPassword` varchar(32) NOT NULL DEFAULT 'password',
+  `userPassword` varchar(102) NOT NULL DEFAULT 'password',
   `userActive` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
