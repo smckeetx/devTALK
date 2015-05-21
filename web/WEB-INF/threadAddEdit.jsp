@@ -31,7 +31,13 @@
                                 <select name="project" id="project" required style="width:17.5em;">
                                     <option value="0">-- Select Project --</option>
                                     <c:forEach items="${requestScope.projects}" var="project">
-                                        <option value="${project.projectID}">${project.projectDesc}</option>
+                                        <option value="${project.projectID}" 
+                                            <c:if test="${project.projectID == requestScope.project}">
+                                                selected
+                                            </c:if>
+                                        >
+                                            ${project.projectDesc}
+                                        </option>
                                     </c:forEach>
                                 </select>
                                 <input type="submit" value="Go">
@@ -39,6 +45,7 @@
                         </div>
                         <c:if test="${!empty requestScope.project}">
                             <form action="thrdCre8" method="post" name="admin">
+                                <input type="hidden" name="project" value="${requestScope.project}"/>
                                 <div class="datCol">
                                     <span class="required">*</span>&nbsp;
                                     <label for="title" class="bold em7">
