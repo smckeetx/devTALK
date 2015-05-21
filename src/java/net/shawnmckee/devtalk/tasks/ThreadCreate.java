@@ -83,71 +83,87 @@ public class ThreadCreate extends HttpServlet {
         // get the projects the user can see
         projects = user.getProjectsList();
         request.setAttribute("projects", projects);
+        String destination = "";
 
         try{
             Integer proj = Integer.parseInt(request.getParameter("project"));
-            if(proj.equals(0))
+            if(proj.equals(0)){
+                destination = "/WEB-INF/threadAddEdit.jsp";
                 error += "You must select a project.<br/>";
+            }else{
+                
+                if(request.getParameterMap().containsKey("title")){
+                    String title = request.getParameter("title");
+                
+                    destination = "/WEB-INF/threadList.jsp";
+                    title = title.replaceAll("<", "&lt;");
+                    if(title.trim().isEmpty())
+                        error += "You must enter a title.<br/>";
 
-            String title = request.getParameter("title");
-            title = title.replaceAll("<", "&lt;");
-            if(title.trim().isEmpty())
-                error += "You must enter a title.<br/>";
+                    String postTxt = request.getParameter("post");
+                    if(postTxt.trim().isEmpty())
+                        error += "You must enter some content.<br/>";
 
-            String postTxt = request.getParameter("post");
-            if(postTxt.trim().isEmpty())
-                error += "You must enter some content.<br/>";
+                    Boolean isPublic = request.getParameter("pubPriv").equals("public");
 
-            Boolean isPublic = request.getParameter("pubPriv").equals("public");
-
-            String[] participants = null;
-            try{
-                participants = request.getParameterValues("participants");
-                if(!isPublic && 
-                   (participants == null || 
-                    (participants.length == 1 && participants[0].equals("0"))
-                   )
-                  ){
-                    error += "You must add at least one participant.<br/>";
-                }
-            }catch(NullPointerException npe){
-                error += "You must add at least one participant.<br/>";
-            }
-
-            if(error.isEmpty()){
-                try{
-                    Conversation thread = new Conversation(title, proj, user.getUserID(), true, isPublic);
-
-                    em.getTransaction().begin();
-                    em.persist(thread);
-
-                    if(participants != null){
-                        q = em.createNamedQuery("User.findByUserID");
-                        q.setParameter("userID", Integer.parseInt(participants[0]));
-                        List<User> users = q.getResultList();
-                        for(Integer i=1; i<participants.length; i++){
-                            q.setParameter("userID", Integer.parseInt(participants[i]));
-                            users.addAll(q.getResultList());
+                    String[] participants = null;
+                    try{
+                        participants = request.getParameterValues("participants");
+                        if(!isPublic && 
+                           (participants == null || 
+                            (participants.length == 1 && participants[0].equals("0"))
+                           )
+                          ){
+                            error += "You must add at least one participant.<br/>";
                         }
-
-                        thread.setUserList(users);
+                    }catch(NullPointerException npe){
+                        error += "You must add at least one participant.<br/>";
                     }
-                    em.merge(thread);
-                    em.getTransaction().commit();
 
-                    Posts post = new Posts(thread.getThreadID(), user.getUserID(), postTxt);
-                    em.getTransaction().begin();
-                    em.persist(post);
-                    em.getTransaction().commit();
+                    if(error.isEmpty()){
+                        try{
+                            Conversation thread = new Conversation(title, proj, user.getUserID(), true, isPublic);
 
-                    request.getSession().setAttribute("thread", thread);
-                    q = em.createNamedQuery("Posts.findByConversationID");
-                    q.setParameter("threadID", thread.getThreadID());
-                    List<Posts> posts = q.getResultList();
-                    request.setAttribute("posts", posts);
+                            em.getTransaction().begin();
+                            em.persist(thread);
 
-                } catch (Exception e) {
-                    error +=  "1: " + e.getMessage() + "<br/>";
+                            if(participants != null){
+                                q = em.createNamedQuery("User.findByUserID");
+                                q.setParameter("userID", Integer.parseInt(participants[0]));
+                                List<User> users = q.getResultList();
+                                for(Integer i=1; i<participants.length; i++){
+                                    q.setParameter("userID", Integer.parseInt(participants[i]));
+                                    users.addAll(q.getResultList());
+                                }
+
+                                thread.setUserList(users);
+                            }
+                            em.merge(thread);
+                            em.getTransaction().commit();
+
+                            Posts post = new Posts(thread.getThreadID(), user.getUserID(), postTxt);
+                            em.getTransaction().begin();
+                            em.persist(post);
+                            em.getTransaction().commit();
+
+                            request.getSession().setAttribute("thread", thread);
+                            q = em.createNamedQuery("Posts.findByConversationID");
+                            q.setParameter("threadID", thread.getThreadID());
+                            List<Posts> posts = q.getResultList();
+                            request.setAttribute("posts", posts);
+
+                        } catch (Exception e) {
+                            error +=  "1: " + e.getMessage() + "<br/>";
+                        }
+                    }
+                
+                }else{
+                    destination = "/WEB-INF/threadAddEdit.jsp";
+                    q = em.createNamedQuery("User.findByUserProjects");
+                    q.setParameter("projectID", proj);
+                    List<User> users = q.getResultList();
+                    request.setAttribute("users", users);
+                    request.setAttribute("project", proj);
                 }
             }
         }catch(Exception e){
@@ -158,7 +174,7 @@ public class ThreadCreate extends HttpServlet {
             request.setAttribute("error", error);
         }
 
-        request.getRequestDispatcher("/WEB-INF/threadList.jsp").forward(request, response);
+        request.getRequestDispatcher(destination).forward(request, response);
     }
 
     /**
