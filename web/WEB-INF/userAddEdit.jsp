@@ -83,7 +83,7 @@
                                             <select name="user" id="user" aria-required="true" required>
                                                 <option value="">-- Select User --</option>
                                                 <c:forEach items="${requestScope.users}" var="user">
-                                                    <option value="${user.userID}">${user.userFirstName}&nbsp;${user.userLastName}&nbsp;-&nbsp;${user.userName}</option>
+                                                    <option value="${user.userID}" <c:if test="${user.userID == requestScope.rUser.userID}">selected</c:if>>${user.userFirstName}&nbsp;${user.userLastName}&nbsp;-&nbsp;${user.userName}</option>
                                                 </c:forEach>
                                             </select>
                                             <input type="submit" value="Go">
