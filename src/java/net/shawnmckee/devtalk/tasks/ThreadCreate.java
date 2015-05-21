@@ -23,7 +23,7 @@ import net.shawnmckee.devtalk.entities.Conversation;
  *
  * @author smckee
  */
-@WebServlet(name = "thrdCre8", urlPatterns = {"/thrdCre8"})
+@WebServlet(name = "thrdCre8", urlPatterns = {"/thrdCre8", "/thrdGet"})
 public class ThreadCreate extends HttpServlet {
 
     /**
@@ -71,100 +71,94 @@ public class ThreadCreate extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-        
-        if(session == null){
-            response.sendRedirect("/devTALK/?error=Your+session+timed+out!");
-        }else{
 
-            response.setContentType("text/html;charset=UTF-8");
-            EntityManager em = DBUtil.getEmFactory().createEntityManager();
-            String error = "";
+        response.setContentType("text/html;charset=UTF-8");
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String error = "";
 
-            User user = (User)session.getAttribute("User");
-            Query q = null;
-            List<Projects> projects = null;
+        User user = (User)session.getAttribute("User");
+        Query q = null;
+        List<Projects> projects = null;
 
-            // get the projects the user can see
-            projects = user.getProjectsList();
-            request.setAttribute("projects", projects);
+        // get the projects the user can see
+        projects = user.getProjectsList();
+        request.setAttribute("projects", projects);
 
+        try{
+            Integer proj = Integer.parseInt(request.getParameter("project"));
+            if(proj.equals(0))
+                error += "You must select a project.<br/>";
+
+            String title = request.getParameter("title");
+            title = title.replaceAll("<", "&lt;");
+            if(title.trim().isEmpty())
+                error += "You must enter a title.<br/>";
+
+            String postTxt = request.getParameter("post");
+            if(postTxt.trim().isEmpty())
+                error += "You must enter some content.<br/>";
+
+            Boolean isPublic = request.getParameter("pubPriv").equals("public");
+
+            String[] participants = null;
             try{
-                Integer proj = Integer.parseInt(request.getParameter("project"));
-                if(proj.equals(0))
-                    error += "You must select a project.<br/>";
-
-                String title = request.getParameter("title");
-                title = title.replaceAll("<", "&lt;");
-                if(title.trim().isEmpty())
-                    error += "You must enter a title.<br/>";
-
-                String postTxt = request.getParameter("post");
-                if(postTxt.trim().isEmpty())
-                    error += "You must enter some content.<br/>";
-
-                Boolean isPublic = request.getParameter("pubPriv").equals("public");
-
-                String[] participants = null;
-                try{
-                    participants = request.getParameterValues("participants");
-                    if(!isPublic && 
-                       (participants == null || 
-                        (participants.length == 1 && participants[0].equals("0"))
-                       )
-                      ){
-                        error += "You must add at least one participant.<br/>";
-                    }
-                }catch(NullPointerException npe){
+                participants = request.getParameterValues("participants");
+                if(!isPublic && 
+                   (participants == null || 
+                    (participants.length == 1 && participants[0].equals("0"))
+                   )
+                  ){
                     error += "You must add at least one participant.<br/>";
                 }
+            }catch(NullPointerException npe){
+                error += "You must add at least one participant.<br/>";
+            }
 
-                if(error.isEmpty()){
-                    try{
-                        Conversation thread = new Conversation(title, proj, user.getUserID(), true, isPublic);
+            if(error.isEmpty()){
+                try{
+                    Conversation thread = new Conversation(title, proj, user.getUserID(), true, isPublic);
 
-                        em.getTransaction().begin();
-                        em.persist(thread);
+                    em.getTransaction().begin();
+                    em.persist(thread);
 
-                        if(participants != null){
-                            q = em.createNamedQuery("User.findByUserID");
-                            q.setParameter("userID", Integer.parseInt(participants[0]));
-                            List<User> users = q.getResultList();
-                            for(Integer i=1; i<participants.length; i++){
-                                q.setParameter("userID", Integer.parseInt(participants[i]));
-                                users.addAll(q.getResultList());
-                            }
-
-                            thread.setUserList(users);
+                    if(participants != null){
+                        q = em.createNamedQuery("User.findByUserID");
+                        q.setParameter("userID", Integer.parseInt(participants[0]));
+                        List<User> users = q.getResultList();
+                        for(Integer i=1; i<participants.length; i++){
+                            q.setParameter("userID", Integer.parseInt(participants[i]));
+                            users.addAll(q.getResultList());
                         }
-                        em.merge(thread);
-                        em.getTransaction().commit();
 
-                        Posts post = new Posts(thread.getThreadID(), user.getUserID(), postTxt);
-                        em.getTransaction().begin();
-                        em.persist(post);
-                        em.getTransaction().commit();
-
-                        request.getSession().setAttribute("thread", thread);
-                        q = em.createNamedQuery("Posts.findByConversationID");
-                        q.setParameter("threadID", thread.getThreadID());
-                        List<Posts> posts = q.getResultList();
-                        request.setAttribute("posts", posts);
-
-                    } catch (Exception e) {
-                        error +=  "1: " + e.getMessage() + "<br/>";
+                        thread.setUserList(users);
                     }
+                    em.merge(thread);
+                    em.getTransaction().commit();
+
+                    Posts post = new Posts(thread.getThreadID(), user.getUserID(), postTxt);
+                    em.getTransaction().begin();
+                    em.persist(post);
+                    em.getTransaction().commit();
+
+                    request.getSession().setAttribute("thread", thread);
+                    q = em.createNamedQuery("Posts.findByConversationID");
+                    q.setParameter("threadID", thread.getThreadID());
+                    List<Posts> posts = q.getResultList();
+                    request.setAttribute("posts", posts);
+
+                } catch (Exception e) {
+                    error +=  "1: " + e.getMessage() + "<br/>";
                 }
-            }catch(Exception e){
-                    error +=  "2: " + e.getMessage() + "<br/>";
             }
-
-            if(!error.isEmpty()){
-                request.setAttribute("error", error);
-            }
-
-            request.getRequestDispatcher("/WEB-INF/threadList.jsp").forward(request, response);
-
+        }catch(Exception e){
+                error +=  "2: " + e.getMessage() + "<br/>";
         }
+
+        if(!error.isEmpty()){
+            request.setAttribute("error", error);
+        }
+
+        request.getRequestDispatcher("/WEB-INF/threadList.jsp").forward(request, response);
     }
 
     /**
