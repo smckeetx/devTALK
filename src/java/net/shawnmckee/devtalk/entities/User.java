@@ -39,7 +39,8 @@ import javax.persistence.Table;
     @NamedQuery(name = "User.findByUserLastName", query = "SELECT u FROM User u WHERE u.userLastName = :userLastName"),
     @NamedQuery(name = "User.findByUserEmail", query = "SELECT u FROM User u WHERE u.userEmail = :userEmail"),
     @NamedQuery(name = "User.findByUserExtension", query = "SELECT u FROM User u WHERE u.userExtension = :userExtension"),
-    @NamedQuery(name = "User.findByUserActive", query = "SELECT u FROM User u WHERE u.userID != 1 AND u.userActive = :userActive")})
+    @NamedQuery(name = "User.findByUserActive", query = "SELECT u FROM User u WHERE u.userID != 1 AND u.userActive = :userActive"),
+    @NamedQuery(name = "User.findByUserProjects", query = "SELECT u FROM User u , IN(u.projectsList) p WHERE p.projectID = :projectID AND u.userID != 1 AND u.userActive = true")})
     public class User implements Serializable {
     @JoinTable(name = "projectUsers", joinColumns = {
         @JoinColumn(name = "userID", referencedColumnName = "userID")}, inverseJoinColumns = {
