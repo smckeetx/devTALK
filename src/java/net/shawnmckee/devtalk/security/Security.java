@@ -57,11 +57,16 @@ public class Security extends HttpServlet {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         String un = request.getParameter("userName");
         String FAILURE_MESSAGE = "Login failed";
+        String INVALID_MESSAGE = "Invalid User Name or Password";
         
         try{
             Query q = em.createNamedQuery("User.findByUserName");
             q.setParameter("userName", un);
-            User user = (User)q.getSingleResult();
+            User user = null;
+            
+            try{
+                    user = (User)q.getSingleResult();
+                }catch(javax.persistence.NoResultException nre){}
             
             if(user != null){
                 if(user.getUserPassword().equals("password") &&
@@ -80,11 +85,11 @@ public class Security extends HttpServlet {
                     session.setAttribute("User", user);
                     return "/WEB-INF/main.jsp";
                 }else{
-                    request.setAttribute("error", "Invalid User Name or Password");
+                    request.setAttribute("error", INVALID_MESSAGE);
                 }
                
             }else{
-                request.setAttribute("error", FAILURE_MESSAGE);
+                request.setAttribute("error", INVALID_MESSAGE);
             }
         }catch(NoSuchAlgorithmException | InvalidKeySpecException e){
             request.setAttribute("error", FAILURE_MESSAGE);
