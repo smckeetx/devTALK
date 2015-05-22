@@ -79,6 +79,8 @@ public class Security extends HttpServlet {
                     HttpSession session = request.getSession(true);
                     session.setAttribute("User", user);
                     return "/WEB-INF/main.jsp";
+                }else{
+                    request.setAttribute("error", "Invalid User Name or Password");
                 }
                
             }else{

@@ -98,8 +98,12 @@ public class ThreadRead extends HttpServlet {
             Query q = em.createNamedQuery("Conversation.findByConversationID");
             q.setParameter("threadID", Integer.parseInt(request.getParameter("thread")));
             List<Conversation> threads = q.getResultList();
-            Conversation thread = threads.get(0);
-            request.getSession().setAttribute("thread", thread);
+            if(threads.size() > 0){
+                Conversation thread = threads.get(0);
+                request.getSession().setAttribute("thread", thread);
+            }else{
+                request.setAttribute("error", "You must select a conversation");
+            }
         }else if(request.getParameter("project") != null){
             Query q = em.createNamedQuery("Conversation.findByProjectID");
             q.setParameter("projectID", Integer.parseInt(request.getParameter("project")));
