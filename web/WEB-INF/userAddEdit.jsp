@@ -116,7 +116,7 @@
                                         </label>
                                     </div>
                                     <div class="cR50TxtLft">
-                                        <input type="text" name="lastName" id="lastName"  style="width:18em;"maxlength="25" value="${pageScope.lastName}" aria-required="true" required />
+                                        <input type="text" name="lastName" id="lastName"  style="width:18em;" maxlength="25" value="${pageScope.lastName}" aria-required="true" required />
                                     </div>
                                 </div>
                                 <div style="height:2em;">
@@ -128,7 +128,7 @@
                                         </label>
                                     </div>
                                     <div class="cR50TxtLft">
-                                        <input type="email" name="email" id="email"  style="width:18em;"maxlength="50" value="${pageScope.email}" aria-required="true" required />
+                                        <input type="email" name="email" id="email"  style="width:18em;" maxlength="50" value="${pageScope.email}" aria-required="true" required />
                                     </div>
                                 </div>
                                 <div style="height:2em;">
@@ -140,7 +140,7 @@
                                         </label>
                                     </div>
                                     <div class="cR50TxtLft">
-                                        <input type="userName" name="userName" id="userName"  style="width:18em;" maxlength="25" value="${pageScope.userName}" aria-required="true" required />
+                                        <input type="text" name="userName" id="userName"  style="width:18em;" maxlength="25" value="${pageScope.userName}" aria-required="true" required />
                                     </div>
                                 </div>
                                 <div style="height:2em;">
@@ -152,7 +152,7 @@
                                         </label>
                                     </div>
                                     <div class="cR50TxtLft">
-                                        <input type="number" name="userPhone" id="userPhone" style="width:18em;" maxlength="10" value="${pageScope.userPhone}" aria-required="true" min="1000000000" max="9999999999" />
+                                        <input type="tel" name="userPhone" id="userPhone" style="width:18em;" maxlength="10" value="${pageScope.userPhone}" aria-required="true" min="1000000000" max="9999999999" />
                                     </div>
                                 </div>
 
@@ -206,7 +206,7 @@
                                             </label>
                                         </div>
                                         <div class="cR50TxtLft">
-                                            <select name="projects" id="projects" multiple="true" size="3" style="width:18em;">
+                                            <select name="projects" id="projects" multiple size="3" style="width:18em;">
                                                 <option value="0">-- Select Project(s) --</option>
                                                 <c:forEach items="${requestScope.projects}" var="project">
                                                     <option value="${project.projectID}" <c:if test="${requestScope.rUser.projectsList.contains(project)}">selected</c:if>>${project.projectDesc}</option>
