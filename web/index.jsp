@@ -36,7 +36,7 @@
                                     <input type="text" name="userName" id="userName" size="32" maxlength="16" value="" aria-required="true" required />
                                 </div>
                                 <div style="padding:2%">
-                                    <label for="pw" class="bold">
+                                    <label for="password" class="bold">
                                         Password:
                                     </label>
                                 </div>
